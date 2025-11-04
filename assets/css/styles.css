@@ -14,7 +14,7 @@ body {
   padding: 0;
   background-color: var(--black);
   color: var(--white); /* make text readable by default */
-  cursor: url('../cursors/handopen.svg') 10 5, auto;
+  cursor: url('https://raw.githubusercontent.com/GabiBrawl/Portfolio/7055d3fc518688e0d4b96505e7342546d3285332/assets/cursors/handopen.svg') 10 5, auto;
 }
 
 /* Typography */
@@ -70,7 +70,7 @@ h2 { margin: 0; font-family: "Special Gothic Condensed One", sans-serif; }
 
 /* Custom cursors for clickable elements */
 a, [role="button"] {
-  cursor: url('../cursors/handpointing.svg') 10 5, pointer;
+  cursor: url('https://raw.githubusercontent.com/GabiBrawl/Portfolio/7055d3fc518688e0d4b96505e7342546d3285332/assets/cursors/handpointing.svg') 10 5, pointer;
 }
 
 /* Effects */
