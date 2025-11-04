@@ -111,6 +111,60 @@
     updateAge('age', '2007-02-07');
   });
 
+  /* --- Profile picture click effects --- */
+  function pickRandom(arr) { return arr[Math.floor(Math.random() * arr.length)]; }
+
+
+  // NOTE: burst effect removed. `smallBurst` is still used by project hover interactions.
+
+  function wirePfpEffects() {
+    const pfp = document.querySelector('.pfp');
+    const wrap = document.querySelector('.pfp-wrap');
+    if (!pfp || !wrap) return;
+
+  const effects = ['effect-wobble', 'effect-spin', 'effect-bounce'];
+
+    function runEffect(type, ev) {
+      // visual active state
+      pfp.classList.add('effect-active');
+
+      // All remaining effects are CSS animation classes applied to the image
+      pfp.classList.add(type);
+      // remove the class when animation ends
+      pfp.addEventListener('animationend', function handler() {
+        pfp.classList.remove(type);
+        pfp.removeEventListener('animationend', handler);
+      });
+
+      // Cleanup active state shortly after last animation
+      setTimeout(() => pfp.classList.remove('effect-active'), 900);
+    }
+
+    function onActivate(ev) {
+      ev.preventDefault();
+      const chosen = pickRandom(effects);
+      runEffect(chosen, ev);
+    }
+
+    wrap.addEventListener('click', onActivate);
+    // keyboard activation (Enter / Space)
+    pfp.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' || e.key === ' ') onActivate(e);
+    });
+    // small hover hint: occasionally nudge
+    wrap.addEventListener('mouseenter', () => {
+      // tiny, non-intrusive cue
+      pfp.animate([
+        { transform: 'translateY(0)' },
+        { transform: 'translateY(-4px)' },
+        { transform: 'translateY(0)' }
+      ], { duration: 350, easing: 'ease-out' });
+    });
+  }
+
+  // wire pfp effects after DOM loaded
+  document.addEventListener('DOMContentLoaded', wirePfpEffects);
+
   // Remove the preload class only after all resources (images, css, etc.) have loaded
   window.addEventListener('load', () => {
     document.documentElement.classList.remove('preload');
