@@ -105,10 +105,101 @@
     el.textContent = age + 'y';
   }
 
+  /* --- Tech scroller dynamic population ---
+     Builds a randomized sequence of words (including new entries) and
+     injects them into the existing `.scroller-content` element. The
+     sequence is duplicated to create a seamless infinite loop.
+  */
+  function shuffleArray(arr) {
+    // Fisher-Yates shuffle
+    const a = arr.slice();
+    for (let i = a.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [a[i], a[j]] = [a[j], a[i]];
+    }
+    return a;
+  }
+
+  function buildScroller() {
+    const scroller = document.querySelector('.scroller-content');
+    if (!scroller) return;
+
+    // Existing words (kept from original markup)
+    const words = [
+      'LINUX BTW', 'WINDOWS', 'C++', 'C', 'AI', 'PCB', '$BTC', 'MEMES', 'VS CODE', 'GIT',
+      'COOL SHIT', 'OMARCHY', 'EMBEDDED DEV', 'ML', '.AF', 'THINKPAD', 'PROTON', 'ZEN',
+      'NBHD', 'SOFTCORE', 'xD', 'NOTHING', 'ART', 'CYBERSIGILISM', 'VALORANT', 'BRAVE BROWSER',
+      'UBUNTU', 'HTML', 'AFFINITY', 'FIGMA', 'YAPPER', 'X [DOT] COM', 'TESLA', 'ESPRESSIF',
+      'MIATAAA', 'CHOC CHIP COOKIES', 'OPEN SOURCE', 'RETRO FTW', 'CASH IS KING'
+    ];
+
+    // Merge and shuffle
+    const randomizedWords = shuffleArray(words);
+
+    // Build HTML with star separators; duplicate sequence for seamless loop
+    const buildSequence = seq => seq.map(w => `<span class="star"></span> ${w} `).join('');
+    // Duplicate sequence for seamless looping
+    const html = buildSequence(randomizedWords) + buildSequence(randomizedWords);
+    scroller.innerHTML = html;
+  }
+
+  /* --- Smooth pixel-based scroller animation (requestAnimationFrame) ---
+     Replaces the CSS keyframe animation to avoid the visible jump when the
+     animation resets. We move the `.scroller-content` left in pixels and
+     wrap when we've scrolled one sequence width.
+  */
+  let _rafId = null;
+  function startScrollerAnimation() {
+    const scroller = document.querySelector('.scroller-content');
+    if (!scroller) return;
+
+    // disable any CSS animation on the element
+    scroller.style.animation = 'none';
+    scroller.style.willChange = 'transform';
+
+    let last = performance.now();
+    let offset = 0; // negative px (we'll subtract)
+    let sequenceWidth = scroller.scrollWidth / 2 || 0; // half since we duplicated sequence
+  const durationSeconds = 30; // original approximate duration for one loop
+
+    function update(now) {
+      const dt = (now - last) / 1000; // seconds
+      last = now;
+      // recalc if sequenceWidth is 0 or on resize (lazy: check each frame occasionally)
+      if (!sequenceWidth || scroller._lastWidth !== scroller.scrollWidth) {
+        sequenceWidth = scroller.scrollWidth / 2 || 0;
+        scroller._lastWidth = scroller.scrollWidth;
+      }
+
+  // compute speed based on current sequence width so resizing keeps a consistent period
+  const speed = sequenceWidth > 0 ? sequenceWidth / durationSeconds : 0;
+  offset -= speed * dt;
+
+      // wrap smoothly
+      if (sequenceWidth > 0 && -offset >= sequenceWidth) {
+        offset += sequenceWidth;
+      }
+
+      scroller.style.transform = `translateX(${offset}px)`;
+      _rafId = requestAnimationFrame(update);
+    }
+
+    if (_rafId) cancelAnimationFrame(_rafId);
+    _rafId = requestAnimationFrame(update);
+  }
+
+  function stopScrollerAnimation() {
+    if (_rafId) cancelAnimationFrame(_rafId);
+    _rafId = null;
+  }
+
   // Initialize when DOM is ready
   document.addEventListener('DOMContentLoaded', () => {
     wireProjectHoverInteractions();
     updateAge('age', '2007-02-07');
+    buildScroller();
+    // start smooth scroller animation after building content
+    startScrollerAnimation();
   });
 
   /* --- Profile picture click effects --- */
