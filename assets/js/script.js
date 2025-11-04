@@ -284,6 +284,94 @@
   // wire email copy after DOM loaded
   document.addEventListener('DOMContentLoaded', wireEmailCopy);
 
+  /* --- Project Modal Functionality --- */
+  function wireProjectModal() {
+    const modal = document.getElementById('project-modal');
+    const modalImage = document.getElementById('modal-image');
+    const modalTitle = document.getElementById('modal-title');
+    const modalDescription = document.getElementById('modal-description');
+    const modalTags = document.getElementById('modal-tags');
+    const closeButton = document.querySelector('.close-button');
+
+    // Function to open modal with project data
+    function openModal(projectElement) {
+      const img = projectElement.querySelector('img');
+      const title = projectElement.querySelector('h3');
+      const description = projectElement.querySelector('p');
+      const tags = projectElement.querySelector('.tags');
+
+      modalImage.src = img.src;
+      modalImage.alt = img.alt;
+      modalTitle.textContent = title.textContent;
+      modalDescription.textContent = description.textContent;
+      
+      // Clone tags
+      modalTags.innerHTML = '';
+      if (tags) {
+        const tagElements = tags.querySelectorAll('span, a');
+        tagElements.forEach(tag => {
+          const clonedTag = tag.cloneNode(true);
+          modalTags.appendChild(clonedTag);
+        });
+      }
+
+      modal.style.display = 'block';
+      document.body.style.overflow = 'hidden'; // Prevent background scrolling
+    }
+
+    // Function to close modal
+    function closeModal() {
+      modal.style.display = 'none';
+      document.body.style.overflow = 'auto';
+    }
+
+    // Add click listeners to project cards
+    const projects = document.querySelectorAll('.project');
+    projects.forEach(project => {
+      project.addEventListener('click', () => {
+        openModal(project);
+      });
+    });
+
+    // Close modal when clicking close button
+    closeButton.addEventListener('click', closeModal);
+
+    // Close modal when clicking outside the modal content
+    modal.addEventListener('click', (e) => {
+      if (e.target === modal) {
+        closeModal();
+      }
+    });
+
+    // Close modal on Escape key
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && modal.style.display === 'block') {
+        closeModal();
+      }
+    });
+  }
+
+  // wire project modal after DOM loaded
+  document.addEventListener('DOMContentLoaded', wireProjectModal);
+
+  /* --- Cursor change on mouse down --- */
+  function wireCursorGrab() {
+    const body = document.body;
+
+    document.addEventListener('mousedown', (e) => {
+      if (e.button === 0) { // Left mouse button
+        body.classList.add('grabbing');
+      }
+    });
+
+    document.addEventListener('mouseup', () => {
+      body.classList.remove('grabbing');
+    });
+  }
+
+  // wire cursor grab after DOM loaded
+  document.addEventListener('DOMContentLoaded', wireCursorGrab);
+
   // Remove the preload class only after all resources (images, css, etc.) have loaded
   window.addEventListener('load', () => {
     document.documentElement.classList.remove('preload');
