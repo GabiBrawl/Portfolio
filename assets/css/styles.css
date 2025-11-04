@@ -120,6 +120,7 @@ h2 { margin: 0; font-family: "Special Gothic Condensed One", sans-serif; }
 .socials { margin-top: 20px; }
 .socials a { display:block; color:var(--white); text-decoration:none; margin-bottom:10px; padding:10px; border:2px solid var(--white); text-align:center; }
 .socials a:hover { background:var(--white); color:var(--black); }
+.socials a.copied { background: var(--accent); color: var(--black); }
 .social-row { display:flex; gap:10px; }
 .social-row a { flex:1; }
 

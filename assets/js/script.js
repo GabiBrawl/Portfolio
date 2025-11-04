@@ -165,6 +165,34 @@
   // wire pfp effects after DOM loaded
   document.addEventListener('DOMContentLoaded', wirePfpEffects);
 
+  /* --- Email copy functionality --- */
+  function wireEmailCopy() {
+    const emailLink = document.getElementById('email-link');
+    if (!emailLink) return;
+
+    emailLink.addEventListener('click', async (e) => {
+      e.preventDefault();
+      const email = 'gabiya219@gmail.com';
+      try {
+        await navigator.clipboard.writeText(email);
+        const originalText = emailLink.textContent;
+        emailLink.textContent = 'Copied!';
+        emailLink.classList.add('copied');
+        setTimeout(() => {
+          emailLink.textContent = originalText;
+          emailLink.classList.remove('copied');
+        }, 2000);
+      } catch (err) {
+        console.error('Failed to copy email: ', err);
+        // Fallback: open mailto
+        window.location.href = `mailto:${email}`;
+      }
+    });
+  }
+
+  // wire email copy after DOM loaded
+  document.addEventListener('DOMContentLoaded', wireEmailCopy);
+
   // Remove the preload class only after all resources (images, css, etc.) have loaded
   window.addEventListener('load', () => {
     document.documentElement.classList.remove('preload');
