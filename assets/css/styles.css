@@ -14,6 +14,7 @@ body {
   padding: 0;
   background-color: var(--black);
   color: var(--white); /* make text readable by default */
+  cursor: url('../cursors/handopen.svg') 10 5, auto;
 }
 
 /* Typography */
@@ -66,6 +67,11 @@ h2 { margin: 0; font-family: "Special Gothic Condensed One", sans-serif; }
 .pfp-wrap { position: relative; width: 100px; margin: 20px auto; display:block; }
 .pfp[role="button"] { cursor: pointer; outline: none; }
 .pfp:focus { box-shadow: 0 0 0 4px rgba(255,171,7,0.12); }
+
+/* Custom cursors for clickable elements */
+a, [role="button"] {
+  cursor: url('../cursors/handpointing.svg') 10 5, pointer;
+}
 
 /* Effects */
 @keyframes wobble {
