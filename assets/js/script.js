@@ -354,6 +354,223 @@
   // wire project modal after DOM loaded
   document.addEventListener('DOMContentLoaded', wireProjectModal);
 
+  /* --- Command Palette Easter Egg --- */
+  function wireCommandPalette() {
+    let paletteVisible = false;
+    let isDark = true;
+    let commandHistory = [];
+    let historyIndex = -1;
+
+    function cowsay(message) {
+      const len = message.length;
+      const top = ' ' + '_'.repeat(len + 2);
+      const middle = '< ' + message + ' >';
+      const bottom = ' ' + '-'.repeat(len + 2);
+      const cow = `        \\   ^__^
+         \\  (oo)\\_______
+            (__)\\       )\\/\\
+                ||----w |
+                ||     ||`;
+      return top + '\n' + middle + '\n' + bottom + '\n' + cow;
+    }
+
+    function toggleTheme() {
+      isDark = !isDark;
+      if (isDark) {
+        document.documentElement.style.setProperty('--black', '#070707');
+        document.documentElement.style.setProperty('--white', '#DED8CB');
+        document.documentElement.style.setProperty('--accent', '#FFAB07');
+      } else {
+        document.documentElement.style.setProperty('--black', '#f0f0f0');
+        document.documentElement.style.setProperty('--white', '#000000');
+        document.documentElement.style.setProperty('--accent', '#007bff');
+      }
+    }
+
+    const overlay = document.createElement('div');
+    overlay.style.cssText = `
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.8);
+      display: none;
+      z-index: 1000;
+      justify-content: center;
+      align-items: center;
+    `;
+
+    const terminal = document.createElement('div');
+    terminal.style.cssText = `
+      background: var(--black);
+      color: var(--white);
+      font-family: monospace;
+      padding: 20px;
+      width: 80%;
+      max-width: 600px;
+      max-height: 80vh;
+      overflow-y: auto;
+      border: 2px solid var(--white);
+    `;
+
+    const output = document.createElement('div');
+    output.style.cssText = `
+      margin-bottom: 10px;
+      white-space: pre-wrap;
+      font-size: 14px;
+    `;
+
+    const inputContainer = document.createElement('div');
+    inputContainer.style.cssText = `display: flex; align-items: center;`;
+
+    const prompt = document.createElement('span');
+    prompt.textContent = '$ ';
+    prompt.style.cssText = `color: var(--white); font-family: monospace; font-size: 14px;`;
+
+    const input = document.createElement('input');
+    input.style.cssText = `
+      background: transparent;
+      color: var(--white);
+      border: none;
+      font-family: monospace;
+      width: 100%;
+      outline: none;
+      font-size: 14px;
+      padding: 0;
+      margin: 0;
+    `;
+
+    inputContainer.appendChild(prompt);
+    inputContainer.appendChild(input);
+    terminal.appendChild(output);
+    terminal.appendChild(inputContainer);
+    overlay.appendChild(terminal);
+    document.body.appendChild(overlay);
+
+    function showPalette() {
+      paletteVisible = true;
+      overlay.style.display = 'flex';
+      input.focus();
+      if (output.textContent === '') {
+        output.textContent = 'Welcome to Gabi\'s Command Palette!\nType "help" for available commands.\n\n';
+      }
+    }
+
+    function hidePalette() {
+      paletteVisible = false;
+      overlay.style.display = 'none';
+      input.value = '';
+    }
+
+    function executeCommand(cmd) {
+      const originalCmd = cmd;
+      cmd = cmd.trim();
+      if (!cmd) {
+        output.textContent += '\n';
+        input.value = '';
+        return;
+      }
+      commandHistory.push(originalCmd);
+      historyIndex = commandHistory.length;
+      let response = '';
+      let lowerCmd = cmd.toLowerCase();
+      if (lowerCmd.startsWith('sudo')) {
+        response = 'User not in the sudoers file. This incident will be reported.\n';
+      } else {
+        if (lowerCmd.startsWith('cowsay ')) {
+          const message = cmd.slice(7).trim();
+          response = cowsay(message) + '\n';
+        } else {
+          switch(lowerCmd) {
+            case 'projects':
+              document.querySelector('.projects').scrollIntoView({behavior: 'smooth'});
+              response = 'Scrolling to projects...\n';
+              break;
+            case 'github':
+              window.open('https://github.com/GabiBrawl', '_blank');
+              response = 'Opening GitHub...\n';
+              break;
+            case 'contact':
+              window.location.href = 'mailto:gabiya219@gmail.com';
+              response = 'Opening email client...\n';
+              break;
+            case 'help':
+              response = 'Available commands:\n  projects - Scroll to projects\n  github - Open GitHub\n  contact - Open email\n  whoami - Display user info\n  sudo - Attempt sudo\n  age - Display age\n  cowsay [message] - Cow says message\n  theme - Toggle theme\n  help - Show this help\n  clear - Clear terminal\n  exit - Close palette\n\n';
+              break;
+            case 'whoami':
+              response = 'GabiBrawl // Full-stack developer and electronics enthusiast\n';
+              break;
+            case 'age':
+              response = '18y... for now\n';
+              break;
+            case 'theme':
+              toggleTheme();
+              response = 'Theme toggled!\n';
+              break;
+            case 'cowsay':
+              response = 'Usage: cowsay [message]\n';
+              break;
+            case 'clear':
+              output.textContent = '';
+              input.value = '';
+              return;
+            case 'exit':
+              hidePalette();
+              return;
+            default:
+              response = `Unknown command: ${cmd}\nType "help" for available commands.\n\n`;
+          }
+        }
+      }
+      output.textContent += `$ ${originalCmd}\n${response}`;
+      input.value = '';
+    }
+
+    input.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowUp') {
+        e.preventDefault();
+        if (historyIndex > 0) {
+          historyIndex--;
+          input.value = commandHistory[historyIndex];
+        }
+      } else if (e.key === 'ArrowDown') {
+        e.preventDefault();
+        if (historyIndex < commandHistory.length - 1) {
+          historyIndex++;
+          input.value = commandHistory[historyIndex];
+        } else {
+          historyIndex = commandHistory.length;
+          input.value = '';
+        }
+      } else if (e.key === 'Enter') {
+        executeCommand(input.value);
+      } else if (e.key === 'Escape') {
+        hidePalette();
+      }
+    });
+
+    overlay.addEventListener('click', (e) => {
+      if (e.target === overlay) {
+        hidePalette();
+      }
+    });
+
+    document.addEventListener('keydown', (e) => {
+      if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
+        e.preventDefault();
+        if (paletteVisible) {
+          hidePalette();
+        } else {
+          showPalette();
+        }
+      }
+    });
+  }
+
+  // wire command palette after DOM loaded
+  document.addEventListener('DOMContentLoaded', wireCommandPalette);
+
   /* --- Cursor change on mouse down --- */
   function wireCursorGrab() {
     const body = document.body;
