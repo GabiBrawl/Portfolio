@@ -196,3 +196,12 @@
   vertical-align: middle;
   margin: 0 8px;
 }
+
+/* Mobile adjustments for tech scroller */
+@media (max-width: 800px) {
+  .tech-scroller {
+    left: 20px;
+    right: 20px;
+    height: 32px; /* down from the default 40 in desktop*/
+  }
+}

@@ -55,7 +55,7 @@ footer {
     width: 100%;
     height: auto;
     border-right: none;
-    padding-bottom: 50px; /* Make room for the absolutely positioned scroller */
+    padding-bottom: 30px; /* Reduced spacing to bring scroller closer to buttons */
   }
 
   .main {
