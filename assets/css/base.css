@@ -1,0 +1,62 @@
+/* CSS Variables and Base Styles */
+:root {
+  --black: #070707;
+  --white: #DED8CB;
+  --accent: #FFAB07;
+}
+
+/* Page base */
+html, body {
+  height: 100%;
+}
+
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  background-color: var(--black);
+  color: var(--white);
+  cursor: url('../cursors/handopen.svg') 10 5, auto;
+  transition: opacity 250ms ease-in-out;
+  opacity: 1;
+}
+
+body.grabbing {
+  cursor: url('../cursors/handgrabbing.svg') 10 5, auto !important;
+}
+
+/* Preload state */
+html.preload body {
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* Typography */
+p {
+  line-height: 1.6;
+  font-family: "Special Gothic Condensed One", sans-serif;
+  font-weight: 160;
+  text-align: justify;
+}
+
+h1 {
+  font-family: "Special Gothic Expanded One", sans-serif;
+  font-weight: 400;
+  margin: 0;
+}
+
+h2 {
+  margin: 0;
+  font-family: "Special Gothic Condensed One", sans-serif;
+}
+
+/* Custom cursors */
+a, [role="button"] {
+  cursor: url('../cursors/handpointing.svg') 10 5, pointer;
+}
+
+/* Selection */
+::selection {
+  background: var(--accent);
+  color: var(--black);
+}

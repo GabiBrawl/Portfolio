@@ -37,9 +37,17 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <!-- Load Google Fonts (moved out of CSS for better performance) -->
     <link href="https://fonts.googleapis.com/css2?family=Special+Gothic+Condensed+One&family=Special+Gothic+Expanded+One&display=swap" rel="stylesheet">
-    <!-- Preload main stylesheet to reduce render-blocking; use onload swap + noscript fallback -->
-    <link rel="preload" href="assets/css/styles.css" as="style" onload="this.rel='stylesheet'">
-    <noscript><link rel="stylesheet" href="assets/css/styles.css"></noscript>
+    <!-- Preload main stylesheets to reduce render-blocking -->
+    <link rel="preload" href="assets/css/base.css" as="style" onload="this.rel='stylesheet'">
+    <link rel="preload" href="assets/css/layout.css" as="style" onload="this.rel='stylesheet'">
+    <link rel="preload" href="assets/css/components.css" as="style" onload="this.rel='stylesheet'">
+    <link rel="preload" href="assets/css/effects.css" as="style" onload="this.rel='stylesheet'">
+    <noscript>
+        <link rel="stylesheet" href="assets/css/base.css">
+        <link rel="stylesheet" href="assets/css/layout.css">
+        <link rel="stylesheet" href="assets/css/components.css">
+        <link rel="stylesheet" href="assets/css/effects.css">
+    </noscript>
     <!-- Preload above-the-fold profile image -->
     <link rel="preload" href="https://pbs.twimg.com/profile_images/1984304066915102720/fhDLrrGn_400x400.jpg" as="image">
 </head><body>
@@ -84,52 +92,44 @@
             </div>
             <div class="project-grid">
                 <div class="project">
-                <img src="https://github.com/GabiBrawl/portfolio.github.io/blob/main/assets/kibodo.webp?raw=true" alt="Project Image" width="400" height="200" loading="lazy" decoding="async">
-                <h3>Kibodo One</h3>
-                <p>Possibly the coolest Keyboard built from scratch, with magnetically attachable modules, and a sick side-display.</p>
-                <div class="tags">
-                    <span>Embedded Development</span>
-                    <span>Electronics</span>
-                    <a href="https://github.com/PsychoDuckTech">OpenSource</a>
+                    <img src="https://github.com/GabiBrawl/portfolio.github.io/blob/main/assets/kibodo.webp?raw=true" alt="Project Image" width="400" height="200" loading="lazy" decoding="async">
+                    <h3>Kibodo One</h3>
+                    <p>Possibly the coolest Keyboard built from scratch, with magnetically attachable modules, and a sick side-display.</p>
+                    <div class="tags">
+                        <span>Embedded Development</span>
+                        <span>Electronics</span>
+                        <a href="https://github.com/PsychoDuckTech">OpenSource</a>
+                    </div>
+                </div>
+                <div class="project">
+                    <img src="https://github.com/GabiBrawl/portfolio.github.io/blob/main/assets/leplayer.png?raw=true" alt="Project Image" width="400" height="200" loading="lazy" decoding="async">
+                    <h3>LePlayer Music</h3>
+                    <p>A music streaming service, attempting to dethrone the giants in the industry</p>
+                    <div class="tags">
+                        <span>Svelte</span>
+                        <span>Python</span>
+                        <span>In Progress</span>
+                        <a href="https://github.com/LePlayer-Music">OpenSource</a>
+                    </div>
+                </div>
+                <div class="project">
+                    <img src="https://github.com/GabiBrawl/portfolio.github.io/blob/main/assets/pc.jpeg?raw=true" alt="Project Image" width="400" height="200" loading="lazy" decoding="async">
+                    <h3>PC Building</h3>
+                    <p>I build custom PCs tailored to individual needs and preferences.</p>
+                    <div class="tags">
+                        <span>Intel</span>
+                        <span>AMD</span>
+                    </div>
                 </div>
             </div>
-            <div class="project">
-                <img src="https://github.com/GabiBrawl/portfolio.github.io/blob/main/assets/leplayer.png?raw=true" alt="Project Image" width="400" height="200" loading="lazy" decoding="async">
-                <h3>LePlayer Music</h3>
-                <p>A music streaming service, attempting to dethrone the giants in the industry</p>
-                <div class="tags">
-                    <span>Svelte</span>
-                    <span>Python</span>
-                    <span>In Progress</span>
-                    <a href="https://github.com/LePlayer-Music">OpenSource</a>
-                </div>
-                </div>
-            <div class="project">
-                <img src="https://github.com/GabiBrawl/portfolio.github.io/blob/main/assets/pc.jpeg?raw=true" alt="Project Image" width="400" height="200" loading="lazy" decoding="async">
-                <h3>PC Building</h3>
-                <p>I build custom PCs tailored to individual needs and preferences.</p>
-                <div class="tags">
-                    <span>Intel</span>
-                    <span>AMD</span>
-                </div>
-                </div>
         </section>
-                <footer><span class="line"></span><span class="gb">𝕲 // 𝕭</span><span class="line"></span></footer>
+        <footer><span class="line"></span><span class="gb">𝕲 // 𝕭</span><span class="line"></span></footer>
     </div>
     
-    <!-- Project Modal -->
-    <div id="project-modal" class="modal">
-        <div class="modal-content">
-            <span class="close-button">&times;</span>
-            <div class="modal-body">
-                <img id="modal-image" src="" alt="Project Image">
-                <h2 id="modal-title"></h2>
-                <p id="modal-description"></p>
-                <div id="modal-tags" class="tags"></div>
-            </div>
-        </div>
-    </div>
-    
-    <script src="assets/js/script.js" defer></script>
+    <script src="assets/js/utils.js" defer></script>
+    <script src="assets/js/effects.js" defer></script>
+    <script src="assets/js/interactions.js" defer></script>
+    <script src="assets/js/features.js" defer></script>
+    <script src="assets/js/main.js" defer></script>
 </body>
 </html>
