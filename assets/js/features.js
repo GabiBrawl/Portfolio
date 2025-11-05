@@ -210,10 +210,14 @@ function wireCommandPalette() {
       document.documentElement.style.setProperty('--black', '#070707');
       document.documentElement.style.setProperty('--white', '#DED8CB');
       document.documentElement.style.setProperty('--accent', '#FFAB07');
+      document.documentElement.style.setProperty('--star-color', '#070707');
+      document.documentElement.style.setProperty('--star-image', 'url("../star.svg")');
     } else {
       document.documentElement.style.setProperty('--black', '#f0f0f0');
       document.documentElement.style.setProperty('--white', '#000000');
       document.documentElement.style.setProperty('--accent', '#007bff');
+      document.documentElement.style.setProperty('--star-color', '#DED8CB');
+      document.documentElement.style.setProperty('--star-image', 'url("../starW.svg")');
     }
   }
 
@@ -375,10 +379,6 @@ function wireCommandPalette() {
       response = 'User not in the sudoers file. This incident will be reported.';
     } else {
       switch(lowerCmd) {
-        case 'projects':
-          document.querySelector('.projects').scrollIntoView({behavior: 'smooth'});
-          response = 'Scrolling to projects...';
-          break;
         case 'github':
           window.open('https://github.com/GabiBrawl', '_blank');
           response = 'Opening GitHub...';
@@ -388,7 +388,7 @@ function wireCommandPalette() {
           response = 'Opening email client...';
           break;
         case 'help':
-          response = 'Available commands:\n  projects - Scroll to projects\n  github - Open GitHub\n  contact - Open email\n  whoami - Display user info\n  sudo - Attempt sudo (will show error)\n  age - Display age\n  qotd - Quote of the day\n  cowsay [message] - Cow says message\n  theme - Toggle theme\n  help - Show this help\n  clear - Clear terminal\n  exit - Close palette\n\nUse pipes: command | cowsay';
+          response = 'Available commands:\n  github - Open GitHub\n  contact - Open email\n  whoami - Display user info\n  sudo - Run a command as other user\n  age - Display age\n  qotd - Quote of the day\n  cowsay [message] - Cow says message\n  theme - Dont do this\n  help - Show this help\n  clear - Clear terminal\n  exit - Close palette\n\nUse pipes: command | cowsay';
           break;
         case 'whoami':
           response = 'GabiBrawl // Full-stack developer and electronics enthusiast';
@@ -433,7 +433,7 @@ function wireCommandPalette() {
       e.preventDefault();
       // Tab completion
       const currentValue = input.value.trim();
-      const commands = ['projects', 'github', 'contact', 'whoami', 'sudo', 'age', 'qotd', 'cowsay', 'theme', 'help', 'clear', 'exit'];
+      const commands = ['github', 'contact', 'whoami', 'sudo', 'age', 'qotd', 'cowsay', 'theme', 'help', 'clear', 'exit'];
       
       if (currentValue === '') {
         // Show all commands
