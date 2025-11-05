@@ -132,16 +132,76 @@ function wireCommandPalette() {
   let historyIndex = -1;
 
   function cowsay(message) {
-    const len = message.length;
-    const top = ' ' + '_'.repeat(len + 2);
-    const middle = '< ' + message + ' >';
-    const bottom = ' ' + '-'.repeat(len + 2);
-    const cow = `        \\   ^__^
+    // Handle multi-line input by splitting on newlines first
+    const inputLines = message.split('\n');
+    const maxWidth = 40;
+    const lines = [];
+
+    for (const inputLine of inputLines) {
+      if (inputLine.trim() === '') {
+        lines.push('');
+        continue;
+      }
+
+      const words = inputLine.split(' ');
+      let currentLine = '';
+
+      for (const word of words) {
+        if (currentLine.length + word.length + 1 <= maxWidth) {
+          currentLine += (currentLine ? ' ' : '') + word;
+        } else {
+          if (currentLine) lines.push(currentLine);
+          currentLine = word;
+        }
+      }
+      if (currentLine) lines.push(currentLine);
+    }
+
+    // Remove empty lines at the end
+    while (lines.length > 0 && lines[lines.length - 1] === '') {
+      lines.pop();
+    }
+
+    if (lines.length === 1 && lines[0].length <= maxWidth) {
+      // Single line - use original format
+      const len = lines[0].length;
+      const top = ' ' + '_'.repeat(len + 2);
+      const middle = '< ' + lines[0] + ' >';
+      const bottom = ' ' + '-'.repeat(len + 2);
+      const cow = `        \\   ^__^
          \\  (oo)\\_______
             (__)\\       )\\/\\
                 ||----w |
                 ||     ||`;
-    return top + '\n' + middle + '\n' + bottom + '\n' + cow;
+      return top + '\n' + middle + '\n' + bottom + '\n' + cow;
+    } else {
+      // Multi-line - create proper multi-line bubble
+      const maxLineLength = Math.max(...lines.filter(line => line.length > 0).map(line => line.length));
+      let result = ' ' + '_'.repeat(maxLineLength + 2) + '\n';
+      
+      // First line
+      const firstLine = lines[0] || '';
+      result += '/ ' + firstLine + ' '.repeat(maxLineLength - firstLine.length) + ' \\\n';
+      
+      // Middle lines
+      for (let i = 1; i < lines.length - 1; i++) {
+        const line = lines[i] || '';
+        result += '| ' + line + ' '.repeat(maxLineLength - line.length) + ' |\n';
+      }
+      
+      // Last line
+      const lastLine = lines[lines.length - 1] || '';
+      result += '\\ ' + lastLine + ' '.repeat(maxLineLength - lastLine.length) + ' /\n';
+      result += ' ' + '-'.repeat(maxLineLength + 2) + '\n';
+      
+      const cow = `        \\   ^__^
+         \\  (oo)\\_______
+            (__)\\       )\\/\\
+                ||----w |
+                ||     ||`;
+      
+      return result + cow;
+    }
   }
 
   function toggleTheme() {
@@ -268,61 +328,89 @@ function wireCommandPalette() {
     }
     commandHistory.push(originalCmd);
     historyIndex = commandHistory.length;
+
+    // Handle special commands that don't produce output
+    if (cmd.toLowerCase() === 'clear') {
+      output.textContent = '';
+      input.value = '';
+      return;
+    }
+    if (cmd.toLowerCase() === 'exit') {
+      hidePalette();
+      return;
+    }
+
+    // Parse command pipeline
+    const pipeline = cmd.split('|').map(c => c.trim());
+    let currentOutput = '';
+
+    for (let i = 0; i < pipeline.length; i++) {
+      const command = pipeline[i];
+      let response = '';
+
+      if (command.toLowerCase().startsWith('cowsay')) {
+        // If cowsay has args, use them; otherwise use the piped input
+        const cowsayArgs = command.slice(6).trim();
+        const message = cowsayArgs || currentOutput;
+        response = cowsay(message);
+      } else {
+        // Execute the command normally
+        response = executeSingleCommand(command);
+      }
+
+      currentOutput = response;
+    }
+
+    output.textContent += `$ ${originalCmd}\n${currentOutput}\n`;
+    input.value = '';
+    
+    // Auto-scroll to bottom to show latest output
+    terminal.scrollTop = terminal.scrollHeight;
+  }
+
+  function executeSingleCommand(cmd) {
     let response = '';
     let lowerCmd = cmd.toLowerCase();
     if (lowerCmd.startsWith('sudo')) {
-      response = 'User not in the sudoers file. This incident will be reported.\n';
+      response = 'User not in the sudoers file. This incident will be reported.';
     } else {
-      if (lowerCmd.startsWith('cowsay ')) {
-        const message = cmd.slice(7).trim();
-        response = cowsay(message) + '\n';
-      } else {
-        switch(lowerCmd) {
-          case 'projects':
-            document.querySelector('.projects').scrollIntoView({behavior: 'smooth'});
-            response = 'Scrolling to projects...\n';
-            break;
-          case 'github':
-            window.open('https://github.com/GabiBrawl', '_blank');
-            response = 'Opening GitHub...\n';
-            break;
-          case 'contact':
-            window.location.href = 'mailto:gabiya219@gmail.com';
-            response = 'Opening email client...\n';
-            break;
-          case 'help':
-            response = 'Available commands:\n  projects - Scroll to projects\n  github - Open GitHub\n  contact - Open email\n  whoami - Display user info\n  sudo - Attempt sudo (will show error)\n  age - Display age\n  qotd - Quote of the day\n  cowsay [message] - Cow says message\n  theme - Toggle theme\n  help - Show this help\n  clear - Clear terminal\n  exit - Close palette\n\n';
-            break;
-          case 'whoami':
-            response = 'GabiBrawl // Full-stack developer and electronics enthusiast\n';
-            break;
-          case 'age':
-            response = '18y... for now\n';
-            break;
-          case 'qotd':
-            response = qotd() + '\n';
-            break;
-          case 'theme':
-            toggleTheme();
-            response = 'Theme toggled!\n';
-            break;
-          case 'cowsay':
-            response = 'Usage: cowsay [message]\n';
-            break;
-          case 'clear':
-            output.textContent = '';
-            input.value = '';
-            return;
-          case 'exit':
-            hidePalette();
-            return;
-          default:
-            response = `Unknown command: ${cmd}\nType "help" for available commands.\n\n`;
-        }
+      switch(lowerCmd) {
+        case 'projects':
+          document.querySelector('.projects').scrollIntoView({behavior: 'smooth'});
+          response = 'Scrolling to projects...';
+          break;
+        case 'github':
+          window.open('https://github.com/GabiBrawl', '_blank');
+          response = 'Opening GitHub...';
+          break;
+        case 'contact':
+          window.location.href = 'mailto:gabiya219@gmail.com';
+          response = 'Opening email client...';
+          break;
+        case 'help':
+          response = 'Available commands:\n  projects - Scroll to projects\n  github - Open GitHub\n  contact - Open email\n  whoami - Display user info\n  sudo - Attempt sudo (will show error)\n  age - Display age\n  qotd - Quote of the day\n  cowsay [message] - Cow says message\n  theme - Toggle theme\n  help - Show this help\n  clear - Clear terminal\n  exit - Close palette\n\nUse pipes: command | cowsay';
+          break;
+        case 'whoami':
+          response = 'GabiBrawl // Full-stack developer and electronics enthusiast';
+          break;
+        case 'age':
+          response = '18y... for now';
+          break;
+        case 'qotd':
+          response = qotd();
+          break;
+        case 'theme':
+          toggleTheme();
+          response = 'Theme toggled!';
+          break;
+        case 'cowsay':
+          response = 'Usage: cowsay [message] or command | cowsay';
+          break;
+        default:
+          response = `Unknown command: ${cmd}\nType "help" for available commands.`;
       }
     }
-    output.textContent += `$ ${originalCmd}\n${response}`;
-    input.value = '';
+    return response;
   }
 
   input.addEventListener('keydown', (e) => {
@@ -340,6 +428,38 @@ function wireCommandPalette() {
       } else {
         historyIndex = commandHistory.length;
         input.value = '';
+      }
+    } else if (e.key === 'Tab') {
+      e.preventDefault();
+      // Tab completion
+      const currentValue = input.value.trim();
+      const commands = ['projects', 'github', 'contact', 'whoami', 'sudo', 'age', 'qotd', 'cowsay', 'theme', 'help', 'clear', 'exit'];
+      
+      if (currentValue === '') {
+        // Show all commands
+        output.textContent += '\nAvailable commands: ' + commands.join(', ') + '\n';
+        terminal.scrollTop = terminal.scrollHeight;
+      } else {
+        const matches = commands.filter(cmd => cmd.startsWith(currentValue));
+        if (matches.length === 1) {
+          // Complete the command
+          input.value = matches[0];
+        } else if (matches.length > 1) {
+          // Show possible completions
+          output.textContent += '\n' + matches.join('  ') + '\n';
+          terminal.scrollTop = terminal.scrollHeight;
+          // Find common prefix
+          const commonPrefix = matches.reduce((prefix, cmd) => {
+            let i = 0;
+            while (i < prefix.length && i < cmd.length && prefix[i] === cmd[i]) {
+              i++;
+            }
+            return prefix.slice(0, i);
+          });
+          if (commonPrefix.length > currentValue.length) {
+            input.value = commonPrefix;
+          }
+        }
       }
     } else if (e.key === 'Enter') {
       executeCommand(input.value);
