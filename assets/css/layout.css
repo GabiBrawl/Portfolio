@@ -13,7 +13,7 @@
 }
 
 .main {
-  margin-left: 350px;
+  margin-left: 310px;
   padding: 20px;
   background-color: var(--black);
   color: var(--white);
@@ -31,7 +31,7 @@ footer {
   justify-content: center;
   position: fixed;
   bottom: 0;
-  left: 350px;
+  left: 310px;
   right: 0;
   background-color: var(--black);
   color: var(--white);
