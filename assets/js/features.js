@@ -500,16 +500,12 @@ function wireCommandPalette() {
       response = 'User not in the sudoers file. This incident will be reported.';
     } else {
       switch(lowerCmd) {
-        case 'github':
-          window.open('https://github.com/GabiBrawl', '_blank');
-          response = 'Opening GitHub...';
-          break;
         case 'contact':
-          window.location.href = 'mailto:gabiya219@gmail.com';
-          response = 'Opening email client...';
+          response = 'Email: gabiya219@gmail.com\nCopied to clipboard!';
+          navigator.clipboard.writeText('gabiya219@gmail.com').catch(err => console.error('Failed to copy email:', err));
           break;
         case 'help':
-          response = 'Available commands:\n  github - Open GitHub\n  contact - Open email\n  whoami - Display user info\n  sudo - Run a command as other user\n  age - Display age\n  qotd - Quote of the day\n  cowsay [message] - Cow says message\n  theme - Dont do this\n  sticker - Toggle all stickers\n  retro - Toggle Retro sticker\n  help - Show this help\n  clear - Clear terminal\n  exit - Close palette\n\nUse pipes: command | cowsay';
+          response = 'Available commands:\n\nNavigation:\n  contact - Copy email to clipboard\n\nInfo:\n  whoami - Display user info\n  age - Display age\n  qotd - Quote of the day\n\nFun:\n  cowsay [message] - Cow says message\n  sudo - Run a command as other user\n\nTheme/Stickers:\n  theme - Toggle theme\n  sticker - Toggle all stickers\n\nTerminal:\n  help - Show this help\n  clear - Clear terminal\n  exit - Close palette\n\nUse pipes: command | cowsay';
           break;
         case 'whoami':
           response = 'GabiBrawl // Full-stack developer and electronics enthusiast';
@@ -527,10 +523,6 @@ function wireCommandPalette() {
         case 'sticker':
           toggleAllStickers();
           response = 'All stickers toggled!';
-          break;
-        case 'retro':
-          toggleSticker('retro');
-          response = 'Retro sticker toggled!';
           break;
         case 'cowsay':
           response = 'Usage: cowsay [message] or command | cowsay';
@@ -562,7 +554,7 @@ function wireCommandPalette() {
       e.preventDefault();
       // Tab completion
       const currentValue = input.value.trim();
-      const commands = ['github', 'contact', 'whoami', 'sudo', 'age', 'qotd', 'cowsay', 'theme', 'sticker', 'retro', 'help', 'clear', 'exit'];
+      const commands = ['contact', 'whoami', 'sudo', 'age', 'qotd', 'cowsay', 'theme', 'sticker', 'help', 'clear', 'exit'];
       
       if (currentValue === '') {
         // Show all commands
@@ -611,6 +603,13 @@ function wireCommandPalette() {
       } else {
         showPalette();
       }
+    }
+  });
+
+  // Auto-focus input when typing in palette
+  document.addEventListener('keydown', (e) => {
+    if (paletteVisible && document.activeElement !== input && !e.ctrlKey && !e.metaKey && !e.altKey && e.key !== 'Escape' && e.key !== 'Enter' && e.key !== 'Tab' && !e.key.startsWith('Arrow') && !e.key.startsWith('F') && e.key.length === 1) {
+      input.focus();
     }
   });
 }
