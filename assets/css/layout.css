@@ -17,22 +17,20 @@
   padding: 20px;
   background-color: var(--black);
   color: var(--white);
-  padding-bottom: 60px;
+  display: flex;
+  flex-direction: column;
+  min-height: calc(100vh - 40px);
 }
 
 /* Footer */
 footer {
   text-align: center;
-  padding: 20px;
-  margin-top: 40px;
+  padding: 20px 0 0 0;
+  margin-top: auto;
   font-size: 14px;
   display: flex;
   align-items: center;
   justify-content: center;
-  position: fixed;
-  bottom: 0;
-  left: 310px;
-  right: 0;
   background-color: var(--black);
   color: var(--white);
 }
@@ -56,8 +54,22 @@ footer {
 }
 
 .wifi-sticker {
-  width: 60px;
-  height: 60px;
+  width: 40px;
+  height: 40px;
+  transition: transform 0.3s ease;
+}
+
+/* Retro Sticker Container */
+.retro-sticker-container {
+  text-align: center;
+  margin: 20px 0;
+  transition: transform 0.3s ease;
+}
+
+.retro-sticker {
+  width: 40px;
+  height: 40px;
+  transition: transform 0.3s ease;
 }
 
 /* Mobile Layout */
@@ -67,17 +79,16 @@ footer {
     height: auto;
     position: static;
     border-right: none;
-    border-bottom: 2px solid var(--white);
   }
 
   .main {
     margin-left: 0;
     padding-top: 0;
+    min-height: auto;
   }
 
   footer {
     left: 0;
-    position: static;
     margin-top: 20px;
   }
 }

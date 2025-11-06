@@ -128,6 +128,7 @@
 
 .project:hover {
   box-shadow: 0 0 0 4px var(--black);
+  z-index: 10;
 }
 
 .project img {

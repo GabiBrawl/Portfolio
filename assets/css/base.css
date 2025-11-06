@@ -20,6 +20,7 @@ body {
   cursor: url('../cursors/handopen.svg') 10 5, auto;
   transition: opacity 250ms ease-in-out;
   opacity: 1;
+  overflow-x: hidden;
 }
 
 body.grabbing {

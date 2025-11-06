@@ -18,6 +18,7 @@ function createParticle({ left, top, color = 'var(--white)', tx = '0px', ty = '0
   particle.style.background = color;
   particle.style.setProperty('--tx', tx);
   particle.style.setProperty('--ty', ty);
+  particle.style.zIndex = '1000';
   document.body.appendChild(particle);
   setTimeout(() => particle.remove(), lifetime);
 }
