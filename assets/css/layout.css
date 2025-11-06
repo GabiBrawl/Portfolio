@@ -52,14 +52,22 @@ footer {
 .wifi-sticker-container {
   text-align: center;
   margin: 20px 0;
+  transition: transform 0.3s ease;
 }
 
 .wifi-sticker {
   width: 60px;
   height: 60px;
+}
+
+/* Retro Sticker Container */
+.retro-sticker-container {
+  text-align: center;
+  margin: 20px 0;
   transition: transform 0.3s ease;
 }
 
-.wifi-sticker:hover {
-  transform: scale(1.1);
+.retro-sticker {
+  width: 60px;
+  height: 60px;
 }

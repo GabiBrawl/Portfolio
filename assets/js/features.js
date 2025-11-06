@@ -1,10 +1,11 @@
 /* features.js - Complex features */
 
 /**
- * Toggles the WiFi sticker visibility
+ * Toggles sticker visibility (WiFi or Retro)
  */
-function toggleWifiSticker() {
-  const stickerContainer = document.getElementById('wifi-sticker-container');
+function toggleSticker(stickerType = 'wifi') {
+  const containerId = `${stickerType}-sticker-container`;
+  const stickerContainer = document.getElementById(containerId);
   if (!stickerContainer) return;
 
   if (stickerContainer.style.display === 'none' || stickerContainer.style.display === '') {
@@ -21,7 +22,7 @@ function toggleWifiSticker() {
       // Calculate available space between socials and scroller (vertical)
       const availableHeight = scrollerRect.top - socialsRect.bottom - 80; // 80px for sticker height + margin
 
-      // Calculate available width within sidebar (accounting for padding)
+      // Calculate available width within sidebar bounds
       const availableWidth = sidebarRect.width - 40; // 20px padding on each side
 
       if (availableHeight > 20 && availableWidth > 80) { // Minimum space check
@@ -40,19 +41,8 @@ function toggleWifiSticker() {
         stickerContainer.style.transform = `rotate(${randomRotation}deg)`;
         stickerContainer.style.margin = '0';
 
-        // Store original rotation for hover effect
-        stickerContainer.dataset.originalRotation = randomRotation;
-
-        // Add hover handlers
-        const sticker = stickerContainer.querySelector('.wifi-sticker');
-        if (sticker) {
-          sticker.addEventListener('mouseenter', () => {
-            sticker.style.transform = 'rotate(0deg) scale(1.1)';
-          });
-          sticker.addEventListener('mouseleave', () => {
-            sticker.style.transform = `rotate(${randomRotation}deg) scale(1)`;
-          });
-        }
+        // Store original transform for hover effect
+        stickerContainer.dataset.originalTransform = `rotate(${randomRotation}deg)`;
       } else {
         // Fallback positioning
         stickerContainer.style.position = 'absolute';
@@ -60,6 +50,7 @@ function toggleWifiSticker() {
         stickerContainer.style.left = '50%';
         stickerContainer.style.transform = 'translateX(-50%) rotate(0deg)';
         stickerContainer.style.margin = '0';
+        stickerContainer.dataset.originalTransform = 'translateX(-50%) rotate(0deg)';
       }
     }
 
@@ -67,6 +58,67 @@ function toggleWifiSticker() {
   } else {
     stickerContainer.style.display = 'none';
   }
+}
+
+/**
+ * Toggles all stickers visibility
+ */
+function toggleAllStickers() {
+  const wifiContainer = document.getElementById('wifi-sticker-container');
+  const retroContainer = document.getElementById('retro-sticker-container');
+
+  const isVisible = wifiContainer && wifiContainer.style.display !== 'none';
+
+  // Toggle both stickers
+  if (wifiContainer) toggleSticker('wifi');
+  if (retroContainer) toggleSticker('retro');
+}
+
+// Set up hover handlers for stickers (only once)
+function setupStickerHover() {
+  // Set up hover for WiFi sticker
+  const wifiStickerContainer = document.getElementById('wifi-sticker-container');
+  if (wifiStickerContainer) {
+    wifiStickerContainer.removeEventListener('mouseenter', handleStickerMouseEnter);
+    wifiStickerContainer.removeEventListener('mouseleave', handleStickerMouseLeave);
+    wifiStickerContainer.addEventListener('mouseenter', handleStickerMouseEnter);
+    wifiStickerContainer.addEventListener('mouseleave', handleStickerMouseLeave);
+  }
+
+  // Set up hover for Retro sticker
+  const retroStickerContainer = document.getElementById('retro-sticker-container');
+  if (retroStickerContainer) {
+    retroStickerContainer.removeEventListener('mouseenter', handleStickerMouseEnter);
+    retroStickerContainer.removeEventListener('mouseleave', handleStickerMouseLeave);
+    retroStickerContainer.addEventListener('mouseenter', handleStickerMouseEnter);
+    retroStickerContainer.addEventListener('mouseleave', handleStickerMouseLeave);
+  }
+}
+
+// Set up hover handlers for the WiFi sticker (legacy function for backward compatibility)
+function setupWifiStickerHover() {
+  setupStickerHover();
+}
+
+function handleStickerMouseEnter(event) {
+  const stickerContainer = event.currentTarget;
+  if (!stickerContainer) return;
+
+  // Generate a small random angle between -2° and 2°
+  const hoverAngle = (Math.random() - 0.5) * 4; // -2 to +2 degrees
+
+  // Store current transform and apply hover transform
+  stickerContainer.dataset.originalTransform = stickerContainer.style.transform;
+  stickerContainer.style.transform = `rotate(${hoverAngle}deg) scale(1.1)`;
+}
+
+function handleStickerMouseLeave(event) {
+  const stickerContainer = event.currentTarget;
+  if (!stickerContainer) return;
+
+  // Restore original transform
+  const originalTransform = stickerContainer.dataset.originalTransform || 'rotate(0deg)';
+  stickerContainer.style.transform = originalTransform;
 }
 
 /**
@@ -457,7 +509,7 @@ function wireCommandPalette() {
           response = 'Opening email client...';
           break;
         case 'help':
-          response = 'Available commands:\n  github - Open GitHub\n  contact - Open email\n  whoami - Display user info\n  sudo - Run a command as other user\n  age - Display age\n  qotd - Quote of the day\n  cowsay [message] - Cow says message\n  theme - Dont do this\n  sticker - Toggle WiFi sticker\n  help - Show this help\n  clear - Clear terminal\n  exit - Close palette\n\nUse pipes: command | cowsay';
+          response = 'Available commands:\n  github - Open GitHub\n  contact - Open email\n  whoami - Display user info\n  sudo - Run a command as other user\n  age - Display age\n  qotd - Quote of the day\n  cowsay [message] - Cow says message\n  theme - Dont do this\n  sticker - Toggle all stickers\n  retro - Toggle Retro sticker\n  help - Show this help\n  clear - Clear terminal\n  exit - Close palette\n\nUse pipes: command | cowsay';
           break;
         case 'whoami':
           response = 'GabiBrawl // Full-stack developer and electronics enthusiast';
@@ -473,8 +525,12 @@ function wireCommandPalette() {
           response = 'Theme toggled!';
           break;
         case 'sticker':
-          toggleWifiSticker();
-          response = 'WiFi sticker toggled!';
+          toggleAllStickers();
+          response = 'All stickers toggled!';
+          break;
+        case 'retro':
+          toggleSticker('retro');
+          response = 'Retro sticker toggled!';
           break;
         case 'cowsay':
           response = 'Usage: cowsay [message] or command | cowsay';
@@ -506,7 +562,7 @@ function wireCommandPalette() {
       e.preventDefault();
       // Tab completion
       const currentValue = input.value.trim();
-      const commands = ['github', 'contact', 'whoami', 'sudo', 'age', 'qotd', 'cowsay', 'theme', 'sticker', 'help', 'clear', 'exit'];
+      const commands = ['github', 'contact', 'whoami', 'sudo', 'age', 'qotd', 'cowsay', 'theme', 'sticker', 'retro', 'help', 'clear', 'exit'];
       
       if (currentValue === '') {
         // Show all commands

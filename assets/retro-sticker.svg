@@ -1,0 +1,210 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   width="80mm"
+   height="80mm"
+   viewBox="0 0 80 80"
+   version="1.1"
+   id="retro-sticker"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <defs id="defs1">
+    <!-- Enhanced Gradients -->
+    <linearGradient id="retroGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#FF0080;stop-opacity:1" />
+      <stop offset="25%" style="stop-color:#FF6B35;stop-opacity:1" />
+      <stop offset="50%" style="stop-color:#8338EC;stop-opacity:1" />
+      <stop offset="75%" style="stop-color:#3A86FF;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#06FFA5;stop-opacity:1" />
+    </linearGradient>
+
+    <radialGradient id="sunsetGradient" cx="40%" cy="30%">
+      <stop offset="0%" style="stop-color:#FFD700;stop-opacity:1" />
+      <stop offset="30%" style="stop-color:#FF8C00;stop-opacity:1" />
+      <stop offset="70%" style="stop-color:#FF4500;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#FF1493;stop-opacity:1" />
+    </radialGradient>
+
+    <linearGradient id="skyGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#1E3A8A;stop-opacity:1" />
+      <stop offset="30%" style="stop-color:#3B82F6;stop-opacity:1" />
+      <stop offset="70%" style="stop-color:#8B5CF6;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#EC4899;stop-opacity:1" />
+    </linearGradient>
+
+    <radialGradient id="sunGlow" cx="50%" cy="50%">
+      <stop offset="0%" style="stop-color:#FFD700;stop-opacity:0.9" />
+      <stop offset="50%" style="stop-color:#FFA500;stop-opacity:0.6" />
+      <stop offset="100%" style="stop-color:#FF4500;stop-opacity:0" />
+    </radialGradient>
+
+    <linearGradient id="stickerShine" x1="20%" y1="20%" x2="80%" y2="80%">
+      <stop offset="0%" style="stop-color:#ffffff;stop-opacity:0.8" />
+      <stop offset="30%" style="stop-color:#ffffff;stop-opacity:0.4" />
+      <stop offset="70%" style="stop-color:#ffffff;stop-opacity:0.1" />
+      <stop offset="100%" style="stop-color:#ffffff;stop-opacity:0" />
+    </linearGradient>
+
+    <linearGradient id="mountainGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#2D3748;stop-opacity:0.9" />
+      <stop offset="100%" style="stop-color:#1A202C;stop-opacity:0.95" />
+    </linearGradient>
+
+    <linearGradient id="oceanGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#06FFA5;stop-opacity:0.3" />
+      <stop offset="100%" style="stop-color:#00D9FF;stop-opacity:0.6" />
+    </linearGradient>
+
+    <!-- Enhanced Filters -->
+    <filter id="retroShadow" x="-50%" y="-50%" width="200%" height="200%">
+      <feDropShadow dx="3" dy="3" stdDeviation="2" flood-color="#000000" flood-opacity="0.4"/>
+      <feDropShadow dx="1" dy="1" stdDeviation="1" flood-color="#FF0080" flood-opacity="0.2"/>
+    </filter>
+
+    <filter id="glowFilter" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="2" result="coloredBlur"/>
+      <feMerge>
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+
+  <!-- Background Elements -->
+  <g id="background">
+    <!-- Enhanced outer glow -->
+    <rect x="0.5" y="0.5" width="79" height="79" rx="14" ry="14"
+          fill="url(#retroGradient)" opacity="0.6" filter="url(#glowFilter)" id="glow" />
+
+    <!-- Main sticker background with subtle pattern -->
+    <rect x="6" y="6" width="68" height="68" rx="10" ry="10"
+          fill="#0F172A" stroke="url(#retroGradient)" stroke-width="1"
+          filter="url(#retroShadow)" id="sticker-bg" />
+  </g>
+
+  <!-- Sky and Atmosphere -->
+  <g id="landscape">
+    <!-- Enhanced sky gradient -->
+    <rect x="10" y="10" width="60" height="40" rx="6" ry="6"
+          fill="url(#skyGradient)" id="sky" />
+
+    <!-- Refined sun with better animation -->
+    <circle cx="40" cy="28" r="10" fill="url(#sunsetGradient)" id="sun" filter="url(#glowFilter)">
+      <animate attributeName="r" values="10;11;10" dur="4s" repeatCount="indefinite"/>
+      <animateTransform attributeName="transform" type="rotate" values="0 40 28;360 40 28" dur="20s" repeatCount="indefinite"/>
+    </circle>
+
+    <!-- Enhanced sun glow with pulsing -->
+    <circle cx="40" cy="28" r="16" fill="url(#sunGlow)" opacity="0.7" id="sun-glow">
+      <animate attributeName="opacity" values="0.5;0.9;0.5" dur="4s" repeatCount="indefinite"/>
+      <animate attributeName="r" values="16;18;16" dur="4s" repeatCount="indefinite"/>
+    </circle>
+
+    <!-- Refined twinkling stars -->
+    <g id="stars">
+      <circle cx="18" cy="16" r="1.2" fill="#FFD700" opacity="0.9">
+        <animate attributeName="opacity" values="0.3;1;0.3" dur="2.5s" repeatCount="indefinite"/>
+      </circle>
+      <circle cx="55" cy="14" r="0.9" fill="#FFD700" opacity="0.8">
+        <animate attributeName="opacity" values="0.4;0.9;0.4" dur="3.2s" repeatCount="indefinite"/>
+      </circle>
+      <circle cx="65" cy="20" r="1.4" fill="#FFD700" opacity="0.95">
+        <animate attributeName="opacity" values="0.5;1;0.5" dur="2.8s" repeatCount="indefinite"/>
+      </circle>
+      <circle cx="28" cy="12" r="0.7" fill="#FFD700" opacity="0.7">
+        <animate attributeName="opacity" values="0.2;0.8;0.2" dur="3.8s" repeatCount="indefinite"/>
+      </circle>
+    </g>
+
+    <!-- Soft clouds for depth -->
+    <g id="clouds" opacity="0.4">
+      <ellipse cx="20" cy="18" rx="8" ry="3" fill="#ffffff"/>
+      <ellipse cx="15" cy="20" rx="6" ry="2.5" fill="#ffffff"/>
+      <ellipse cx="60" cy="24" rx="7" ry="3" fill="#ffffff"/>
+      <ellipse cx="67" cy="25" rx="5" ry="2" fill="#ffffff"/>
+    </g>
+  </g>
+
+  <!-- Retro Grid System -->
+  <g id="grid" opacity="0.7">
+    <g id="horizontal-lines">
+      <line x1="12" y1="35" x2="68" y2="35" stroke="#FF0080" stroke-width="1.5" opacity="0.8">
+        <animate attributeName="stroke-opacity" values="0.8;0.4;0.8" dur="5s" repeatCount="indefinite"/>
+      </line>
+      <line x1="12" y1="40" x2="68" y2="40" stroke="#FF6B35" stroke-width="1.2" opacity="0.7">
+        <animate attributeName="stroke-opacity" values="0.7;0.3;0.7" dur="5s" repeatCount="indefinite"/>
+      </line>
+      <line x1="12" y1="45" x2="68" y2="45" stroke="#8338EC" stroke-width="1" opacity="0.6">
+        <animate attributeName="stroke-opacity" values="0.6;0.2;0.6" dur="5s" repeatCount="indefinite"/>
+      </line>
+      <line x1="12" y1="50" x2="68" y2="50" stroke="#3A86FF" stroke-width="0.8" opacity="0.5">
+        <animate attributeName="stroke-opacity" values="0.5;0.1;0.5" dur="5s" repeatCount="indefinite"/>
+      </line>
+    </g>
+
+    <g id="vertical-lines">
+      <line x1="20" y1="35" x2="16" y2="50" stroke="#06FFA5" stroke-width="1.2" opacity="0.6"/>
+      <line x1="30" y1="35" x2="26" y2="50" stroke="#06FFA5" stroke-width="1" opacity="0.5"/>
+      <line x1="40" y1="35" x2="40" y2="50" stroke="#FF0080" stroke-width="1.5" opacity="0.8"/>
+      <line x1="50" y1="35" x2="54" y2="50" stroke="#06FFA5" stroke-width="1" opacity="0.5"/>
+      <line x1="60" y1="35" x2="64" y2="50" stroke="#06FFA5" stroke-width="1.2" opacity="0.6"/>
+    </g>
+  </g>
+
+  <!-- Landscape Elements -->
+  <g id="terrain">
+    <!-- Ocean/Water element at bottom -->
+    <path d="M 10,50 Q 15,48 20,50 T 40,50 T 60,50 T 80,50 L 80,55 Q 75,53 70,55 T 50,55 T 30,55 T 10,55 Z"
+          fill="url(#oceanGradient)" opacity="0.6" id="water-wave"/>
+    
+    <g id="mountains" opacity="0.85">
+      <path d="M 12,35 L 22,18 L 32,28 L 42,16 L 52,26 L 62,20 L 68,35 Z"
+            fill="url(#mountainGradient)" opacity="0.9"/>
+      <path d="M 12,35 L 27,23 L 37,30 L 47,21 L 57,28 L 68,35 Z"
+            fill="#1A202C" opacity="0.7"/>
+    </g>
+
+    <g id="palm-tree" transform="translate(16, 28)">
+      <rect x="0" y="0" width="2.5" height="22" fill="#0F172A" opacity="0.9"/>
+      <g id="leaves" opacity="0.8">
+        <path d="M 1.25,-3 Q -6,-10 -9,-7" stroke="#0F172A" stroke-width="2.5" fill="none" opacity="0.9"/>
+        <path d="M 1.25,-3 Q 9,-10 12,-7" stroke="#0F172A" stroke-width="2.5" fill="none" opacity="0.9"/>
+        <path d="M 1.25,-2 Q -4,-12 -7,-10" stroke="#0F172A" stroke-width="2" fill="none" opacity="0.7"/>
+        <path d="M 1.25,-2 Q 7,-12 10,-10" stroke="#0F172A" stroke-width="2" fill="none" opacity="0.7"/>
+        <path d="M 1.25,-1 Q -2,-8 -4,-6" stroke="#0F172A" stroke-width="1.5" fill="none" opacity="0.6"/>
+        <path d="M 1.25,-1 Q 5,-8 7,-6" stroke="#0F172A" stroke-width="1.5" fill="none" opacity="0.6"/>
+      </g>
+      <!-- Palm tree highlight for dimension -->
+      <circle cx="-1" cy="6" r="1.5" fill="#06FFA5" opacity="0.3"/>
+    </g>
+  </g>
+
+  <!-- Effects and Details -->
+  <g id="effects">
+    <ellipse cx="22" cy="16" rx="18" ry="12" fill="url(#stickerShine)" opacity="0.7" id="gloss" />
+
+    <rect x="10" y="10" width="60" height="40" rx="6" ry="6"
+          fill="none" stroke="#ffffff" stroke-width="0.3" opacity="0.4" id="inner-border" />
+  </g>
+
+  <!-- Typography -->
+  <g id="text">
+    <!-- Text glow effect -->
+    <text x="40" y="62" text-anchor="middle"
+          font-family="Arial, sans-serif" font-size="9" font-weight="bold"
+          letter-spacing="1.5" fill="url(#retroGradient)" opacity="0.3"
+          filter="url(#glowFilter)">RETRO</text>
+    
+    <text x="40" y="62" text-anchor="middle"
+          font-family="Arial, sans-serif" font-size="9" font-weight="bold"
+          letter-spacing="1.5" fill="url(#retroGradient)" opacity="1">RETRO</text>
+    
+    <text x="40" y="72" text-anchor="middle"
+          font-family="Arial, sans-serif" font-size="7" font-weight="normal"
+          letter-spacing="2" fill="#FFD700" opacity="0.3"
+          filter="url(#glowFilter)">VIBES</text>
+    
+    <text x="40" y="72" text-anchor="middle"
+          font-family="Arial, sans-serif" font-size="7" font-weight="normal"
+          letter-spacing="2" fill="#FFD700" opacity="1">VIBES</text>
+  </g>
+</svg>

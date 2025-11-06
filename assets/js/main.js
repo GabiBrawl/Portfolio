@@ -14,12 +14,13 @@
   // Initialize when DOM is ready
   document.addEventListener('DOMContentLoaded', () => {
     wireProjectHoverInteractions();
-    updateAge('age', '2007-02-07');
+    updateAge('age', '2007-01-29');
     wireTechScroller();
     wirePfpEffects();
     wireEmailCopy();
     wireCommandPalette();
     wireCursorGrab();
+    setupStickerHover();
     positionWifiSticker();
   });
 
