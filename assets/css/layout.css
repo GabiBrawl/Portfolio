@@ -48,21 +48,18 @@ footer {
   font-size: 24px;
 }
 
-/* Responsive */
-@media (max-width: 800px) {
-  .sidebar {
-    position: relative;
-    width: 100%;
-    height: auto;
-    border-right: none;
-    padding-bottom: 30px; /* Reduced spacing to bring scroller closer to buttons */
-  }
+/* WiFi Sticker Container */
+.wifi-sticker-container {
+  text-align: center;
+  margin: 20px 0;
+}
 
-  .main {
-    margin-left: 0;
-  }
+.wifi-sticker {
+  width: 60px;
+  height: 60px;
+  transition: transform 0.3s ease;
+}
 
-  footer {
-    left: 0;
-  }
+.wifi-sticker:hover {
+  transform: scale(1.1);
 }

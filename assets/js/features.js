@@ -1,6 +1,75 @@
 /* features.js - Complex features */
 
 /**
+ * Toggles the WiFi sticker visibility
+ */
+function toggleWifiSticker() {
+  const stickerContainer = document.getElementById('wifi-sticker-container');
+  if (!stickerContainer) return;
+
+  if (stickerContainer.style.display === 'none' || stickerContainer.style.display === '') {
+    // Position the sticker randomly in the sidebar between socials and scroller
+    const socials = document.querySelector('.socials');
+    const scroller = document.querySelector('.tech-scroller');
+    const sidebar = document.querySelector('.sidebar');
+
+    if (socials && scroller && sidebar) {
+      const socialsRect = socials.getBoundingClientRect();
+      const scrollerRect = scroller.getBoundingClientRect();
+      const sidebarRect = sidebar.getBoundingClientRect();
+
+      // Calculate available space between socials and scroller (vertical)
+      const availableHeight = scrollerRect.top - socialsRect.bottom - 80; // 80px for sticker height + margin
+
+      // Calculate available width within sidebar (accounting for padding)
+      const availableWidth = sidebarRect.width - 40; // 20px padding on each side
+
+      if (availableHeight > 20 && availableWidth > 80) { // Minimum space check
+        // Random vertical position
+        const randomTop = socialsRect.bottom - sidebarRect.top + Math.random() * (availableHeight - 20);
+
+        // Random horizontal position within sidebar bounds
+        const randomLeft = 20 + Math.random() * (availableWidth - 80); // 20px padding + sticker width
+
+        // Random rotation angle (-30 to +30 degrees)
+        const randomRotation = (Math.random() - 0.5) * 60;
+
+        stickerContainer.style.position = 'absolute';
+        stickerContainer.style.top = randomTop + 'px';
+        stickerContainer.style.left = randomLeft + 'px';
+        stickerContainer.style.transform = `rotate(${randomRotation}deg)`;
+        stickerContainer.style.margin = '0';
+
+        // Store original rotation for hover effect
+        stickerContainer.dataset.originalRotation = randomRotation;
+
+        // Add hover handlers
+        const sticker = stickerContainer.querySelector('.wifi-sticker');
+        if (sticker) {
+          sticker.addEventListener('mouseenter', () => {
+            sticker.style.transform = 'rotate(0deg) scale(1.1)';
+          });
+          sticker.addEventListener('mouseleave', () => {
+            sticker.style.transform = `rotate(${randomRotation}deg) scale(1)`;
+          });
+        }
+      } else {
+        // Fallback positioning
+        stickerContainer.style.position = 'absolute';
+        stickerContainer.style.top = (socialsRect.bottom - sidebarRect.top + 20) + 'px';
+        stickerContainer.style.left = '50%';
+        stickerContainer.style.transform = 'translateX(-50%) rotate(0deg)';
+        stickerContainer.style.margin = '0';
+      }
+    }
+
+    stickerContainer.style.display = 'block';
+  } else {
+    stickerContainer.style.display = 'none';
+  }
+}
+
+/**
  * Wires up email copy functionality
  */
 function wireEmailCopy() {
@@ -54,8 +123,8 @@ function wireTechScroller() {
 
     const words = [
       'LINUX BTW', 'WINDOWS', 'C++', 'C', 'AI', 'PCB', '$BTC', 'MEMES', 'VS CODE', 'GIT',
-      'COOL SHIT', 'OMARCHY', 'EMBEDDED DEV', 'ML', '.AF', 'THINKPAD', 'PROTON', 'ZEN',
-      'NBHD', 'SOFTCORE', 'xD', 'NOTHING', 'ART', 'CYBERSIGILISM', 'VALORANT', 'BRAVE BROWSER',
+      'COOL SHIT', 'OMARCHY', 'ML', '.AF', 'THINKPAD', 'PROTON', 'ZEN BROWSER',
+      'NBHD', 'SOFTCORE', 'NOTHING', 'ART', 'CYBERSIGILISM', 'VALORANT', 'BRAVE',
       'UBUNTU', 'HTML', 'AFFINITY', 'FIGMA', 'YAPPER', 'TESLA', 'ESPRESSIF',
       'MIATAAA', 'CHOC CHIP COOKIES', 'OPEN SOURCE', 'RETRO FTW', 'CASH IS KING'
     ];
@@ -388,7 +457,7 @@ function wireCommandPalette() {
           response = 'Opening email client...';
           break;
         case 'help':
-          response = 'Available commands:\n  github - Open GitHub\n  contact - Open email\n  whoami - Display user info\n  sudo - Run a command as other user\n  age - Display age\n  qotd - Quote of the day\n  cowsay [message] - Cow says message\n  theme - Dont do this\n  help - Show this help\n  clear - Clear terminal\n  exit - Close palette\n\nUse pipes: command | cowsay';
+          response = 'Available commands:\n  github - Open GitHub\n  contact - Open email\n  whoami - Display user info\n  sudo - Run a command as other user\n  age - Display age\n  qotd - Quote of the day\n  cowsay [message] - Cow says message\n  theme - Dont do this\n  sticker - Toggle WiFi sticker\n  help - Show this help\n  clear - Clear terminal\n  exit - Close palette\n\nUse pipes: command | cowsay';
           break;
         case 'whoami':
           response = 'GabiBrawl // Full-stack developer and electronics enthusiast';
@@ -402,6 +471,10 @@ function wireCommandPalette() {
         case 'theme':
           toggleTheme();
           response = 'Theme toggled!';
+          break;
+        case 'sticker':
+          toggleWifiSticker();
+          response = 'WiFi sticker toggled!';
           break;
         case 'cowsay':
           response = 'Usage: cowsay [message] or command | cowsay';
@@ -433,7 +506,7 @@ function wireCommandPalette() {
       e.preventDefault();
       // Tab completion
       const currentValue = input.value.trim();
-      const commands = ['github', 'contact', 'whoami', 'sudo', 'age', 'qotd', 'cowsay', 'theme', 'help', 'clear', 'exit'];
+      const commands = ['github', 'contact', 'whoami', 'sudo', 'age', 'qotd', 'cowsay', 'theme', 'sticker', 'help', 'clear', 'exit'];
       
       if (currentValue === '') {
         // Show all commands

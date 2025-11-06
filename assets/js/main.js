@@ -3,6 +3,14 @@
 (function () {
   'use strict';
 
+  /**
+   * Randomly positions the WiFi sticker on the page
+   */
+  function positionWifiSticker() {
+    // Sticker is now positioned in sidebar via CSS, no random positioning needed
+    return;
+  }
+
   // Initialize when DOM is ready
   document.addEventListener('DOMContentLoaded', () => {
     wireProjectHoverInteractions();
@@ -12,6 +20,7 @@
     wireEmailCopy();
     wireCommandPalette();
     wireCursorGrab();
+    positionWifiSticker();
   });
 
   // Remove preload class on window load
