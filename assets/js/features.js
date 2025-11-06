@@ -177,7 +177,7 @@ function wireTechScroller() {
       'LINUX BTW', 'WINDOWS', 'C++', 'C', 'AI', 'PCB', '$BTC', 'MEMES', 'VS CODE', 'GIT',
       'COOL SHIT', 'OMARCHY', 'ML', '.AF', 'THINKPAD', 'PROTON', 'ZEN BROWSER',
       'NBHD', 'SOFTCORE', 'NOTHING', 'ART', 'CYBERSIGILISM', 'VALORANT', 'BRAVE',
-      'UBUNTU', 'HTML', 'AFFINITY', 'FIGMA', 'YAPPER', 'TESLA', 'ESPRESSIF',
+      'UBUNTU', 'HTML', 'AFFINITY', 'FIGMA', 'YAPPER', 'TESLA', 'ESPRESSIF', 'IoT',
       'MIATAAA', 'CHOC CHIP COOKIES', 'OPEN SOURCE', 'RETRO FTW', 'CASH IS KING'
     ];
 
