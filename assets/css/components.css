@@ -153,6 +153,7 @@
   max-height: 40px;
   object-fit: contain;
   z-index: 1;
+  pointer-events: none;
 }
 
 .tags {
@@ -212,8 +213,21 @@
 /* Mobile adjustments for tech scroller */
 @media (max-width: 800px) {
   .tech-scroller {
-    left: 20px;
-    right: 20px;
-    height: 32px; /* down from the default 40 in desktop*/
+    position: static;
+    left: auto;
+    right: auto;
+    height: 32px;
+  }
+}
+
+/* Mobile project grid */
+@media (max-width: 768px) {
+  .project-grid {
+    grid-template-columns: 1fr;
+    gap: 15px;
+  }
+
+  .project {
+    padding: 15px;
   }
 }
