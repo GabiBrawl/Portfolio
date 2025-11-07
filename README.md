@@ -1,6 +1,6 @@
-# Portfolio
+# My Portfolio
 
-A modern, interactive and opinionated portfolio me, GabiBrawl, showcasing my projects which I'm most proud of.
+A modern, interactive and opinionated portfolio for me, GabiBrawl, showcasing my projects which I'm most proud of.
 
 ## Features
 
