@@ -38,6 +38,7 @@ portfolio/
 │   └── (other assets)
 ├── LICENSE
 └── README.md
+```
 
 ## License
 
