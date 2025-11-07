@@ -95,11 +95,6 @@ function setupStickerHover() {
   }
 }
 
-// Set up hover handlers for the WiFi sticker (legacy function for backward compatibility)
-function setupWifiStickerHover() {
-  setupStickerHover();
-}
-
 function handleStickerMouseEnter(event) {
   const stickerContainer = event.currentTarget;
   if (!stickerContainer) return;
