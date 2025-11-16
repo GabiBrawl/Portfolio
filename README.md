@@ -14,7 +14,7 @@ A modern, interactive and opinionated portfolio for me, GabiBrawl, showcasing my
 
 - **Frontend**: HTML5, CSS3, Vanilla JavaScript
 - **Fonts**: Google Fonts (Special Gothic Condensed/Expanded One)
-- **Icons**: Custom SVG cursors, most made by Grok Code Fast 1 and Claude Sonnet 4.5
+- **Icons**: Custom SVG cursor hands
 
 ## Project Structure
 
@@ -48,3 +48,4 @@ See [LICENSE](LICENSE) file.
 
 - **Email**: gabiya219@gmail.com
 - **X (Twitter)**: [@GabiBrawl](https://x.com/GabiBrawl)
+
