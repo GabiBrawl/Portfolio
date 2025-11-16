@@ -46,32 +46,6 @@ footer {
   font-size: 24px;
 }
 
-/* WiFi Sticker Container */
-.wifi-sticker-container {
-  text-align: center;
-  margin: 20px 0;
-  transition: transform 0.3s ease;
-}
-
-.wifi-sticker {
-  width: 40px;
-  height: 40px;
-  transition: transform 0.3s ease;
-}
-
-/* Retro Sticker Container */
-.retro-sticker-container {
-  text-align: center;
-  margin: 20px 0;
-  transition: transform 0.3s ease;
-}
-
-.retro-sticker {
-  width: 40px;
-  height: 40px;
-  transition: transform 0.3s ease;
-}
-
 /* Mobile Layout */
 @media (max-width: 768px) {
   .sidebar {

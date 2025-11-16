@@ -44,11 +44,13 @@
     <link rel="preload" href="assets/css/layout.css" as="style" onload="this.rel='stylesheet'">
     <link rel="preload" href="assets/css/components.css" as="style" onload="this.rel='stylesheet'">
     <link rel="preload" href="assets/css/effects.css" as="style" onload="this.rel='stylesheet'">
+    <link rel="preload" href="assets/css/project-detail.css" as="style" onload="this.rel='stylesheet'">
     <noscript>
         <link rel="stylesheet" href="assets/css/base.css">
         <link rel="stylesheet" href="assets/css/layout.css">
         <link rel="stylesheet" href="assets/css/components.css">
         <link rel="stylesheet" href="assets/css/effects.css">
+        <link rel="stylesheet" href="assets/css/project-detail.css">
     </noscript>
     <!-- Preload above-the-fold profile image -->
     <link rel="preload" href="assets/images/pfp400x400.jpg" as="image">
@@ -66,26 +68,18 @@
         <p>Full-stack developer and electronics enthusiast. I build everything from clean web solutions to custom hardware, all with creativity at the core.</p>
         <div class="socials">
             <a href="https://github.com/GabiBrawl" class="large" target="_blank">GitHub</a>
-            <a class="large">Blog (soon)</a>
             <a class="large" id="email-link">Email</a>
-            <div class="social-row">
-                <a href="https://x.com/GabiBrawl" target="_blank">X (Twitter)</a>
-                <a href="https://discord.gg/D3GPt423tc" target="_blank">Discord</a>
+            <div class="extra-socials">
+                <div class="social-row">
+                    <a href="https://x.com/GabiBrawl" target="_blank">Twitter</a>
+                    <a href="https://discord.gg/D3GPt423tc" target="_blank">Discord</a>
+                </div>
+                <div class="social-row">
+                    <a href="https://open.spotify.com/playlist/29FRF3n8TgRjY5Y2lGGFwV" target="_blank">Spotify</a>
+                    <a href="https://linkedin.com/in/gabrielyassin" target="_blank">LinkedIn</a>
+                </div>
             </div>
-            <div class="social-row">
-                <a href="https://open.spotify.com/playlist/29FRF3n8TgRjY5Y2lGGFwV" target="_blank">Spotify</a>
-                <a href="https://linkedin.com/in/gabrielyassin" target="_blank">LinkedIn</a>
-            </div>
-        </div>
-        
-        <!-- WiFi sticker easter egg (hidden by default) -->
-        <div id="wifi-sticker-container" class="wifi-sticker-container" style="display: none;">
-            <img src="assets/wifi-sticker.svg" alt="WiFi Sticker" class="wifi-sticker">
-        </div>
-        
-        <!-- Retro sticker easter egg (hidden by default) -->
-        <div id="retro-sticker-container" class="retro-sticker-container" style="display: none;">
-            <img src="assets/retro-sticker.svg" alt="Retro Sticker" class="retro-sticker">
+            <a class="large show-more-btn" id="show-more-socials">Click to Show Links</a>
         </div>
         
         <!-- Infinite scrolling tech text -->
@@ -97,50 +91,8 @@
             </noscript>
         </div>
     </div>
-    <div class="main">
-        <section class="projects">
-            <div class="title-container">
-                <hr class="line left">
-                <h2>My Projects</h2>
-                <hr class="line right">
-            </div>
-            <div class="project-grid">
-                <div class="project">
-                    <img src="assets/images/kibodo.webp" alt="Project Image" width="400" height="200" loading="lazy" decoding="async">
-                    <img class="project-logo" src="assets/images/psychoduck64x64.png" alt="Project Logo" style="border: 2px solid var(--white); background-color: var(--black);">
-                    <h3>Kibodo One</h3>
-                    <p>Possibly the coolest Keyboard built from scratch, with magnetically attachable modules, and a sick side-display.</p>
-                    <div class="tags">
-                        <span>Embedded Development</span>
-                        <span>Electronics</span>
-                        <a href="https://github.com/PsychoDuckTech">OpenSource</a>
-                    </div>
-                </div>
-                <div class="project">
-                    <img src="assets/images/leplayer.png" alt="Project Image" width="400" height="200" loading="lazy" decoding="async">
-                    <img class="project-logo" src="assets/images/leplayer52x52.png" alt="Project Logo">
-                    <h3>LePlayer Music</h3>
-                    <p>A music streaming service, attempting to dethrone the giants in the industry</p>
-                    <div class="tags">
-                        <span>Svelte</span>
-                        <span>Python</span>
-                        <span>UI/UX Design</span>
-                        <span>In Progress</span>
-                        <a href="https://github.com/LePlayer-Music">OpenSource</a>
-                    </div>
-                </div>
-                <div class="project">
-                    <img src="assets/images/pc.jpeg" alt="Project Image" width="400" height="200" loading="lazy" decoding="async">
-                    <h3>PC Building</h3>
-                    <p>I build custom PCs tailored to individual needs and preferences.</p>
-                    <div class="tags">
-                        <span>Intel</span>
-                        <span>AMD</span>
-                    </div>
-                </div>
-            </div>
-        </section>
-        <footer><span class="line"></span><span class="gb">𝕲 // 𝕭</span><span class="line"></span></footer>
+    <div class="main" id="main-content">
+        <!-- Content will be rendered here by postApp.js -->
     </div>
     
     <script src="assets/js/utils.js" defer></script>
@@ -148,5 +100,6 @@
     <script src="assets/js/interactions.js" defer></script>
     <script src="assets/js/features.js" defer></script>
     <script src="assets/js/main.js" defer></script>
+    <script src="assets/js/postApp.js" defer></script>
 </body>
 </html>

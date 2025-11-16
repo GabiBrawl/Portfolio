@@ -1,122 +1,6 @@
 /* features.js - Complex features */
 
 /**
- * Toggles sticker visibility (WiFi or Retro)
- */
-function toggleSticker(stickerType = 'wifi') {
-  const containerId = `${stickerType}-sticker-container`;
-  const stickerContainer = document.getElementById(containerId);
-  if (!stickerContainer) return;
-
-  if (stickerContainer.style.display === 'none' || stickerContainer.style.display === '') {
-    // Position the sticker randomly in the sidebar between socials and scroller
-    const socials = document.querySelector('.socials');
-    const scroller = document.querySelector('.tech-scroller');
-    const sidebar = document.querySelector('.sidebar');
-
-    if (socials && scroller && sidebar) {
-      const socialsRect = socials.getBoundingClientRect();
-      const scrollerRect = scroller.getBoundingClientRect();
-      const sidebarRect = sidebar.getBoundingClientRect();
-
-      // Calculate available space between socials and scroller (vertical)
-      const availableHeight = scrollerRect.top - socialsRect.bottom - 80; // 80px for sticker height + margin
-
-      // Calculate available width within sidebar bounds
-      const availableWidth = sidebarRect.width - 40; // 20px padding on each side
-
-      if (availableHeight > 20 && availableWidth > 80) { // Minimum space check
-        // Random vertical position
-        const randomTop = socialsRect.bottom - sidebarRect.top + Math.random() * (availableHeight - 20);
-
-        // Random horizontal position within sidebar bounds
-        const randomLeft = 20 + Math.random() * (availableWidth - 80); // 20px padding + sticker width
-
-        // Random rotation angle (-30 to +30 degrees)
-        const randomRotation = (Math.random() - 0.5) * 60;
-
-        stickerContainer.style.position = 'absolute';
-        stickerContainer.style.top = randomTop + 'px';
-        stickerContainer.style.left = randomLeft + 'px';
-        stickerContainer.style.transform = `rotate(${randomRotation}deg)`;
-        stickerContainer.style.margin = '0';
-
-        // Store original transform for hover effect
-        stickerContainer.dataset.originalTransform = `rotate(${randomRotation}deg)`;
-      } else {
-        // Fallback positioning
-        stickerContainer.style.position = 'absolute';
-        stickerContainer.style.top = (socialsRect.bottom - sidebarRect.top + 20) + 'px';
-        stickerContainer.style.left = '50%';
-        stickerContainer.style.transform = 'translateX(-50%) rotate(0deg)';
-        stickerContainer.style.margin = '0';
-        stickerContainer.dataset.originalTransform = 'translateX(-50%) rotate(0deg)';
-      }
-    }
-
-    stickerContainer.style.display = 'block';
-  } else {
-    stickerContainer.style.display = 'none';
-  }
-}
-
-/**
- * Toggles all stickers visibility
- */
-function toggleAllStickers() {
-  const wifiContainer = document.getElementById('wifi-sticker-container');
-  const retroContainer = document.getElementById('retro-sticker-container');
-
-  const isVisible = wifiContainer && wifiContainer.style.display !== 'none';
-
-  // Toggle both stickers
-  if (wifiContainer) toggleSticker('wifi');
-  if (retroContainer) toggleSticker('retro');
-}
-
-// Set up hover handlers for stickers (only once)
-function setupStickerHover() {
-  // Set up hover for WiFi sticker
-  const wifiStickerContainer = document.getElementById('wifi-sticker-container');
-  if (wifiStickerContainer) {
-    wifiStickerContainer.removeEventListener('mouseenter', handleStickerMouseEnter);
-    wifiStickerContainer.removeEventListener('mouseleave', handleStickerMouseLeave);
-    wifiStickerContainer.addEventListener('mouseenter', handleStickerMouseEnter);
-    wifiStickerContainer.addEventListener('mouseleave', handleStickerMouseLeave);
-  }
-
-  // Set up hover for Retro sticker
-  const retroStickerContainer = document.getElementById('retro-sticker-container');
-  if (retroStickerContainer) {
-    retroStickerContainer.removeEventListener('mouseenter', handleStickerMouseEnter);
-    retroStickerContainer.removeEventListener('mouseleave', handleStickerMouseLeave);
-    retroStickerContainer.addEventListener('mouseenter', handleStickerMouseEnter);
-    retroStickerContainer.addEventListener('mouseleave', handleStickerMouseLeave);
-  }
-}
-
-function handleStickerMouseEnter(event) {
-  const stickerContainer = event.currentTarget;
-  if (!stickerContainer) return;
-
-  // Generate a small random angle between -2° and 2°
-  const hoverAngle = (Math.random() - 0.5) * 4; // -2 to +2 degrees
-
-  // Store current transform and apply hover transform
-  stickerContainer.dataset.originalTransform = stickerContainer.style.transform;
-  stickerContainer.style.transform = `rotate(${hoverAngle}deg) scale(1.1)`;
-}
-
-function handleStickerMouseLeave(event) {
-  const stickerContainer = event.currentTarget;
-  if (!stickerContainer) return;
-
-  // Restore original transform
-  const originalTransform = stickerContainer.dataset.originalTransform || 'rotate(0deg)';
-  stickerContainer.style.transform = originalTransform;
-}
-
-/**
  * Wires up email copy functionality
  */
 function wireEmailCopy() {
@@ -500,7 +384,7 @@ function wireCommandPalette() {
           navigator.clipboard.writeText('gabiya219@gmail.com').catch(err => console.error('Failed to copy email:', err));
           break;
         case 'help':
-          response = 'Available commands:\n\nNavigation:\n  contact - Copy email to clipboard\n\nInfo:\n  whoami - Display user info\n  age - Display age\n  qotd - Quote of the day\n\nFun:\n  cowsay [message] - Cow says message\n  sudo - Run a command as other user\n\nTheme/Stickers:\n  theme - Toggle theme\n  sticker - Toggle all stickers\n\nTerminal:\n  help - Show this help\n  clear - Clear terminal\n  exit - Close palette\n\nUse pipes: command | cowsay';
+          response = 'Available commands:\n\nNavigation:\n  contact - Copy email to clipboard\n\nInfo:\n  whoami - Display user info\n  age - Display age\n  qotd - Quote of the day\n\nFun:\n  cowsay [message] - Cow says message\n  sudo - Run a command as other user\n\nTheme:\n  theme - Toggle theme\n\nTerminal:\n  help - Show this help\n  clear - Clear terminal\n  exit - Close palette\n\nUse pipes: command | cowsay';
           break;
         case 'whoami':
           response = 'GabiBrawl // Full-stack developer and electronics enthusiast';
@@ -514,10 +398,6 @@ function wireCommandPalette() {
         case 'theme':
           toggleTheme();
           response = 'Theme toggled!';
-          break;
-        case 'sticker':
-          toggleAllStickers();
-          response = 'All stickers toggled!';
           break;
         case 'cowsay':
           response = 'Usage: cowsay [message] or command | cowsay';
@@ -549,7 +429,7 @@ function wireCommandPalette() {
       e.preventDefault();
       // Tab completion
       const currentValue = input.value.trim();
-      const commands = ['contact', 'whoami', 'sudo', 'age', 'qotd', 'cowsay', 'theme', 'sticker', 'help', 'clear', 'exit'];
+      const commands = ['contact', 'whoami', 'sudo', 'age', 'qotd', 'cowsay', 'theme', 'help', 'clear', 'exit'];
       
       if (currentValue === '') {
         // Show all commands

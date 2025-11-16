@@ -6,13 +6,14 @@
   // Initialize when DOM is ready
   document.addEventListener('DOMContentLoaded', () => {
     wireProjectHoverInteractions();
+    wireProjectCardClicks();
     updateAge('age', '2007-01-29');
     wireTechScroller();
     wirePfpEffects();
     wireEmailCopy();
     wireCommandPalette();
     wireCursorGrab();
-    setupStickerHover();
+    wireShowMoreSocials();
   });
 
   // Remove preload class on window load

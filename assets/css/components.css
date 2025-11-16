@@ -87,6 +87,19 @@
   flex: 1;
 }
 
+/* Mobile socials adjustments */
+@media (max-width: 768px) {
+  .socials .show-more-btn {
+    display: block !important;
+  }
+}
+
+@media (min-width: 769px) {
+  .socials .show-more-btn {
+    display: none;
+  }
+}
+
 /* Projects */
 .title-container {
   text-align: center;
@@ -122,8 +135,8 @@
   background-color: var(--black);
   color: var(--white);
   transition: transform 0.3s ease;
-  cursor: url('../cursors/handpointing.svg') 10 5, pointer;
   position: relative;
+  cursor: url('../cursors/handpointing.svg') 10 5, pointer;
 }
 
 .project:hover {

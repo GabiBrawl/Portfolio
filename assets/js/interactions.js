@@ -10,34 +10,45 @@ function wireProjectHoverInteractions() {
 
   cards.forEach(card => {
     card.addEventListener('mouseenter', () => {
-      const randomAngle = (Math.random() - 0.5) * 9; // small tilt
-      card.style.transform = `scale(1.05) rotate(${randomAngle}deg)`;
-
-      // small burst from the first 'a' tag inside .tags (if present)
-      const tag = card.querySelector('.tags a');
-      if (tag) {
-        const rect = tag.getBoundingClientRect();
-        const centerX = rect.left + rect.width / 2;
-        const centerY = rect.top + rect.height / 2;
-        smallBurst(centerX, centerY, 20);
+      const isMobile = window.innerWidth <= 768;
+      if (!isMobile) {
+        const randomAngle = (Math.random() - 0.5) * 9; // small tilt
+        card.style.transform = `scale(1.05) rotate(${randomAngle}deg)`;
       }
+      // No transform on mobile - only color changes
 
-      // track rapid hovering for 'crazy party'
-      const now = Date.now();
-      if (now - lastHoverTime < 2000) {
-        hoverCount++;
-        if (hoverCount > 45) {
-          crazyParty();
-          hoverCount = 0;
+      // small burst from the first 'a' tag inside .tags (if present) - disabled on mobile
+      if (!isMobile) {
+        const tag = card.querySelector('.tags a');
+        if (tag) {
+          const rect = tag.getBoundingClientRect();
+          const centerX = rect.left + rect.width / 2;
+          const centerY = rect.top + rect.height / 2;
+          smallBurst(centerX, centerY, 20);
         }
-      } else {
-        hoverCount = 1;
       }
-      lastHoverTime = now;
+
+      // track rapid hovering for 'crazy party' - disabled on mobile
+      if (!isMobile) {
+        const now = Date.now();
+        if (now - lastHoverTime < 2000) {
+          hoverCount++;
+          if (hoverCount > 45) {
+            crazyParty();
+            hoverCount = 0;
+          }
+        } else {
+          hoverCount = 1;
+        }
+        lastHoverTime = now;
+      }
     });
 
     card.addEventListener('mouseleave', () => {
-      card.style.transform = '';
+      const isMobile = window.innerWidth <= 768;
+      if (!isMobile) {
+        card.style.transform = '';
+      }
     });
   });
 }
@@ -87,6 +98,75 @@ function wirePfpEffects() {
       { transform: 'translateY(-4px)' },
       { transform: 'translateY(0)' }
     ], { duration: 350, easing: 'ease-out' });
+  });
+}
+
+/**
+ * Wires up show more button for socials on mobile
+ */
+function wireShowMoreSocials() {
+  const showMoreBtn = document.getElementById('show-more-socials');
+  const socialsContainer = document.querySelector('.socials');
+  
+  if (!showMoreBtn || !socialsContainer) return;
+  
+  const mainSocialLinks = Array.from(socialsContainer.children).filter(child => 
+    child.tagName === 'A' && 
+    child.classList.contains('large') && 
+    !child.classList.contains('show-more-btn')
+  );
+  const extraSocialLinks = socialsContainer.querySelectorAll('.extra-socials a');
+  
+  let isExpanded = false;
+  
+  function updateVisibility() {
+    if (window.innerWidth <= 768) {
+      // On mobile, control visibility with toggle
+      mainSocialLinks.forEach(link => link.style.display = isExpanded ? 'block' : 'none');
+      extraSocialLinks.forEach(link => link.style.display = isExpanded ? 'block' : 'none');
+      showMoreBtn.textContent = isExpanded ? 'Hide Links' : 'Show Links';
+      showMoreBtn.style.display = 'block';
+    } else {
+      // On desktop, show all links and hide button
+      mainSocialLinks.forEach(link => link.style.display = 'block');
+      extraSocialLinks.forEach(link => link.style.display = 'block');
+      showMoreBtn.style.display = 'none';
+      isExpanded = true; // Consider it expanded on desktop
+    }
+  }
+  
+  // Initial state
+  updateVisibility();
+  
+  showMoreBtn.addEventListener('click', (e) => {
+    e.preventDefault();
+    isExpanded = !isExpanded;
+    updateVisibility();
+  });
+  
+  // Handle window resize
+  window.addEventListener('resize', updateVisibility);
+}
+
+/**
+ * Wires up project card clicks to navigate to detail pages
+ */
+function wireProjectCardClicks() {
+  const projectCards = document.querySelectorAll('.project');
+  
+  projectCards.forEach((card, index) => {
+    // Make the card clickable
+    card.style.cursor = 'pointer';
+    
+    card.addEventListener('click', (e) => {
+      // Don't navigate if clicking on a link inside the card
+      if (e.target.tagName === 'A' || e.target.closest('a')) {
+        return;
+      }
+      
+      // Navigate to the project detail page
+      window.location.href = `projects/project.html?id=${index}`;
+    });
   });
 }
 
