@@ -22,7 +22,6 @@
   text-decoration: none;
   font-weight: bold;
   padding: 12px 24px;
-  transition: all 0.3s ease;
   font-family: "Special Gothic Condensed One", sans-serif;
   font-size: 0.9rem;
   letter-spacing: 2px;
@@ -33,20 +32,9 @@
   gap: 8px;
 }
 
-.back-link::before {
-  content: "←";
-  font-size: 1.2rem;
-  transition: transform 0.3s ease;
-}
-
 .back-link:hover {
   background: var(--white);
   color: var(--black);
-  transform: translateX(-5px);
-}
-
-.back-link:hover::before {
-  transform: translateX(-3px);
 }
 
 .project-header h1 {
@@ -92,19 +80,20 @@
 }
 
 .project-links a {
-  color: var(--white);
+  color: var(--black);
   text-decoration: none;
-  padding: 8px 16px;
-  border: 1px solid var(--white);
-  transition: all 0.3s ease;
+  padding: 12px 20px;
+  border: 2px solid var(--white);
+  background: var(--white);
   font-family: "Special Gothic Condensed One", sans-serif;
   font-size: 0.9rem;
   letter-spacing: 1px;
+  font-weight: bold;
 }
 
 .project-links a:hover {
-  background: var(--white);
-  color: var(--black);
+  background: var(--black);
+  color: var(--white);
 }
 
 .project-status {
@@ -238,6 +227,7 @@
   font-family: "Special Gothic Condensed One", sans-serif;
   line-height: 1.6;
   text-align: justify;
+  font-size: 1.1rem;
 }
 
 /* Highlight Box for special content */
@@ -858,7 +848,6 @@
   padding: 15px 30px;
   text-decoration: none;
   font-weight: bold;
-  transition: all 0.3s ease;
   display: inline-block;
   font-family: "Special Gothic Condensed One", sans-serif;
   border: 2px solid var(--white);
@@ -871,7 +860,6 @@
 }
 
 .cta-button.primary:hover {
-  transform: translateY(-2px);
   background: var(--white);
   color: var(--black);
 }
@@ -884,7 +872,6 @@
 .cta-button.secondary:hover {
   background: var(--white);
   color: var(--black);
-  transform: translateY(-2px);
 }
 
 .service-details {
@@ -993,6 +980,7 @@
   position: relative;
   font-family: "Special Gothic Condensed One", sans-serif;
   line-height: 1.6;
+  font-size: 1.1rem;
 }
 
 .feature-list li::before {

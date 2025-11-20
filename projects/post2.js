@@ -1,87 +1,78 @@
-// Project data for PC Building
+// Project data for LePlayer Music
 const projectData = {
     // Meta information
     meta: {
-        title: "PC Building - Gabriel Yassin's Portfolio",
-        description: "Custom PC builds tailored to individual needs and preferences, from gaming rigs to professional workstations.",
-        ogImage: "https://gabibrawl.github.io/Portfolio/assets/images/pc.jpeg",
-        url: "https://gabibrawl.github.io/Portfolio/projects/2.html"
+        title: "LePlayer Music - Gabriel Yassin's Portfolio",
+        description: "A music streaming service, attempting to dethrone the giants in the industry",
+        ogImage: "https://gabibrawl.github.io/Portfolio/assets/images/leplayer.png",
+        url: "https://gabibrawl.github.io/Portfolio/projects/1.html"
     },
 
     // Header information
     header: {
-        title: "PC Building",
-        subtitle: "Custom Computer Systems & Builds THIS PAGE IS A PLACEHOLDER",
-        logo: null,
+        title: "LePlayer Music",
+        subtitle: "Music Streaming Revolution",
+        logo: "../assets/images/leplayer52x52.png",
         logoStyle: ""
     },
 
     // Gallery carousel images
     gallery: [
         {
-            src: "../assets/images/pc.jpeg",
-            alt: "Gaming Build",
-            caption: "High-end gaming build with RTX 4090 and custom loop"
+            src: "../assets/images/leplayer.png",
+            alt: "Player Interface",
+            caption: "Clean and intuitive music player interface"
         },
         {
-            src: "../assets/images/pc.jpeg",
-            alt: "Workstation",
-            caption: "Ryzen 9 7950X workstation for video editing"
+            src: "../assets/images/leplayer.png",
+            alt: "Playlist View",
+            caption: "Organize your music into beautiful playlists"
         },
         {
-            src: "../assets/images/pc.jpeg",
-            alt: "Compact Build",
-            caption: "Compact mATX build with excellent thermals"
+            src: "../assets/images/leplayer.png",
+            alt: "Discovery Engine",
+            caption: "Privacy-preserving music discovery engine"
         },
         {
-            src: "../assets/images/pc.jpeg",
-            alt: "Cable Management",
-            caption: "Professional cable management and routing"
+            src: "../assets/images/leplayer.png",
+            alt: "Social Features",
+            caption: "Share and discover music with your community"
         }
     ],
 
     // Project content sections
     content: [
         {
-            heading: "Custom PC Solutions",
-            text: `I specialize in building custom PCs that perfectly match your needs and budget. Whether you're a gamer looking for maximum FPS, a content creator needing serious rendering power, or a professional requiring a reliable workstation, I've got you covered.
+            heading: "The Vision",
+            text: `LePlayer Music is not just another music streaming platform. It's a revolution in how we consume music while supporting artists fairly.
 
-Each build is carefully planned, with component selection based on your specific use case. I handle everything from initial consultation to final assembly and testing, ensuring you get a system that exceeds expectations.`
+In an era where every interaction is tracked and monetized, LePlayer Music takes a stand: your listening habits should not be commodified. We're building a platform where users are in control of their data, artists earn fair compensation, and the listening experience is genuinely yours.`
         },
         {
-            heading: "Services Offered",
-            list: [
-                "Custom gaming PC builds (Intel & AMD platforms)",
-                "Professional workstations for content creation",
-                "Server builds for home labs and small businesses",
-                "System upgrades and performance tuning"
-            ]
-        },
-        {
-            heading: "Quality Assurance",
-            text: `Every build goes through rigorous testing before delivery:
+            heading: "Join the Revolution",
+            text: `We're looking for contributors, beta testers, and artists who believe in a better music ecosystem. Whether you're a developer, designer, musician, or just someone tired of being tracked, there's a place for you in the LePlayer Music community.
 
-- Stress testing with Prime95 and AIDA64 for stability
-- GPU burn-in testing with FurMark and 3DMark
-- Memory stress testing with MemTest86
-- Thermal monitoring under load to ensure optimal cooling
-- Cable check and component verification
-- Windows installation and driver updates (if requested, extra fee may apply)
-
-You receive a fully tested, optimized system ready to go out of the box.`
+Our GitHub repository contains the full source code, and we welcome pull requests, bug reports, and feature suggestions. The project is open source under the LGPL 2.1 license. THIS PROJECT IS STILL IN EARLY DEVELOPMENT AND NOT YET PRODUCTION-READY.`
         }
     ],
 
     // Project links
-    links: [],
+    links: [
+        {
+            text: "GitHub Repository",
+            href: "https://github.com/LePlayer-Music"
+        }
+    ],
 
     // Tags
     tags: [
-        "Intel",
-        "AMD",
-        "Custom Builds",
-        "Gaming PCs",
-        "Workstations",
-        "Hardware Consultation"
+        "Music Streaming",
+        "Svelte",
+        "Python",
+        "Privacy",
+        "Open Source",
+        "UI/UX Design",
+        "In Progress",
+        "Artist-Friendly"
     ]
 };

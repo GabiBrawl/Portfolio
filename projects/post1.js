@@ -1,58 +1,66 @@
-// Project data for LePlayer Music
+// Project data for Audiophile Recommendations (B_Media)
 const projectData = {
     // Meta information
     meta: {
-        title: "LePlayer Music - Gabriel Yassin's Portfolio",
-        description: "A music streaming service, attempting to dethrone the giants in the industry",
-        ogImage: "https://gabibrawl.github.io/Portfolio/assets/images/leplayer.png",
+        title: "Audiophile Recommendations - Gabriel Yassin's Portfolio",
+        description: "A platform for B_Media's audiophile gear recommendations with superior browsing experience",
+        ogImage: "https://gabibrawl.github.io/Portfolio/assets/images/bmedia.png",
         url: "https://gabibrawl.github.io/Portfolio/projects/1.html"
     },
 
     // Header information
     header: {
-        title: "LePlayer Music",
-        subtitle: "Music Streaming Revolution",
-        logo: "../assets/images/leplayer52x52.png",
+        title: "Audiophile Recommendations",
+        subtitle: "B_Media's Gear Platform",
+        logo: null,
         logoStyle: ""
     },
 
     // Gallery carousel images
     gallery: [
         {
-            src: "../assets/images/leplayer.png",
-            alt: "Player Interface",
-            caption: "Clean and intuitive music player interface"
+            src: "../assets/images/bmedia.png",
+            alt: "B_Media Platform",
+            caption: "Clean, organized audiophile gear recommendations"
         },
         {
-            src: "../assets/images/leplayer.png",
-            alt: "Playlist View",
-            caption: "Organize your music into beautiful playlists"
+            src: "../assets/images/bmedia.png",
+            alt: "Product Categories",
+            caption: "Easy navigation through different gear categories"
         },
         {
-            src: "../assets/images/leplayer.png",
-            alt: "Discovery Engine",
-            caption: "Privacy-preserving music discovery engine"
-        },
-        {
-            src: "../assets/images/leplayer.png",
-            alt: "Social Features",
-            caption: "Share and discover music with your community"
+            src: "../assets/images/bmedia.png",
+            alt: "Detailed Reviews",
+            caption: "Filters"
         }
     ],
 
     // Project content sections
     content: [
         {
-            heading: "The Vision",
-            text: `LePlayer Music is not just another music streaming platform. It's a revolution in how we consume music while supporting artists fairly.
+            heading: "The Inspiration",
+            text: `I'm a big fan of B_Media's content - I regularly watch their videos and find their audiophile gear recommendations incredibly valuable. However, their recommendation list, while comprehensive, was hosted on a basic Linktree page that made it cumbersome to browse through products and watch Axel's detailed thoughts videos on each item was also constantly requiring a manual search.
 
-In an era where every interaction is tracked and monetized, LePlayer Music takes a stand: your listening habits should not be commodified. We're building a platform where users are in control of their data, artists earn fair compensation, and the listening experience is genuinely yours.`
+The interface felt cluttered and hard to navigate. I wanted a better way to explore their recommendations that would make the browsing experience more pleasant and organized.`
         },
         {
-            heading: "Join the Revolution",
-            text: `We're looking for contributors, beta testers, and artists who believe in a better music ecosystem. Whether you're a developer, designer, musician, or just someone tired of being tracked, there's a place for you in the LePlayer Music community.
+            heading: "Building the Solution",
+            text: `I took it upon myself to create a custom web platform that would properly showcase B_Media's audiophile gear recommendations. Using vanilla JavaScript, I built a clean, responsive interface with:
 
-Our GitHub repository contains the full source code, and we welcome pull requests, bug reports, and feature suggestions. The project is open source under the LGPL 2.1 license. THIS PROJECT IS STILL IN EARLY DEVELOPMENT AND NOT YET PRODUCTION-READY.`
+- Intuitive product categorization and filtering
+- Detailed product cards with specifications and reviews
+- Mobile-optimized design for better usability
+- Professional presentation that matches B_Media's brand`
+        },
+        {
+            heading: "The Response",
+            text: `I shared the project with the B_Media moderation team and Axel himself in their Discord server. They absolutely loved it! The improved user experience and professional presentation resonated with them, and they decided to add my platform alongside their official Linktree link.
+
+It's incredibly rewarding to see my work being used and appreciated by the community I built it for. The project demonstrates how a thoughtful redesign can significantly improve user experience while staying true to the original content.`
+        },
+        {
+            heading: "Technical Implementation",
+            text: `Built with modern web standards using vanilla JavaScript for optimal performance. The platform features a responsive design that works seamlessly across all devices, providing the superior browsing experience that B_Media's recommendations deserve.`
         }
     ],
 
@@ -60,19 +68,21 @@ Our GitHub repository contains the full source code, and we welcome pull request
     links: [
         {
             text: "GitHub Repository",
-            href: "https://github.com/LePlayer-Music"
+            href: "https://github.com/GabiBrawl/B_Media"
+        },
+        {
+            text: "Live Platform",
+            href: "https://gabibrawl.github.io/B_Media/"
         }
     ],
 
     // Tags
     tags: [
-        "Music Streaming",
-        "Svelte",
-        "Python",
-        "Privacy",
-        "Open Source",
+        "JavaScript",
+        "Audiophile",
+        "Web Platform",
         "UI/UX Design",
-        "In Progress",
-        "Artist-Friendly"
+        "Open Source",
+        "Product Showcase"
     ]
 };

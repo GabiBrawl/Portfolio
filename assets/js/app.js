@@ -1,4 +1,4 @@
-// postApp.js - Dynamic content renderer for single-page app
+// app.js - Dynamic content renderer for single-page app
 // Handles both projects list view and individual project views based on URL
 
 (function () {
@@ -6,50 +6,6 @@
 
   // Store loaded project data
   const loadedProjects = {};
-
-  // Project metadata for the list view
-  const projectsMetadata = [
-    {
-      id: 0,
-      title: "Kibodo One",
-      image: "assets/images/kibodo.webp",
-      logo: "assets/images/psychoduck64x64.png",
-      logoStyle: "border: 2px solid var(--white); background-color: var(--black);",
-      description: "Possibly the coolest Keyboard built from scratch, with magnetically attachable modules, and a sick side-display.",
-      tags: [
-        { text: "Embedded Development", link: null },
-        { text: "Electronics", link: null },
-        { text: "OpenSource", link: "https://github.com/PsychoDuckTech" }
-      ]
-    },
-    {
-      id: 1,
-      title: "LePlayer Music",
-      image: "assets/images/leplayer.png",
-      logo: "assets/images/leplayer52x52.png",
-      logoStyle: "",
-      description: "A music streaming service, attempting to dethrone the giants in the industry",
-      tags: [
-        { text: "Svelte", link: null },
-        { text: "Python", link: null },
-        { text: "UI/UX Design", link: null },
-        { text: "In Progress", link: null },
-        { text: "OpenSource", link: "https://github.com/LePlayer-Music" }
-      ]
-    },
-    {
-      id: 2,
-      title: "PC Building",
-      image: "assets/images/pc.jpeg",
-      logo: null,
-      logoStyle: "",
-      description: "I build custom PCs tailored to individual needs and preferences.",
-      tags: [
-        { text: "Intel", link: null },
-        { text: "AMD", link: null }
-      ]
-    }
-  ];
 
   document.addEventListener('DOMContentLoaded', () => {
     // Wait for the DOM to be fully ready
@@ -63,7 +19,8 @@
     
     // If it's a project view and data isn't loaded yet, load it first
     if (view.mode === 'project' && !loadedProjects[view.id]) {
-      container.innerHTML = '<p style="padding: 40px; text-align: center;">Loading project...</p>';
+      const dynamicContent = document.getElementById('dynamic-content');
+      dynamicContent.innerHTML = '<p style="padding: 40px; text-align: center;">Loading project...</p>';
       
       fetch(`projects/post${view.id}.js`)
         .then(response => {
@@ -87,7 +44,16 @@
             renderContent();
             wireInteractions();
           } else {
-            container.innerHTML = '<p style="padding: 40px; color: red;">Error: Invalid project data format.</p>';
+            const dynamicContent = document.getElementById('dynamic-content');
+            dynamicContent.innerHTML = `
+              <div class="project-detail">
+                <div class="project-header">
+                  <a href="#" class="back-link" onclick="history.back(); return false;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>Back to Portfolio</a>
+                  <h1>ERROR</h1>
+                  <p class="project-subtitle">Invalid project data format</p>
+                </div>
+              </div>
+            `;
           }
         })
         .catch(error => {
@@ -95,7 +61,16 @@
           const errorMessage = error.message.includes('Project not found') 
             ? 'Project not found. Please check the URL and try again.'
             : 'Error loading project: ' + error.message;
-          container.innerHTML = `<p style="padding: 40px; color: red; text-align: center;">${errorMessage}</p>`;
+          const dynamicContent = document.getElementById('dynamic-content');
+          dynamicContent.innerHTML = `
+            <div class="project-detail">
+              <div class="project-header">
+                <a href="#" class="back-link" onclick="history.back(); return false;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>Back to Portfolio</a>
+                <h1>ERROR</h1>
+                <p class="project-subtitle">${errorMessage}</p>
+              </div>
+            </div>
+          `;
         });
     } else {
       // Normal project list view
@@ -137,15 +112,7 @@
     document.querySelector('meta[property="og:title"]').content = "Gabi's Portfolio";
     document.querySelector('meta[property="og:description"]').content = "Full-stack developer, programmer and electronics enthusiast building clean web pages and custom hardware.";
 
-    let html = `
-      <section class="projects">
-        <div class="title-container">
-          <hr class="line left">
-          <h2>My Projects</h2>
-          <hr class="line right">
-        </div>
-        <div class="project-grid">
-    `;
+    let html = `<div class="project-grid">`;
 
     projectsMetadata.forEach(project => {
       html += `
@@ -165,13 +132,10 @@
       `;
     });
 
-    html += `
-        </div>
-      </section>
-      <footer><span class="line"></span><span class="gb">𝕲 // 𝕭</span><span class="line"></span></footer>
-    `;
+    html += `</div>`;
 
-    container.innerHTML = html;
+    const dynamicContent = document.getElementById('dynamic-content');
+    dynamicContent.innerHTML = html;
   }
 
   function renderProjectView(container, projectId) {
@@ -187,7 +151,8 @@
       if (typeof projectData !== 'undefined') {
         loadedProjects[projectId] = projectData;
       } else {
-        container.innerHTML = '<p style="padding: 40px; text-align: center;">Loading project...</p>';
+        const dynamicContent = document.getElementById('dynamic-content');
+        dynamicContent.innerHTML = '<p style="padding: 40px; text-align: center;">Loading project...</p>';
         return;
       }
     }
@@ -196,16 +161,9 @@
     updateMetaTags(data.meta);
 
     let html = `
-      <section class="projects">
-        <div class="title-container">
-          <hr class="line left">
-          <h2>My Projects</h2>
-          <hr class="line right">
-        </div>
-      </section>
       <div class="project-detail">
         <div class="project-header">
-          <a href="#" class="back-link" onclick="history.back(); return false;">Back to Portfolio</a>
+          <a href="#" class="back-link" onclick="history.back(); return false;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>Back to Portfolio</a>
           <h1>${data.header.title}</h1>
           <p class="project-subtitle">${data.header.subtitle}</p>
     `;
@@ -270,9 +228,9 @@
       html += `</section>`;
     });
     html += '</div></div>';
-    html += '<footer><span class="line"></span><span class="gb">𝕲 // 𝕭</span><span class="line"></span></footer>';
 
-    container.innerHTML = html;
+    const dynamicContent = document.getElementById('dynamic-content');
+    dynamicContent.innerHTML = html;
 
     // Initialize carousel after rendering
     setTimeout(() => {
@@ -328,13 +286,8 @@
   function navigateToProject(projectId) {
     // Load project data if not already loaded
     if (!loadedProjects[projectId]) {
-      const container = document.getElementById('main-content');
-      if (!container) {
-        console.error('main-content element not found');
-        return;
-      }
-      
-      container.innerHTML = '<p style="padding: 40px; text-align: center;">Loading project...</p>';
+      const dynamicContent = document.getElementById('dynamic-content');
+      dynamicContent.innerHTML = '<p style="padding: 40px; text-align: center;">Loading project...</p>';
       
       fetch(`projects/post${projectId}.js`)
         .then(response => {
@@ -357,12 +310,30 @@
             renderContent();
             wireInteractions();
           } else {
-            container.innerHTML = '<p style="padding: 40px; color: red;">Error: Invalid project data format.</p>';
+            const dynamicContent = document.getElementById('dynamic-content');
+            dynamicContent.innerHTML = `
+              <div class="project-detail">
+                <div class="project-header">
+                  <a href="#" class="back-link" onclick="history.back(); return false;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>Back to Portfolio</a>
+                  <h1>ERROR</h1>
+                  <p class="project-subtitle">Invalid project data format</p>
+                </div>
+              </div>
+            `;
           }
         })
         .catch(error => {
           console.error('Error loading project:', error);
-          container.innerHTML = '<p style="padding: 40px; color: red;">Error loading project: ' + error.message + '</p>';
+          const dynamicContent = document.getElementById('dynamic-content');
+          dynamicContent.innerHTML = `
+            <div class="project-detail">
+              <div class="project-header">
+                <a href="#" class="back-link" onclick="history.back(); return false;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>Back to Portfolio</a>
+                <h1>ERROR</h1>
+                <p class="project-subtitle">Error loading project: ${error.message}</p>
+              </div>
+            </div>
+          `;
         });
     } else {
       history.pushState({ projectId }, '', `?post=${projectId}`);

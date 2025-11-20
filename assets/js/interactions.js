@@ -121,10 +121,10 @@ function wireShowMoreSocials() {
   
   function updateVisibility() {
     if (window.innerWidth <= 768) {
-      // On mobile, control visibility with toggle
-      mainSocialLinks.forEach(link => link.style.display = isExpanded ? 'block' : 'none');
+      // On mobile, show main links always, toggle extra links
+      mainSocialLinks.forEach(link => link.style.display = 'block');
       extraSocialLinks.forEach(link => link.style.display = isExpanded ? 'block' : 'none');
-      showMoreBtn.textContent = isExpanded ? 'Hide Links' : 'Show Links';
+      showMoreBtn.textContent = isExpanded ? 'Show Less' : 'Show More';
       showMoreBtn.style.display = 'block';
     } else {
       // On desktop, show all links and hide button

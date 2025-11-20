@@ -54,6 +54,9 @@
     </noscript>
     <!-- Preload above-the-fold profile image -->
     <link rel="preload" href="assets/images/pfp400x400.jpg" as="image">
+    <!-- Preload star images for scroller -->
+    <link rel="preload" href="assets/star.svg" as="image">
+    <link rel="prefetch" href="assets/starW.svg">
 </head><body>
     <div class="sidebar">
     <!-- Profile picture wrapper: clickable for fun effects -->
@@ -79,7 +82,7 @@
                     <a href="https://linkedin.com/in/gabrielyassin" target="_blank">LinkedIn</a>
                 </div>
             </div>
-            <a class="large show-more-btn" id="show-more-socials">Click to Show Links</a>
+            <a class="large show-more-btn" id="show-more-socials">Show More</a>
         </div>
         
         <!-- Infinite scrolling tech text -->
@@ -92,7 +95,17 @@
         </div>
     </div>
     <div class="main" id="main-content">
-        <!-- Content will be rendered here by postApp.js -->
+        <section class="projects">
+            <div class="title-container">
+                <hr class="line left">
+                <h2>My Projects</h2>
+                <hr class="line right">
+            </div>
+            <div id="dynamic-content">
+                <!-- Content will be rendered here by postApp.js -->
+            </div>
+        </section>
+        <footer><span class="line"></span><span class="gb">𝕲 // 𝕭</span><span class="line"></span></footer>
     </div>
     
     <script src="assets/js/utils.js" defer></script>
@@ -100,6 +113,7 @@
     <script src="assets/js/interactions.js" defer></script>
     <script src="assets/js/features.js" defer></script>
     <script src="assets/js/main.js" defer></script>
-    <script src="assets/js/postApp.js" defer></script>
+    <script src="assets/js/projectsMetadata.js" defer></script>
+    <script src="assets/js/app.js" defer></script>
 </body>
 </html>
