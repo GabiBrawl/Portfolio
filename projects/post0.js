@@ -18,22 +18,22 @@ const projectData = {
     // Gallery carousel images
     gallery: [
         {
-            src: "../assets/images/kibodo.webp",
+            src: "assets/images/kibodo.webp",
             alt: "Keyboard Layout",
             caption: "Ergonomic split design with custom keycaps"
         },
         {
-            src: "../assets/images/kibodo.webp",
+            src: "assets/images/kibodo.webp",
             alt: "Numpad Module",
             caption: "Magnetically attachable"
         },
         {
-            src: "../assets/images/kibodo.webp",
+            src: "assets/images/kibodo.webp",
             alt: "Build Process",
             caption: "Handcrafted construction with precision engineering"
         },
         {
-            src: "../assets/images/kibodo.webp",
+            src: "assets/images/kibodo.webp",
             alt: "Display",
             caption: "Side-mounted OLED display with custom graphics"
         }

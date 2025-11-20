@@ -19,22 +19,22 @@ const projectData = {
     // Gallery carousel images
     gallery: [
         {
-            src: "../assets/images/pc.jpeg",
+            src: "assets/images/pc.jpeg",
             alt: "Gaming Build",
             caption: "High-end gaming build with RTX 4090 and custom loop"
         },
         {
-            src: "../assets/images/pc.jpeg",
+            src: "assets/images/pc.jpeg",
             alt: "Workstation",
             caption: "Ryzen 9 7950X workstation for video editing"
         },
         {
-            src: "../assets/images/pc.jpeg",
+            src: "assets/images/pc.jpeg",
             alt: "Compact Build",
             caption: "Compact mATX build with excellent thermals"
         },
         {
-            src: "../assets/images/pc.jpeg",
+            src: "assets/images/pc.jpeg",
             alt: "Cable Management",
             caption: "Professional cable management and routing"
         }

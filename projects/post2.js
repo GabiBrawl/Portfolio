@@ -19,22 +19,22 @@ const projectData = {
     // Gallery carousel images
     gallery: [
         {
-            src: "../assets/images/leplayer.png",
+            src: "assets/images/leplayer.png",
             alt: "Player Interface",
             caption: "Clean and intuitive music player interface"
         },
         {
-            src: "../assets/images/leplayer.png",
+            src: "assets/images/leplayer.png",
             alt: "Playlist View",
             caption: "Organize your music into beautiful playlists"
         },
         {
-            src: "../assets/images/leplayer.png",
+            src: "assets/images/leplayer.png",
             alt: "Discovery Engine",
             caption: "Privacy-preserving music discovery engine"
         },
         {
-            src: "../assets/images/leplayer.png",
+            src: "assets/images/leplayer.png",
             alt: "Social Features",
             caption: "Share and discover music with your community"
         }

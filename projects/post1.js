@@ -19,17 +19,17 @@ const projectData = {
     // Gallery carousel images
     gallery: [
         {
-            src: "../assets/images/bmedia.png",
+            src: "assets/images/bmedia.png",
             alt: "B_Media Platform",
             caption: "Clean, organized audiophile gear recommendations"
         },
         {
-            src: "../assets/images/bmedia.png",
+            src: "assets/images/bmedia.png",
             alt: "Product Categories",
             caption: "Easy navigation through different gear categories"
         },
         {
-            src: "../assets/images/bmedia.png",
+            src: "assets/images/bmedia.png",
             alt: "Detailed Reviews",
             caption: "Filters"
         }
