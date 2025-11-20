@@ -173,9 +173,6 @@
     }
 
     html += `
-      <div class="project-meta">
-        ${data.tags.slice(0, 3).map(tag => `<span>${tag}</span>`).join('')}
-      </div>
     `;
 
     if (data.links && data.links.length > 0) {
