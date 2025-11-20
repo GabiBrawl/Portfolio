@@ -48,7 +48,7 @@
             dynamicContent.innerHTML = `
               <div class="project-detail">
                 <div class="project-header">
-                  <a href="#" class="back-link" onclick="history.back(); return false;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>Back to Portfolio</a>
+                  <a href="#" class="back-link" onclick="history.pushState(null, '', window.location.pathname); window.renderContent(); window.wireInteractions(); return false;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>Back to Portfolio</a>
                   <h1>ERROR</h1>
                   <p class="project-subtitle">Invalid project data format</p>
                 </div>
@@ -65,7 +65,7 @@
           dynamicContent.innerHTML = `
             <div class="project-detail">
               <div class="project-header">
-                <a href="#" class="back-link" onclick="history.back(); return false;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>Back to Portfolio</a>
+                <a href="#" class="back-link" onclick="history.pushState(null, '', window.location.pathname); window.renderContent(); window.wireInteractions(); return false;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>Back to Portfolio</a>
                 <h1>ERROR</h1>
                 <p class="project-subtitle">${errorMessage}</p>
               </div>
@@ -163,7 +163,7 @@
     let html = `
       <div class="project-detail">
         <div class="project-header">
-          <a href="#" class="back-link" onclick="history.back(); return false;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>Back to Portfolio</a>
+          <a href="#" class="back-link" onclick="history.pushState(null, '', window.location.pathname); window.renderContent(); window.wireInteractions(); return false;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>Back to Portfolio</a>
           <h1>${data.header.title}</h1>
           <p class="project-subtitle">${data.header.subtitle}</p>
     `;
@@ -314,7 +314,7 @@
             dynamicContent.innerHTML = `
               <div class="project-detail">
                 <div class="project-header">
-                  <a href="#" class="back-link" onclick="history.back(); return false;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>Back to Portfolio</a>
+                  <a href="#" class="back-link" onclick="history.pushState(null, '', window.location.pathname); window.renderContent(); window.wireInteractions(); return false;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>Back to Portfolio</a>
                   <h1>ERROR</h1>
                   <p class="project-subtitle">Invalid project data format</p>
                 </div>
@@ -328,7 +328,7 @@
           dynamicContent.innerHTML = `
             <div class="project-detail">
               <div class="project-header">
-                <a href="#" class="back-link" onclick="history.back(); return false;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>Back to Portfolio</a>
+                <a href="#" class="back-link" onclick="history.pushState(null, '', window.location.pathname); window.renderContent(); window.wireInteractions(); return false;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>Back to Portfolio</a>
                 <h1>ERROR</h1>
                 <p class="project-subtitle">Error loading project: ${error.message}</p>
               </div>
@@ -437,6 +437,10 @@
   }
 
   // No longer needed - handled at DOMContentLoaded
+  // Expose functions globally for back button navigation
+  window.renderContent = renderContent;
+  window.wireInteractions = wireInteractions;
+
   // window.addEventListener('load', () => {
 
 })();
