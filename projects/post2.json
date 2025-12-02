@@ -14,16 +14,6 @@
   ],
   "metaTitle": "LePlayer Music - Gabriel Yassin's Portfolio",
   "metaImage": "https://gabibrawl.github.io/Portfolio/assets/images/leplayer.png",
-  "pageTags": [
-    "Music Streaming",
-    "Svelte",
-    "Python",
-    "Privacy",
-    "Open Source",
-    "UI/UX Design",
-    "In Progress",
-    "Artist-Friendly"
-  ],
   "gallery": [
     {
       "src": "assets/images/leplayer.png",

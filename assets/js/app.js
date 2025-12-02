@@ -247,18 +247,6 @@
       html += `</section>`;
     });
 
-    // Project tags
-    if (data.pageTags && data.pageTags.length > 0) {
-      html += `
-        <div class="project-tags">
-          <h3>Technologies & Skills</h3>
-          <div class="tags">
-            ${data.pageTags.map(tag => `<span>${tag}</span>`).join('')}
-          </div>
-        </div>
-      `;
-    }
-
     html += '</div>';
     html += '<a href="#" class="back-link" onclick="history.pushState(null, \'\', window.location.pathname); window.renderContent(); window.wireInteractions(); return false;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><path d="M19 12H5M12 19l-7-7 7-7"></svg>Back to Portfolio</a>';
     html += '</div>';

@@ -12,16 +12,6 @@
   ],
   "metaTitle": "Kibodo One - Gabriel Yassin's Portfolio",
   "metaImage": "https://gabibrawl.github.io/Portfolio/assets/images/kibodo.webp",
-  "pageTags": [
-    "Mechanical Keyboard",
-    "Embedded Development",
-    "Electronics",
-    "OLED Display",
-    "PCB Design",
-    "QMK Firmware",
-    "Open Source",
-    "Hardware Design"
-  ],
   "gallery": [
     {
       "src": "assets/images/kibodo.webp",
