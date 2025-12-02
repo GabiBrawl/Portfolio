@@ -253,7 +253,7 @@ function wireCommandPalette() {
     left: 0;
     width: 100%;
     height: 100%;
-    background: rgba(0,0,0,0.8);
+    backdrop-filter: blur(8px);
     display: none;
     z-index: 1000;
     justify-content: center;

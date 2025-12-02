@@ -1,0 +1,68 @@
+{
+  "title": "Audiophile Recommendations",
+  "subtitle": "B_Media's Gear Platform",
+  "description": "A platform for B_Media's audiophile gear recommendations, offering a superior browsing experience compared to the original Linktree.",
+  "cardImage": "assets/images/bmedia.png",
+  "cardLogo": null,
+  "cardLogoStyle": "",
+  "cardTags": [
+    { "text": "JavaScript", "link": null },
+    { "text": "Audiophile", "link": null },
+    { "text": "OpenSource", "link": "https://github.com/GabiBrawl/B_Media" }
+  ],
+  "metaTitle": "Audiophile Recommendations - Gabriel Yassin's Portfolio",
+  "metaImage": "https://gabibrawl.github.io/Portfolio/assets/images/bmedia.png",
+  "pageTags": [
+    "JavaScript",
+    "Audiophile",
+    "Web Platform",
+    "UI/UX Design",
+    "Open Source",
+    "Product Showcase"
+  ],
+  "gallery": [
+    {
+      "src": "assets/images/bmedia.png",
+      "alt": "B_Media Platform",
+      "caption": "Clean, organized audiophile gear recommendations"
+    },
+    {
+      "src": "assets/images/bmedia.png",
+      "alt": "Product Categories",
+      "caption": "Easy navigation through different gear categories"
+    },
+    {
+      "src": "assets/images/bmedia.png",
+      "alt": "Detailed Reviews",
+      "caption": "Filters"
+    }
+  ],
+  "content": [
+    {
+      "heading": "The Inspiration",
+      "text": "I'm a big fan of B_Media's content - I regularly watch their videos and find their audiophile gear recommendations incredibly valuable. However, their recommendation list, while comprehensive, was hosted on a basic Linktree page that made it cumbersome to browse through products and watch Axel's detailed thoughts videos on each item was also constantly requiring a manual search.\n\nThe interface felt cluttered and hard to navigate. I wanted a better way to explore their recommendations that would make the browsing experience more pleasant and organized."
+    },
+    {
+      "heading": "Building the Solution",
+      "text": "I took it upon myself to create a custom web platform that would properly showcase B_Media's audiophile gear recommendations. Using vanilla JavaScript, I built a clean, responsive interface with:\n\n- Intuitive product categorization and filtering\n- Detailed product cards with specifications and reviews\n- Mobile-optimized design for better usability\n- Professional presentation that matches B_Media's brand"
+    },
+    {
+      "heading": "The Response",
+      "text": "I shared the project with the B_Media moderation team and Axel himself in their Discord server. They absolutely loved it! The improved user experience and professional presentation resonated with them, and they decided to add my platform alongside their official Linktree link.\n\nIt's incredibly rewarding to see my work being used and appreciated by the community I built it for. The project demonstrates how a thoughtful redesign can significantly improve user experience while staying true to the original content."
+    },
+    {
+      "heading": "Technical Implementation",
+      "text": "Built with modern web standards using vanilla JavaScript for optimal performance. The platform features a responsive design that works seamlessly across all devices, providing the superior browsing experience that B_Media's recommendations deserve."
+    }
+  ],
+  "links": [
+    {
+      "text": "GitHub Repository",
+      "href": "https://github.com/GabiBrawl/B_Media"
+    },
+    {
+      "text": "Live Platform",
+      "href": "https://gabibrawl.github.io/B_Media/"
+    }
+  ]
+}

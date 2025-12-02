@@ -22,24 +22,15 @@
       const dynamicContent = document.getElementById('dynamic-content');
       dynamicContent.innerHTML = '<p style="padding: 40px; text-align: center;">Loading project...</p>';
       
-      fetch(`projects/post${view.id}.js`)
+      fetch(`projects/post${view.id}.json`)
         .then(response => {
           if (!response.ok) {
             throw new Error(`Project not found (HTTP ${response.status})`);
           }
-          return response.text();
+          return response.json();
         })
-        .then(scriptContent => {
-          const scope = {};
-          const code = `
-            ${scriptContent}
-            scope.data = projectData;
-          `;
-          const fn = new Function('scope', code);
-          fn(scope);
-          const data = scope.data;
-          
-          if (data && data.meta) {
+        .then(data => {
+          if (data && data.title) {
             loadedProjects[view.id] = data;
             renderContent();
             wireInteractions();
@@ -106,36 +97,77 @@
     }
   }
 
+  function loadProjects() {
+    return new Promise(async (resolve) => {
+      const projects = [];
+      let id = 0;
+      while (true) {
+        try {
+          const response = await fetch(`projects/post${id}.json`);
+          if (!response.ok) break;
+          const data = await response.json();
+          if (data && data.title) {
+            projects.push({
+              id,
+              title: data.title,
+              description: data.description,
+              image: data.cardImage,
+              logo: data.cardLogo,
+              logoStyle: data.cardLogoStyle,
+              tags: data.cardTags
+            });
+          }
+          id++;
+        } catch (error) {
+          break;
+        }
+      }
+      resolve(projects);
+    });
+  }
+
   function renderProjectsListView(container) {
     // Update page title
     document.title = "Gabriel Yassin's Portfolio";
     document.querySelector('meta[property="og:title"]').content = "Gabi's Portfolio";
     document.querySelector('meta[property="og:description"]').content = "Full-stack developer, programmer and electronics enthusiast building clean web pages and custom hardware.";
 
-    let html = `<div class="project-grid">`;
+    // Load all project card data dynamically
+    loadProjects().then(projects => {
+      const validProjects = projects.filter(p => p !== null);
+      
+      let html = `<div class="project-grid">`;
 
-    projectsMetadata.forEach(project => {
-      html += `
-        <div class="project" data-project-id="${project.id}">
-          <img src="${project.image}" alt="Project Image" width="400" height="200" loading="lazy" decoding="async">
-          ${project.logo ? `<img class="project-logo" src="${project.logo}" alt="Project Logo" style="${project.logoStyle}">` : ''}
-          <h3>${project.title}</h3>
-          <p>${project.description}</p>
-          <div class="tags">
-            ${project.tags.map(tag => 
-              tag.link 
-                ? `<a href="${tag.link}" target="_blank">${tag.text}</a>`
-                : `<span>${tag.text}</span>`
-            ).join('')}
+      validProjects.forEach(project => {
+        html += `
+          <div class="project" data-project-id="${project.id}">
+            <img src="${project.image}" alt="Project Image" width="400" height="200" loading="lazy" decoding="async">
+            ${project.logo ? `<img class="project-logo" src="${project.logo}" alt="Project Logo" style="${project.logoStyle}">` : ''}
+            <h3>${project.title}</h3>
+            <p>${project.description}</p>
+            <div class="tags">
+              ${project.tags.map(tag => 
+                tag.link 
+                  ? `<a href="${tag.link}" target="_blank">${tag.text}</a>`
+                  : `<span>${tag.text}</span>`
+              ).join('')}
+            </div>
           </div>
-        </div>
-      `;
+        `;
+      });
+
+      html += `</div>`;
+
+      const dynamicContent = document.getElementById('dynamic-content');
+      dynamicContent.innerHTML = html;
+      
+      // Wire interactions after rendering
+      wireInteractions();
+    }).catch(error => {
+      console.error('Error loading project cards:', error);
+      const dynamicContent = document.getElementById('dynamic-content');
+      dynamicContent.innerHTML = '<p style="padding: 40px; text-align: center;">Error loading projects</p>';
     });
-
-    html += `</div>`;
-
-    const dynamicContent = document.getElementById('dynamic-content');
-    dynamicContent.innerHTML = html;
   }
 
   function renderProjectView(container, projectId) {
@@ -147,29 +179,20 @@
 
     // Check if data is loaded
     if (!loadedProjects[projectId]) {
-      // Try to load it
-      if (typeof projectData !== 'undefined') {
-        loadedProjects[projectId] = projectData;
-      } else {
-        const dynamicContent = document.getElementById('dynamic-content');
-        dynamicContent.innerHTML = '<p style="padding: 40px; text-align: center;">Loading project...</p>';
-        return;
-      }
+      const dynamicContent = document.getElementById('dynamic-content');
+      dynamicContent.innerHTML = '<p style="padding: 40px; text-align: center;">Loading project...</p>';
+      return;
     }
 
     const data = loadedProjects[projectId];
-    updateMetaTags(data.meta);
+    updateMetaTags(data);
 
     let html = `
 <div class="project-detail">
         <div class="project-header">
-          <h1>${data.header.title}</h1>
-          <p class="project-subtitle">${data.header.subtitle}</p>
+          <h1>${data.title}</h1>
+          <p class="project-subtitle">${data.subtitle}</p>
     `;
-
-    if (data.header.logo) {
-      html += `<img class="project-logo-main" src="${data.header.logo}" alt="Project Logo" style="${data.header.logoStyle}">`;
-    }
 
     html += `
     `;
@@ -223,6 +246,19 @@
 
       html += `</section>`;
     });
+
+    // Project tags
+    if (data.pageTags && data.pageTags.length > 0) {
+      html += `
+        <div class="project-tags">
+          <h3>Technologies & Skills</h3>
+          <div class="tags">
+            ${data.pageTags.map(tag => `<span>${tag}</span>`).join('')}
+          </div>
+        </div>
+      `;
+    }
+
     html += '</div>';
     html += '<a href="#" class="back-link" onclick="history.pushState(null, \'\', window.location.pathname); window.renderContent(); window.wireInteractions(); return false;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><path d="M19 12H5M12 19l-7-7 7-7"></svg>Back to Portfolio</a>';
     html += '</div>';
@@ -236,8 +272,8 @@
     }, 0);
   }
 
-  function updateMetaTags(meta) {
-    document.title = meta.title;
+  function updateMetaTags(data) {
+    document.title = data.metaTitle;
     
     const setMetaContent = (selector, content) => {
       const element = document.querySelector(selector);
@@ -246,14 +282,14 @@
       }
     };
     
-    setMetaContent('meta[property="og:title"]', meta.title);
-    setMetaContent('meta[property="og:description"]', meta.description);
-    setMetaContent('meta[property="og:image"]', meta.ogImage);
-    setMetaContent('meta[property="og:url"]', meta.url);
-    setMetaContent('meta[property="twitter:title"]', meta.title);
-    setMetaContent('meta[property="twitter:description"]', meta.description);
-    setMetaContent('meta[property="twitter:image"]', meta.ogImage);
-    setMetaContent('meta[name="description"]', meta.description);
+    setMetaContent('meta[property="og:title"]', data.metaTitle);
+    setMetaContent('meta[property="og:description"]', data.description);
+    setMetaContent('meta[property="og:image"]', data.metaImage);
+    setMetaContent('meta[property="og:url"]', data.metaUrl || `${window.location.origin}${window.location.pathname}`);
+    setMetaContent('meta[property="twitter:title"]', data.metaTitle);
+    setMetaContent('meta[property="twitter:description"]', data.description);
+    setMetaContent('meta[property="twitter:image"]', data.metaImage);
+    setMetaContent('meta[name="description"]', data.description);
   }
 
   function wireInteractions() {
@@ -287,22 +323,13 @@
       const dynamicContent = document.getElementById('dynamic-content');
       dynamicContent.innerHTML = '<p style="padding: 40px; text-align: center;">Loading project...</p>';
       
-      fetch(`projects/post${projectId}.js`)
+      fetch(`projects/post${projectId}.json`)
         .then(response => {
-          if (!response.ok) throw new Error(`HTTP ${response.status}`);
-          return response.text();
+          if (!response.ok) throw new Error(`Project not found (HTTP ${response.status})`);
+          return response.json();
         })
-        .then(scriptContent => {
-          const scope = {};
-          const code = `
-            ${scriptContent}
-            scope.data = projectData;
-          `;
-          const fn = new Function('scope', code);
-          fn(scope);
-          const data = scope.data;
-          
-          if (data && data.meta) {
+        .then(data => {
+          if (data && data.title) {
             loadedProjects[projectId] = data;
             history.pushState({ projectId }, '', `?post=${projectId}`);
             renderContent();

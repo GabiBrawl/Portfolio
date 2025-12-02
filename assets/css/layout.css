@@ -12,6 +12,10 @@
   border-right: 2px solid var(--white);
 }
 
+.sidebar p {
+  text-align: justify;
+}
+
 .main {
   margin-left: 310px;
   padding: 20px;
