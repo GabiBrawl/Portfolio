@@ -4,10 +4,9 @@
 (function () {
   'use strict';
 
-  // Store loaded project data
-  const loadedProjects = {};
-
-  // Constants
+// Store loaded project data
+const loadedProjects = {};
+let cachedProjects = null;  // Constants
   const BACK_LINK_HTML = '<a href="#" class="back-link" onclick="history.pushState(null, \'\', window.location.pathname); window.renderContent(); window.wireInteractions(); return false;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><path d="M19 12H5M12 19l-7-7 7-7"></svg>Back to Portfolio</a>';
   const LOADING_HTML = '<p style="padding: 40px; text-align: center;">Loading project...</p>';
   const ERROR_HTML = (message) => `
@@ -94,36 +93,39 @@
     }
   }
 
-  function loadProjects() {
-    return new Promise(async (resolve) => {
-      const projects = [];
-      let id = 0;
-      while (true) {
-        try {
-          const response = await fetch(`projects/post${id}.json`);
-          if (!response.ok) break;
-          const data = await response.json();
-          if (data && data.title) {
-            projects.push({
-              id,
-              title: data.title,
-              description: data.description,
-              image: data.cardImage,
-              logo: data.cardLogo,
-              logoStyle: data.cardLogoStyle,
-              tags: data.cardTags
-            });
-          }
-          id++;
-        } catch (error) {
-          break;
-        }
-      }
-      resolve(projects);
-    });
+function loadProjects() {
+  if (cachedProjects) {
+    return Promise.resolve(cachedProjects);
   }
-
-  function renderProjectsListView(container) {
+  
+  return new Promise(async (resolve) => {
+    const projects = [];
+    let id = 0;
+    while (true) {
+      try {
+        const response = await fetch(`projects/post${id}.json`);
+        if (!response.ok) break;
+        const data = await response.json();
+        if (data && data.title) {
+          projects.push({
+            id,
+            title: data.title,
+            description: data.description,
+            image: data.cardImage,
+            logo: data.cardLogo,
+            logoStyle: data.cardLogoStyle,
+            tags: data.cardTags
+          });
+        }
+        id++;
+      } catch (error) {
+        break;
+      }
+    }
+    cachedProjects = projects;
+    resolve(projects);
+  });
+}  function renderProjectsListView(container) {
     // Update page title
     document.title = "Gabriel Yassin's Portfolio";
     document.querySelector('meta[property="og:title"]').content = "Gabi's Portfolio";
@@ -158,8 +160,10 @@
       const dynamicContent = document.getElementById('dynamic-content');
       dynamicContent.innerHTML = html;
       
-      // Wire interactions after rendering
-      wireInteractions();
+      // Wire interactions after DOM update
+      setTimeout(() => {
+        wireInteractions();
+      }, 0);
     }).catch(error => {
       console.error('Error loading project cards:', error);
       const dynamicContent = document.getElementById('dynamic-content');
@@ -254,6 +258,7 @@
     // Initialize carousel after rendering
     setTimeout(() => {
       initializeCarousel();
+      wireInteractions();
     }, 0);
   }
 
@@ -277,32 +282,36 @@
     setMetaContent('meta[name="description"]', data.description);
   }
 
-  function wireInteractions() {
-    const view = getViewMode();
+function wireInteractions() {
+  const view = getViewMode();
 
-    if (view.mode === 'projects') {
-      // Wire up project card clicks
-      document.querySelectorAll('.project').forEach(card => {
-        card.addEventListener('click', (e) => {
-          if (e.target.tagName === 'A' || e.target.closest('a')) {
-            return;
-          }
-          const projectId = card.dataset.projectId;
-          navigateToProject(projectId);
-        });
-      });
-      
-      // Wire up hover effects for project cards
-      if (typeof wireProjectHoverInteractions === 'function') {
-        wireProjectHoverInteractions();
-      }
-    } else {
-      // Wire up interactions for project page
-      wireProjectPageInteractions();
+  if (view.mode === 'projects') {
+    // Use event delegation for project card clicks
+    const container = document.getElementById('dynamic-content');
+    
+    // Remove existing listener to prevent duplicates
+    container.removeEventListener('click', handleProjectClick);
+    
+    // Add the listener
+    container.addEventListener('click', handleProjectClick);
+    
+    // Wire up hover effects for project cards
+    if (typeof wireProjectHoverInteractions === 'function') {
+      wireProjectHoverInteractions();
     }
+  } else {
+    // Wire up interactions for project page
+    wireProjectPageInteractions();
   }
+}
 
-  function navigateToProject(projectId) {
+function handleProjectClick(e) {
+  const card = e.target.closest('.project');
+  if (card && !e.target.closest('a')) {
+    const projectId = card.dataset.projectId;
+    navigateToProject(projectId);
+  }
+}  function navigateToProject(projectId) {
     // Load project data if not already loaded
     if (!loadedProjects[projectId]) {
       const dynamicContent = document.getElementById('dynamic-content');
@@ -431,19 +440,25 @@
     });
   }
 
-  function wireProjectPageInteractions() {
-    // Wire back button to return to portfolio list
-    document.querySelectorAll('.back-link').forEach(link => {
-      link.addEventListener('click', (e) => {
-        e.preventDefault();
-        history.pushState(null, '', 'index.html');
-        renderContent();
-        wireInteractions();
-      });
-    });
-  }
+function wireProjectPageInteractions() {
+  // Use event delegation for back button
+  const container = document.getElementById('dynamic-content');
+  
+  // Remove existing listener to prevent duplicates
+  container.removeEventListener('click', handleBackLinkClick);
+  
+  // Add the listener
+  container.addEventListener('click', handleBackLinkClick);
+}
 
-  // No longer needed - handled at DOMContentLoaded
+function handleBackLinkClick(e) {
+  if (e.target.closest('.back-link')) {
+    e.preventDefault();
+    history.pushState(null, '', 'index.html');
+    renderContent();
+    wireInteractions();
+  }
+}  // No longer needed - handled at DOMContentLoaded
   // Expose functions globally for back button navigation
   window.renderContent = renderContent;
   window.wireInteractions = wireInteractions;
