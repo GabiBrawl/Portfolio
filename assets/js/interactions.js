@@ -10,7 +10,7 @@ function wireProjectHoverInteractions() {
 
   cards.forEach(card => {
     card.addEventListener('mouseenter', () => {
-      const isMobile = window.innerWidth <= 768;
+      const isMobile = window.innerWidth <= CONFIG.MOBILE_BREAKPOINT;
       if (!isMobile) {
         const randomAngle = (Math.random() - 0.5) * 9; // small tilt
         card.style.transform = `scale(1.05) rotate(${randomAngle}deg)`;
@@ -120,7 +120,7 @@ function wireShowMoreSocials() {
   let isExpanded = false;
   
   function updateVisibility() {
-    if (window.innerWidth <= 768) {
+    if (window.innerWidth <= CONFIG.MOBILE_BREAKPOINT) {
       // On mobile, show main links always, toggle extra links
       mainSocialLinks.forEach(link => link.style.display = 'block');
       extraSocialLinks.forEach(link => link.style.display = isExpanded ? 'block' : 'none');
@@ -146,28 +146,6 @@ function wireShowMoreSocials() {
   
   // Handle window resize
   window.addEventListener('resize', updateVisibility);
-}
-
-/**
- * Wires up project card clicks to navigate to detail pages
- */
-function wireProjectCardClicks() {
-  const projectCards = document.querySelectorAll('.project');
-  
-  projectCards.forEach((card, index) => {
-    // Make the card clickable
-    card.style.cursor = 'pointer';
-    
-    card.addEventListener('click', (e) => {
-      // Don't navigate if clicking on a link inside the card
-      if (e.target.tagName === 'A' || e.target.closest('a')) {
-        return;
-      }
-      
-      // Navigate to the project detail page
-      window.location.href = `projects/project.html?id=${index}`;
-    });
-  });
 }
 
 /**

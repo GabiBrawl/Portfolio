@@ -6,8 +6,7 @@
   // Initialize when DOM is ready
   document.addEventListener('DOMContentLoaded', () => {
     wireProjectHoverInteractions();
-    wireProjectCardClicks();
-    updateAge('age', '2007-01-29');
+    updateAge('age', CONFIG.BIRTH_DATE);
     wireTechScroller();
     wirePfpEffects();
     wireEmailCopy();

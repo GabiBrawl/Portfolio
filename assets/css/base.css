@@ -21,6 +21,7 @@ body {
   transition: opacity 250ms ease-in-out;
   opacity: 1;
   overflow-x: hidden;
+  word-spacing: 1px;
 }
 
 body.grabbing {
@@ -39,6 +40,7 @@ p {
   font-family: "Special Gothic Condensed One", sans-serif;
   font-weight: 160;
   text-align: left;
+  word-spacing: 1px;
 }
 
 h1 {
@@ -50,6 +52,7 @@ h1 {
 h2 {
   margin: 0;
   font-family: "Special Gothic Condensed One", sans-serif;
+  word-spacing: 1px;
 }
 
 /* Custom cursors */
