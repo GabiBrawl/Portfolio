@@ -3,6 +3,7 @@
   "subtitle": "キーボード ✦ Nibunkatsu is the Japanese word for Splitting in Half",
   "description": "にぶんかつ ✦ A fully custom split keyboard!",
   "cardImage": "assets/images/nibunkatsu/hero.png",
+  "flags": ["hack-club"],
   "cardTags": [
     { "text": "Embedded Development", "link": null },
     { "text": "Electronics", "link": null },

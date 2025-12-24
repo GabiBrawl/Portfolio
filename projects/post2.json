@@ -3,6 +3,7 @@
   "subtitle": "うつわ ✦ Utsuwa comes from the Japanese word for 'vessel', symbolizing a container for your digital soul",
   "description": "うつわ ✦ A custom FIDO-2 passkey storing device!",
   "cardImage": "assets/images/utsuwa/hero.png",
+  "flags": ["hack-club"],
   "cardTags": [
     { "text": "Embedded Development", "link": null },
     { "text": "Electronics", "link": null },

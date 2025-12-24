@@ -13,6 +13,21 @@
   padding: 40px;
   position: relative;
   background: var(--black);
+  overflow: hidden;
+}
+
+.hack-club-flag {
+  position: absolute;
+  top: 0px;
+  left: 40px;
+  width: 130px;
+  height: auto;
+  animation: wave 2s ease-in-out infinite;
+  transform-origin: top center;
+}
+
+.title-block {
+  text-align: center;
 }
 
 .back-link {
@@ -44,7 +59,7 @@
   color: var(--black);
 }
 
-.project-header h1 {
+.title-block h1 {
   font-size: 4rem;
   margin: 80px 0 15px 0;
   color: var(--white);
@@ -84,6 +99,7 @@
   display: flex;
   gap: 15px;
   align-items: center;
+  justify-content: center;
 }
 
 .project-links a {
@@ -1038,4 +1054,13 @@
   max-width: 100px;
   height: auto;
   margin: 15px auto;
+}
+
+@keyframes wave {
+  0%, 100% {
+    transform: rotate(0deg);
+  }
+  50% {
+    transform: rotate(5deg);
+  }
 }

@@ -114,7 +114,8 @@ function loadProjects() {
             image: data.cardImage,
             logo: data.cardLogo,
             logoStyle: data.cardLogoStyle,
-            tags: data.cardTags
+            tags: data.cardTags,
+            flags: data.flags || []
           });
         }
         id++;
@@ -191,20 +192,20 @@ function loadProjects() {
     let html = `
 <div class="project-detail">
         <div class="project-header">
-          <h1>${data.title}</h1>
-          <p class="project-subtitle">${data.subtitle}</p>
+          ${data.flags && data.flags.includes('hack-club') ? '<img src="assets/flag-orpheus-top.svg" alt="Hack Club Flag" class="hack-club-flag">' : ''}
+          <div class="title-block">
+            <h1>${data.title}</h1>
+            <p class="project-subtitle">${data.subtitle}</p>
+            ${data.links && data.links.length > 0 ? `
+            <div class="project-links">
+              ${data.links.map(link => `<a href="${link.href}" target="_blank">${link.text}</a>`).join('')}
+            </div>
+            ` : ''}
+          </div>
     `;
 
     html += `
     `;
-
-    if (data.links && data.links.length > 0) {
-      html += `
-        <div class="project-links">
-          ${data.links.map(link => `<a href="${link.href}" target="_blank">${link.text}</a>`).join('')}
-        </div>
-      `;
-    }
 
     html += `</div>`;
 
