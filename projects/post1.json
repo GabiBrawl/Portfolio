@@ -5,8 +5,9 @@
   "cardImage": "assets/images/nibunkatsu/hero.png",
   "flags": ["hack-club"],
   "cardTags": [
-    { "text": "Embedded Development", "link": null },
+    { "text": "Hack Club", "link": null },
     { "text": "Electronics", "link": null },
+    { "text": "CAD Modeling", "link": null },
     { "text": "OpenSource", "link": "https://github.com/PsychoDuckTech" }
   ],
   "metaTitle": "Kibodo One - Gabriel Yassin's Portfolio",
@@ -64,6 +65,10 @@
     {
       "text": "View on GitHub",
       "href": "https://github.com/GabiBrawl/Nibunkatsu"
+    },
+    {
+      "text": "View on Blueprint",
+      "href": "https://blueprint.hackclub.com/projects/4052"
     }
   ]
 }

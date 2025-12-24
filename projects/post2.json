@@ -5,7 +5,7 @@
   "cardImage": "assets/images/utsuwa/hero.png",
   "flags": ["hack-club"],
   "cardTags": [
-    { "text": "Embedded Development", "link": null },
+    { "text": "Hack Club", "link": null },
     { "text": "Electronics", "link": null },
     { "text": "OpenSource", "link": "https://github.com/PsychoDuckTech" }
   ],
@@ -52,6 +52,10 @@
     {
       "text": "View on GitHub",
       "href": "https://github.com/GabiBrawl/Utsuwa"
+    },
+    {
+      "text": "View on Blueprint",
+      "href": "https://blueprint.hackclub.com/projects/6307"
     }
   ]
 }
