@@ -1,60 +1,68 @@
 {
-  "title": "Audiophile Recommendations",
-  "subtitle": "B_Media's Gear Platform",
-  "description": "A platform for B_Media's audiophile gear recommendations, offering a superior browsing experience compared to the original Linktree.",
-  "cardImage": "assets/images/bmedia.png",
-  "cardLogo": null,
-  "cardLogoStyle": "",
+  "title": "Nibunkatsu One",
+  "subtitle": "キーボード ✦ Nibunkatsu is the Japanese word for Splitting in Half",
+  "description": "にぶんかつ ✦ A fully custom split keyboard!",
+  "cardImage": "assets/images/nibunkatsu/hero.png",
   "cardTags": [
-    { "text": "JavaScript", "link": null },
-    { "text": "Audiophile", "link": null },
-    { "text": "OpenSource", "link": "https://github.com/GabiBrawl/B_Media" }
+    { "text": "Embedded Development", "link": null },
+    { "text": "Electronics", "link": null },
+    { "text": "OpenSource", "link": "https://github.com/PsychoDuckTech" }
   ],
-  "metaTitle": "Audiophile Recommendations - Gabriel Yassin's Portfolio",
-  "metaImage": "https://gabibrawl.github.io/Portfolio/assets/images/bmedia.png",
+  "metaTitle": "Kibodo One - Gabriel Yassin's Portfolio",
+  "metaImage": "https://gabibrawl.github.io/Portfolio/assets/images/kibodo.webp",
   "gallery": [
     {
-      "src": "assets/images/bmedia.png",
-      "alt": "B_Media Platform",
-      "caption": "Clean, organized audiophile gear recommendations"
+      "src": "assets/images/nibunkatsu/hero.png",
+      "alt": "Keyboard Layout",
+      "caption": ""
     },
     {
-      "src": "assets/images/bmedia.png",
-      "alt": "Product Categories",
-      "caption": "Easy navigation through different gear categories"
+      "src": "assets/images/nibunkatsu/1.png",
+      "alt": "Numpad Module",
+      "caption": ""
     },
     {
-      "src": "assets/images/bmedia.png",
-      "alt": "Detailed Reviews",
-      "caption": "Filters"
+      "src": "assets/images/nibunkatsu/2.png",
+      "alt": "Build Process",
+      "caption": "Schematics"
+    },
+    {
+      "src": "assets/images/nibunkatsu/3.png",
+      "alt": "Display",
+      "caption": "PCB design"
+    },
+    {
+      "src": "assets/images/nibunkatsu/4.png",
+      "alt": "Display",
+      "caption": "3D Render with CAD case design"
     }
   ],
   "content": [
     {
-      "heading": "The Inspiration",
-      "text": "I'm a big fan of B_Media's content - I regularly watch their videos and find their audiophile gear recommendations incredibly valuable. However, their recommendation list, while comprehensive, was hosted on a basic Linktree page that made it cumbersome to browse through products and watch Axel's detailed thoughts videos on each item was also constantly requiring a manual search.\n\nThe interface felt cluttered and hard to navigate. I wanted a better way to explore their recommendations that would make the browsing experience more pleasant and organized."
+      "heading": "About Nibunkatsu",
+      "text": "Nibunkatsu is a compact split keyboard mainly designed for typing and programming. It was fully designed, engineered & planned out in only 7 days.\n\n Funded by Blueprint, a movement by Hack Club and AMD (yes, that AMD) to empower teenagers to build tech projects and actually bring them to life!"
     },
     {
-      "heading": "Building the Solution",
-      "text": "I took it upon myself to create a custom web platform that would properly showcase B_Media's audiophile gear recommendations. Using vanilla JavaScript, I built a clean, responsive interface with:\n\n- Intuitive product categorization and filtering\n- Detailed product cards with specifications and reviews\n- Mobile-optimized design for better usability\n- Professional presentation that matches B_Media's brand"
+      "heading": "The Split Mechanism",
+      "text": "Although Nibunkatsu is not an innovation in any realms, it features a very cool ergonomical concept with the split layout which I've been aching to try for a while!\n\nBoth halves run the ESP32-S3 MCU, and communicate together using a 3.5mm TRRS cable."
     },
     {
-      "heading": "The Response",
-      "text": "I shared the project with the B_Media moderation team and Axel himself in their Discord server. They absolutely loved it! The improved user experience and professional presentation resonated with them, and they decided to add my platform alongside their official Linktree link.\n\nIt's incredibly rewarding to see my work being used and appreciated by the community I built it for. The project demonstrates how a thoughtful redesign can significantly improve user experience while staying true to the original content."
+        "heading": "CAD Design",
+        "text": "This project obliged me to try CAD design for the first time ever. It sure looks like a nightmare, but once you get into it, it's like the coolest thing everrrr! The case I made for Nibunkatsu is my first ever 3D design fully made by me, and I can say that I proud myself of the results <3"
     },
     {
-      "heading": "Technical Implementation",
-      "text": "Built with modern web standards using vanilla JavaScript for optimal performance. The platform features a responsive design that works seamlessly across all devices, providing the superior browsing experience that B_Media's recommendations deserve."
+        "heading": "Other functionality",
+        "text": "Each half has a distinct feature, the left side has a small 0.91' display with custom UI designed using LOPAKA.app, and the right side features a rotary knob. Both halves work together with layers which are toggleable using special keys on the thumbs."
+    },
+    {
+      "heading": "Open Source",
+      "text": "Nibunkatsu One is completely open-source, available on my GitHub (link available on top). This includes:\n\n- Complete PCB schematics and layouts (made in EasyEDA)\n\n- 3D model files for the case (.3MF format)\n\n- The updated Circuit Python code that runs on my own personal build! Based on KMK"
     }
   ],
   "links": [
     {
-      "text": "GitHub Repository",
-      "href": "https://github.com/GabiBrawl/B_Media"
-    },
-    {
-      "text": "Live Platform",
-      "href": "https://gabibrawl.github.io/B_Media/"
+      "text": "View on GitHub",
+      "href": "https://github.com/GabiBrawl/Nibunkatsu"
     }
   ]
 }
