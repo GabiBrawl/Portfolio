@@ -115,21 +115,21 @@ function wireShowMoreSocials() {
     child.classList.contains('large') && 
     !child.classList.contains('show-more-btn')
   );
-  const extraSocialLinks = socialsContainer.querySelectorAll('.extra-socials a');
+  const extraSocials = socialsContainer.querySelector('.extra-socials');
   
   let isExpanded = false;
   
   function updateVisibility() {
     if (window.innerWidth <= CONFIG.MOBILE_BREAKPOINT) {
-      // On mobile, show main links always, toggle extra links
+      // On mobile, show main links always, toggle extra socials
       mainSocialLinks.forEach(link => link.style.display = 'block');
-      extraSocialLinks.forEach(link => link.style.display = isExpanded ? 'block' : 'none');
+      extraSocials.style.display = isExpanded ? 'block' : 'none';
       showMoreBtn.textContent = isExpanded ? 'Show Less' : 'Show More';
       showMoreBtn.style.display = 'block';
     } else {
-      // On desktop, show all links and hide button
+      // On desktop, show all and hide button
       mainSocialLinks.forEach(link => link.style.display = 'block');
-      extraSocialLinks.forEach(link => link.style.display = 'block');
+      extraSocials.style.display = 'block';
       showMoreBtn.style.display = 'none';
       isExpanded = true; // Consider it expanded on desktop
     }
@@ -162,5 +162,29 @@ function wireCursorGrab() {
 
   document.addEventListener('mouseup', () => {
     body.classList.remove('grabbing');
+  });
+}
+
+/**
+ * Wires up webring toggle button
+ */
+function wireWebringToggle() {
+  const toggleBtn = document.querySelector('.webring-toggle');
+  const content = document.querySelector('.webring-content');
+  
+  if (!toggleBtn || !content) return;
+  
+  let isExpanded = false;
+  
+  toggleBtn.addEventListener('click', (e) => {
+    e.preventDefault();
+    isExpanded = !isExpanded;
+    if (isExpanded) {
+      content.style.display = 'block';
+      toggleBtn.textContent = 'Hide Webring';
+    } else {
+      content.style.display = 'none';
+      toggleBtn.textContent = 'Part of the Hack Club Webring';
+    }
   });
 }

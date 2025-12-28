@@ -13,6 +13,7 @@
     wireCommandPalette();
     wireCursorGrab();
     wireShowMoreSocials();
+    wireWebringToggle();
   });
 
   // Remove preload class on window load

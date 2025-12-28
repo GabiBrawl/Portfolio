@@ -87,6 +87,34 @@
   flex: 1;
 }
 
+.webring-section {
+  margin-top: 0px;
+}
+
+.webring-toggle {
+  display: block;
+  color: var(--white);
+  text-decoration: none;
+  margin-bottom: 10px;
+  padding: 10px;
+  border: 2px solid var(--white);
+  text-align: center;
+  background: none;
+  cursor: pointer;
+  width: 100%;
+  font-family: inherit;
+  font-size: inherit;
+}
+
+.webring-toggle:hover {
+  background: var(--white);
+  color: var(--black);
+}
+
+.webring-content {
+  display: none;
+}
+
 /* Mobile socials adjustments */
 @media (max-width: 768px) {
   .socials .show-more-btn {

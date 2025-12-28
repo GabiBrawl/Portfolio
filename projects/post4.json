@@ -2,8 +2,8 @@
   "title": "LePlayer Music",
   "subtitle": "Music Streaming Revolution",
   "description": "A music streaming service, attempting to dethrone the giants in the industry",
-  "cardImage": "assets/images/leplayer.png",
-  "cardLogo": "assets/images/leplayer52x52.png",
+  "cardImage": "assets/images/leplayer/hero.png",
+  "cardLogo": "assets/images/leplayer/logo52x52.png",
   "cardLogoStyle": "",
   "cardTags": [
     { "text": "Svelte", "link": null },
@@ -13,25 +13,25 @@
     { "text": "OpenSource", "link": "https://github.com/LePlayer-Music" }
   ],
   "metaTitle": "LePlayer Music - Gabriel Yassin's Portfolio",
-  "metaImage": "https://gabibrawl.github.io/Portfolio/assets/images/leplayer.png",
+  "metaImage": "https://gabibrawl.github.io/Portfolio/assets/images/leplayer/hero.png",
   "gallery": [
     {
-      "src": "assets/images/leplayer.png",
+      "src": "assets/images/leplayer/hero.png",
       "alt": "Player Interface",
       "caption": "Clean and intuitive music player interface"
     },
     {
-      "src": "assets/images/leplayer.png",
+      "src": "assets/images/leplayer/hero.png",
       "alt": "Playlist View",
       "caption": "Organize your music into beautiful playlists"
     },
     {
-      "src": "assets/images/leplayer.png",
+      "src": "assets/images/leplayer/hero.png",
       "alt": "Discovery Engine",
       "caption": "Privacy-preserving music discovery engine"
     },
     {
-      "src": "assets/images/leplayer.png",
+      "src": "assets/images/leplayer/hero.png",
       "alt": "Social Features",
       "caption": "Share and discover music with your community"
     }

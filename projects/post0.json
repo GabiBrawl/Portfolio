@@ -2,8 +2,8 @@
   "title": "Kibodo One",
   "subtitle": "キーボード ✦ Kibodo is the Japanese word for Keyboard",
   "description": "キーボード ✦ The coolest keyboard ever, with magnetical modules, and a sick side-display!",
-  "cardImage": "assets/images/kibodo.webp",
-  "cardLogo": "assets/images/psychoduck64x64.png",
+  "cardImage": "assets/images/psychoduck/kibodo/hero.webp",
+  "cardLogo": "assets/images/psychoduck/logo64x64.png",
   "cardLogoStyle": "border: 2px solid var(--white); background-color: var(--black);",
   "cardTags": [
     { "text": "Embedded Development", "link": null },
@@ -11,25 +11,25 @@
     { "text": "OpenSource", "link": "https://github.com/PsychoDuckTech" }
   ],
   "metaTitle": "Kibodo One - Gabriel Yassin's Portfolio",
-  "metaImage": "https://gabibrawl.github.io/Portfolio/assets/images/kibodo.webp",
+  "metaImage": "https://gabibrawl.github.io/Portfolio/assets/images/psychoduck/kibodo/hero.webp",
   "gallery": [
     {
-      "src": "assets/images/kibodo.webp",
+      "src": "assets/images/psychoduck/kibodo/hero.webp",
       "alt": "Keyboard Layout",
       "caption": "Ergonomic split design with custom keycaps"
     },
     {
-      "src": "assets/images/kibodo.webp",
+      "src": "assets/images/psychoduck/kibodo/hero.webp",
       "alt": "Numpad Module",
       "caption": "Magnetically attachable"
     },
     {
-      "src": "assets/images/kibodo.webp",
+      "src": "assets/images/psychoduck/kibodo/hero.webp",
       "alt": "Build Process",
       "caption": "Handcrafted construction with precision engineering"
     },
     {
-      "src": "assets/images/kibodo.webp",
+      "src": "assets/images/psychoduck/kibodo/hero.webp",
       "alt": "Display",
       "caption": "Side-mounted OLED display with custom graphics"
     }

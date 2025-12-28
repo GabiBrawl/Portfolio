@@ -37,7 +37,7 @@
     <!-- Preconnect to font provider for faster font load -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <!-- Load Google Fonts (moved out of CSS for better performance) -->
+    <!-- Load Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Special+Gothic+Condensed+One&family=Special+Gothic+Expanded+One&display=swap" rel="stylesheet">
     <!-- Preload main stylesheets to reduce render-blocking -->
     <link rel="preload" href="assets/css/base.css" as="style" onload="this.rel='stylesheet'">
@@ -81,10 +81,16 @@
                     <a href="https://open.spotify.com/playlist/29FRF3n8TgRjY5Y2lGGFwV" target="_blank">Spotify</a>
                     <a href="https://linkedin.com/in/gabrielyassin" target="_blank">LinkedIn</a>
                 </div>
+                <div class="webring-section">
+                    <button class="webring-toggle">Part of the Hack Club Webring</button>
+                    <div class="webring-content">
+                        <pagering-link theme="dark"></pagering-link>
+                    </div>
+                </div>
             </div>
             <a class="large show-more-btn" id="show-more-socials">Show More</a>
         </div>
-        <pagering-link theme="dark" style="margin-top: 8px;"></pagering-link>
+        
         
         <!-- Infinite scrolling tech text -->
         <div class="tech-scroller">
