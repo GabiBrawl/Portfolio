@@ -1,15 +1,16 @@
 {
   "title": "LePlayer Music",
   "subtitle": "Music Streaming Revolution",
-  "description": "A music streaming service, attempting to dethrone the giants in the industry",
+  "description": "An uncomplete music player or streaming service, built on Svelte.",
   "cardImage": "assets/images/leplayer/hero.png",
+  "flags": ["disabled"],
   "cardLogo": "assets/images/leplayer/logo52x52.png",
   "cardLogoStyle": "",
   "cardTags": [
     { "text": "Svelte", "link": null },
     { "text": "Python", "link": null },
     { "text": "UI/UX Design", "link": null },
-    { "text": "In Progress", "link": null },
+    { "text": "Early Development", "link": null },
     { "text": "OpenSource", "link": "https://github.com/LePlayer-Music" }
   ],
   "metaTitle": "LePlayer Music - Gabriel Yassin's Portfolio",

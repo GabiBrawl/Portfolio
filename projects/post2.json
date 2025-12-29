@@ -1,12 +1,13 @@
 {
   "title": "Utsuwa Key",
   "subtitle": "うつわ ✦ Utsuwa comes from the Japanese word for 'vessel', symbolizing a container for your digital soul",
-  "description": "うつわ ✦ A custom FIDO-2 passkey storing device!",
+  "description": "うつわ ✦ A contactless FIDO-2 passkey storing device!",
   "cardImage": "assets/images/utsuwa/hero.png",
   "flags": ["hack-club"],
   "cardTags": [
     { "text": "Hack Club", "link": null },
     { "text": "Electronics", "link": null },
+    { "text": "Security", "link": null },
     { "text": "OpenSource", "link": "https://github.com/PsychoDuckTech" }
   ],
   "metaTitle": "Kibodo One - Gabriel Yassin's Portfolio",
@@ -19,33 +20,37 @@
     },
     {
       "src": "assets/images/utsuwa/1.png",
-      "alt": "Numpad Module",
-      "caption": ""
+      "alt": "PCB Top",
+      "caption": "PCB Top"
     },
     {
       "src": "assets/images/utsuwa/2.png",
-      "alt": "Build Process",
-      "caption": "Schematics"
+      "alt": "PCB Bottom",
+      "caption": "PCB Bottom"
     },
     {
       "src": "assets/images/utsuwa/3.png",
-      "alt": "Display",
+      "alt": "PCB Design",
       "caption": "PCB design"
     },
     {
       "src": "assets/images/utsuwa/4.png",
-      "alt": "Display",
-      "caption": "3D Render with CAD case design"
+      "alt": "Schematics",
+      "caption": "Schematics"
     }
   ],
   "content": [
     {
       "heading": "Another Security Key",
-      "text": "Unlike standard keys that use mechanical buttons, **Utsuwa** uses a **Hall Effect Sensor**, allowing for contactless authentication via a magnetic ring or charm."
+      "text": "A FIDO-2 Hardware passkey storing device that revolutionizes authentication with contactless technology. Unlike standard keys that use mechanical buttons (or exposed copper), **Utsuwa** employs __**Hall Effect Sensors**__, to enable secure authentication via magnetic rings or charms - eliminating physical contact and reducing wear.\n\nBuilt on the RP2354A microcontroller and open-source firmware, Utsuwa features custom PCB artwork, designed on Figma, by me. This device stores FIDO-2 passkeys securely while maintaining a sleek, modern form factor and unique design."
+    },
+    {
+      "heading": "Features",
+      "text": "- Hall Effect sensor for contactless authentication.\n\n- FIDO-2 compliant security architecture.\n\n- Custom-designed PCB with unique artwork.\n\n- Open-source firmware and hardware designs."
     },
     {
       "heading": "Open Source",
-      "text": "Utsuwa is completely open-source, available on my GitHub (link available on the top of this page)."
+      "text": "Utsuwa is completely open-source, available on my GitHub."
     }
   ],
   "links": [

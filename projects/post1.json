@@ -1,6 +1,6 @@
 {
   "title": "Nibunkatsu One",
-  "subtitle": "キーボード ✦ Nibunkatsu is the Japanese word for Splitting in Half",
+  "subtitle": "にぶんかつ ✦ Nibunkatsu is the Japanese word for Splitting in Half",
   "description": "にぶんかつ ✦ A fully custom split keyboard!",
   "cardImage": "assets/images/nibunkatsu/hero.png",
   "flags": ["hack-club"],
@@ -8,6 +8,7 @@
     { "text": "Hack Club", "link": null },
     { "text": "Electronics", "link": null },
     { "text": "CAD Modeling", "link": null },
+    { "text": "Keyboard", "link": null },
     { "text": "OpenSource", "link": "https://github.com/PsychoDuckTech" }
   ],
   "metaTitle": "Kibodo One - Gabriel Yassin's Portfolio",
@@ -46,11 +47,11 @@
     },
     {
       "heading": "The Split Mechanism",
-      "text": "Although Nibunkatsu is not an innovation in any realms, it features a very cool ergonomical concept with the split layout which I've been aching to try for a while!\n\nBoth halves run the ESP32-S3 MCU, and communicate together using a 3.5mm TRRS cable."
+      "text": "Although Nibunkatsu is not an innovation in any realms, it's a very cool concept which I've been aching to try for a while!\n\nBoth halves run the ESP32-S3 MCU, and communicate together using a 3.5mm TRRS cable."
     },
     {
         "heading": "CAD Design",
-        "text": "This project obliged me to try CAD design for the first time ever. It sure looks like a nightmare, but once you get into it, it's like the coolest thing everrrr! The case I made for Nibunkatsu is my first ever 3D design fully made by me, and I can say that I proud myself of the results <3"
+        "text": "This project obliged me to try CAD designing for the first time ever. It looked intimidating at first, but once I got into it, it turned out to be quite straightforward. The case I made for Nibunkatsu is my first ever 3D design fully made by me. I'm proud of the results and feel this represents a significant milestone in my design journey."
     },
     {
         "heading": "Other functionality",
@@ -58,7 +59,7 @@
     },
     {
       "heading": "Open Source",
-      "text": "Nibunkatsu One is completely open-source, available on my GitHub (link available on top). This includes:\n\n- Complete PCB schematics and layouts (made in EasyEDA)\n\n- 3D model files for the case (.3MF format)\n\n- The updated Circuit Python code that runs on my own personal build! Based on KMK"
+      "text": "Nibunkatsu One is completely open-source, available on my GitHub (link available on top). This includes:\n\n- Complete PCB schematics and layouts (made in EasyEDA)\n\n- 3D model files for the case (.3MF format)\n\n- The updated Circuit Python code that runs on my own personal build! Based on the KMK keyboard firmware framework"
     }
   ],
   "links": [

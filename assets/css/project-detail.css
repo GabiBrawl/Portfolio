@@ -8,7 +8,7 @@
 }
 
 .project-header {
-  margin-bottom: 60px;
+  margin-bottom: 50px;
   border: 2px solid var(--white);
   padding: 40px;
   position: relative;
@@ -61,7 +61,7 @@
 
 .title-block h1 {
   font-size: 4rem;
-  margin: 80px 0 15px 0;
+  margin: 40px 0 15px 0;
   color: var(--white);
   font-family: "Special Gothic Expanded One", sans-serif;
   letter-spacing: 2px;

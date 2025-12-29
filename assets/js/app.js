@@ -139,21 +139,23 @@ function loadProjects() {
       let html = `<div class="project-grid">`;
 
       validProjects.forEach(project => {
-        html += `
-          <div class="project" data-project-id="${project.id}">
-            <img src="${project.image}" alt="Project Image" width="400" height="200" loading="lazy" decoding="async">
-            ${project.logo ? `<img class="project-logo" src="${project.logo}" alt="Project Logo" style="${project.logoStyle}">` : ''}
-            <h3>${project.title}</h3>
-            <p>${project.description}</p>
-            <div class="tags">
-              ${project.tags.map(tag => 
-                tag.link 
-                  ? `<a href="${tag.link}" target="_blank">${tag.text}</a>`
-                  : `<span>${tag.text}</span>`
-              ).join('')}
+        if (!project.flags.includes('disabled')) {
+          html += `
+            <div class="project" data-project-id="${project.id}">
+              <img src="${project.image}" alt="Project Image" width="400" height="200" loading="lazy" decoding="async">
+              ${project.logo ? `<img class="project-logo" src="${project.logo}" alt="Project Logo" style="${project.logoStyle}">` : ''}
+              <h3>${project.title}</h3>
+              <p>${project.description}</p>
+              <div class="tags">
+                ${project.tags.map(tag => 
+                  tag.link 
+                    ? `<a href="${tag.link}" target="_blank">${tag.text}</a>`
+                    : `<span>${tag.text}</span>`
+                ).join('')}
+              </div>
             </div>
-          </div>
-        `;
+          `;
+        };
       });
 
       html += `</div>`;
@@ -235,7 +237,7 @@ function loadProjects() {
       html += `<section class="project-section"><h2>${section.heading}</h2>`;
 
       if (section.text) {
-        html += `<p>${section.text.replace(/\n\n/g, '</p><p>').replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')}</p>`;
+        html += `<p>${processMarkdownText(section.text)}</p>`;
       }
 
       if (section.list) {
@@ -459,7 +461,38 @@ function handleBackLinkClick(e) {
     renderContent();
     wireInteractions();
   }
-}  // No longer needed - handled at DOMContentLoaded
+}
+
+function processMarkdownText(text) {
+  // Handle paragraph breaks first
+  let processed = text.replace(/\n\n/g, '</p><p>');
+  
+  // Process underline first (to avoid conflicts with bold)
+  processed = processed.replace(/__(.*?)__/g, '<u>$1</u>');
+  
+  // Process bold
+  processed = processed.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+  
+  // Process italics (*text* or _text_)
+  processed = processed.replace(/(?<!\*)\*(?!\*)([^*]+?)(?<!\*)\*(?!\*)/g, '<em>$1</em>');
+  processed = processed.replace(/(?<!_)_([^_]+?)_(?!_)/g, '<em>$1</em>');
+  
+  // Process strikethrough
+  processed = processed.replace(/~~(.*?)~~/g, '<del>$1</del>');
+  
+  // Process inline code
+  processed = processed.replace(/`([^`]+?)`/g, '<code>$1</code>');
+  
+  // Process links [text](url)
+  processed = processed.replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" target="_blank">$1</a>');
+  
+  // Process line breaks within paragraphs
+  processed = processed.replace(/\n/g, '<br>');
+  
+  return processed;
+}
+
+  // No longer needed - handled at DOMContentLoaded
   // Expose functions globally for back button navigation
   window.renderContent = renderContent;
   window.wireInteractions = wireInteractions;

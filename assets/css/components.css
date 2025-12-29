@@ -131,7 +131,7 @@
 /* Projects */
 .title-container {
   text-align: center;
-  margin-bottom: 30px;
+  margin-bottom: 20px;
 }
 
 .title-container .line {
@@ -272,4 +272,44 @@
   .project {
     padding: 15px;
   }
+}
+
+/* Markdown text processing styles */
+.project-content strong {
+  font-weight: bold;
+  color: var(--accent);
+}
+
+.project-content em {
+  font-style: italic;
+  color: var(--white);
+}
+
+.project-content u {
+  text-decoration: underline;
+  text-decoration-color: var(--accent);
+}
+
+.project-content del {
+  text-decoration: line-through;
+  color: #888;
+}
+
+.project-content code {
+  background-color: rgba(255, 255, 255, 0.1);
+  padding: 2px 4px;
+  border-radius: 3px;
+  font-family: 'Courier New', monospace;
+  font-size: 0.9em;
+  color: var(--accent);
+}
+
+.project-content a {
+  color: var(--accent);
+  text-decoration: underline;
+  text-decoration-color: var(--accent);
+}
+
+.project-content a:hover {
+  color: var(--white);
 }

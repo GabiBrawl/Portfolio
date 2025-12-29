@@ -1,7 +1,7 @@
 {
   "title": "Audiophile Recommendations",
   "subtitle": "A comprehensive platform to host B_Media's Gear recommendations in a more thoughtful way!",
-  "description": "A platform for B_Media's audiophile gear recommendations, offering a superior browsing experience compared to the original Linktree.",
+  "description": "A platform for B_Media's audiophile gear recommendations, offering a superior UX & browsing experience compared to the original Linktree.",
   "cardImage": "assets/images/b_media/hero.png",
   "cardLogo": null,
   "cardLogoStyle": "",
@@ -16,7 +16,7 @@
     {
       "src": "assets/images/b_media/hero.png",
       "alt": "B_Media Platform",
-      "caption": "Clean, organized audiophile gear recommendations"
+      "caption": ""
     },
     {
       "src": "assets/images/b_media/hero.png",

@@ -3,6 +3,7 @@
   "subtitle": "Custom Computer Systems & Builds THIS PAGE IS A PLACEHOLDER",
   "description": "I build custom PCs tailored to individual needs and preferences.",
   "cardImage": "assets/images/pc.jpeg",
+  "flags": ["disabled"],
   "cardLogo": null,
   "cardLogoStyle": "",
   "cardTags": [
