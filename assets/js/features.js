@@ -260,8 +260,8 @@ function wireCommandPalette() {
   inputContainer.style.cssText = `display: flex; align-items: center;`;
 
   const prompt = document.createElement('span');
-  prompt.textContent = '$ ';
-  prompt.style.cssText = `color: var(--white); font-family: monospace; font-size: 14px;`;
+  prompt.textContent = '$';
+  prompt.style.cssText = `color: var(--white); font-family: monospace; font-size: 14px; margin-right: 8px;`;
 
   const input = document.createElement('input');
   input.style.cssText = `
@@ -366,7 +366,7 @@ function wireCommandPalette() {
           response = 'GabiBrawl // Full-stack developer and electronics enthusiast';
           break;
         case 'age':
-          response = '18y... for now';
+          response = `${getAge()}y... for now`;
           break;
         case 'qotd':
           response = qotd();

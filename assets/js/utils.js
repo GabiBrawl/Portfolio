@@ -24,13 +24,10 @@ function convertPolarToCartesian(angle, distance) {
 
 /**
  * Calculates age from birth date
- * @param {string} elementId - ID of element to update
- * @param {string} birthDateString - Birth date in YYYY-MM-DD format
+ * @param {string} birthDateString - Birth date in YYYY-MM-DD format (defaults to CONFIG.BIRTH_DATE)
+ * @returns {number} Age in years
  */
-function updateAge(elementId, birthDateString) {
-  const el = document.getElementById(elementId);
-  if (!el) return;
-
+function getAge(birthDateString = CONFIG.BIRTH_DATE) {
   const birthDate = new Date(birthDateString);
   const today = new Date();
   let age = today.getFullYear() - birthDate.getFullYear();
@@ -40,7 +37,19 @@ function updateAge(elementId, birthDateString) {
     age--;
   }
 
-  el.textContent = age + 'y';
+  return age;
+}
+
+/**
+ * Updates an element with the calculated age
+ * @param {string} elementId - ID of element to update
+ * @param {string} birthDateString - Birth date in YYYY-MM-DD format
+ */
+function updateAge(elementId, birthDateString) {
+  const el = document.getElementById(elementId);
+  if (!el) return;
+
+  el.textContent = getAge(birthDateString) + 'y';
 }
 
 /**
