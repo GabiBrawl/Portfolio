@@ -162,10 +162,13 @@
 }
 
 .carousel-slide img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
+  object-fit: scale-down;
+  max-height: 90%;
+  max-width: 85%;
   display: block;
+  margin: 0 auto;
+  border: 2px solid var(--white);
+  box-sizing: border-box;
 }
 
 .carousel-caption {
@@ -173,8 +176,8 @@
   bottom: 0;
   left: 0;
   right: 0;
-  padding: 25px;
-  background: linear-gradient(to top, rgba(7, 7, 7, 0.95) 0%, rgba(7, 7, 7, 0.7) 70%, transparent 100%);
+  padding: 50px 25px 45px 25px;
+  background: linear-gradient(to top, var(--black) 0%, rgba(7, 7, 7, 0.85) 40%, rgba(7, 7, 7, 0.4) 70%, transparent 100%);
   color: var(--white);
   font-family: "Special Gothic Condensed One", sans-serif;
   font-size: 1.1rem;
@@ -189,12 +192,12 @@
   right: 0;
   bottom: 0;
   pointer-events: all;
-  cursor: pointer;
+  cursor: url('../cursors/handpointing.svg') 10 5, pointer;
 }
 
 .carousel-indicators {
   position: absolute;
-  bottom: 90px;
+  bottom: 20px;
   left: 50%;
   transform: translateX(-50%);
   display: flex;
@@ -207,7 +210,7 @@
   height: 12px;
   border: 2px solid var(--white);
   background: transparent;
-  cursor: pointer;
+  cursor: url('../cursors/handpointing.svg') 10 5, pointer;
 }
 
 .carousel-dot.active {
@@ -219,8 +222,6 @@
 }
 
 .project-hero img {
-  width: 100%;
-  max-width: 800px;
   height: auto;
   border: 2px solid var(--white);
 }
@@ -542,6 +543,7 @@
   transition: all 0.4s ease;
   position: relative;
   aspect-ratio: 16/10;
+  cursor: url('../cursors/handpointing.svg') 10 5, pointer;
 }
 
 .gallery-item:hover {

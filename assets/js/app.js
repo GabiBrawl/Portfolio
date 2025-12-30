@@ -331,6 +331,13 @@ function handleProjectClick(e) {
             history.pushState({ projectId }, '', `?post=${projectId}`);
             renderContent();
             wireInteractions();
+            // Scroll to main content area on mobile after content loads
+            if (window.innerWidth <= CONFIG.MOBILE_BREAKPOINT) {
+              const mainContent = document.getElementById('main-content');
+              if (mainContent) {
+                mainContent.scrollIntoView({ behavior: 'smooth', block: 'start' });
+              }
+            }
           } else {
             const dynamicContent = document.getElementById('dynamic-content');
             dynamicContent.innerHTML = ERROR_HTML('Invalid project data format');
@@ -345,6 +352,13 @@ function handleProjectClick(e) {
       history.pushState({ projectId }, '', `?post=${projectId}`);
       renderContent();
       wireInteractions();
+      // Scroll to main content area on mobile after content loads
+      if (window.innerWidth <= CONFIG.MOBILE_BREAKPOINT) {
+        const mainContent = document.getElementById('main-content');
+        if (mainContent) {
+          mainContent.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+      }
     }
   }
 

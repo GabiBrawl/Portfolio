@@ -16,29 +16,34 @@
   "gallery": [
     {
       "src": "assets/images/psychoduck/kibodo/hero.webp",
-      "alt": "Keyboard Layout",
-      "caption": "Ergonomic split design with custom keycaps"
-    },
-    {
-      "src": "assets/images/psychoduck/kibodo/hero.webp",
       "alt": "Numpad Module",
-      "caption": "Magnetically attachable"
+      "caption": "Magnetically attachable module"
     },
     {
-      "src": "assets/images/psychoduck/kibodo/hero.webp",
+      "src": "assets/images/psychoduck/kibodo/1.png",
       "alt": "Build Process",
-      "caption": "Handcrafted construction with precision engineering"
+      "caption": "Handcrafted construction"
     },
     {
-      "src": "assets/images/psychoduck/kibodo/hero.webp",
+      "src": "assets/images/psychoduck/kibodo/2.png",
+      "alt": "",
+      "caption": "At the Showcase Event"
+    },
+    {
+      "src": "assets/images/psychoduck/kibodo/display.jpg",
+      "alt": "Numpad Module",
+      "caption": "Real Display UI Picture"
+    },
+    {
+      "src": "assets/images/psychoduck/brand.png",
       "alt": "Display",
-      "caption": "Side-mounted OLED display with custom graphics"
+      "caption": "Brand Mascot and Color Palette"
     }
   ],
   "content": [
     {
       "heading": "What is Kibodo One?",
-      "text": "<h3>A revolutionary mechanical keyboard</h3>\n\nBuilt from the ground up with a focus on modularity, ergonomics, and aesthetic appeal.\n\nKibodo One features magnetically attachable modules that allow users to customize their typing experience on the fly.\n\nThe design integrates a side-display, which shows the time, a live count of your words per minute, system information, and allows you to configure the keyboard without requiring an installed app on your PC!\n\n It was born from a highschool project, together with a colleague [gg](gg.com).\n\nThis project was so good that we were selected to present it nationally alongside 15 other projects from across Portugal! Although we didn't win the contest, I loved every moment of the journey"
+      "text": "<h3>A revolutionary mechanical keyboard</h3>\n\nBuilt from the ground up with a focus on modularity, ergonomics, and aesthetic appeal.\n\nKibodo One features magnetically attachable modules that allow users to customize their typing experience on the fly.\n\nThe design integrates a side-display, which shows the time, a live count of your words per minute, system information, and allows you to configure the keyboard without requiring an installed app on your PC!\n\n It was born from a highschool project together with a colleague, [𝔗𝔬𝔪𝔞𝔰 𝔐𝔞𝔯𝔱𝔦𝔫𝔢𝔷](https://github.com/tomii070).\n\nThis project was so good that we were selected to present it nationally alongside 15 other projects from across Portugal! Although we didn't win the contest, I loved every moment of the journey"
     },
     {
       "heading": "Design Philosophy",

@@ -16,17 +16,17 @@
     {
       "src": "assets/images/b_media/hero.png",
       "alt": "B_Media Platform",
-      "caption": ""
+      "caption": "B_Media Platform"
     },
     {
-      "src": "assets/images/b_media/hero.png",
-      "alt": "Product Categories",
-      "caption": "Easy navigation through different gear categories"
+      "src": "assets/images/b_media/1.png",
+      "alt": "Filtering System",
+      "caption": "Filtering System"
     },
     {
-      "src": "assets/images/b_media/hero.png",
+      "src": "assets/images/b_media/2.png",
       "alt": "Detailed Reviews",
-      "caption": "Filters"
+      "caption": "Details per product"
     }
   ],
   "content": [

@@ -277,7 +277,6 @@
 /* Markdown text processing styles */
 .project-content strong {
   font-weight: bold;
-  color: var(--accent);
 }
 
 .project-content em {
@@ -287,7 +286,6 @@
 
 .project-content u {
   text-decoration: underline;
-  text-decoration-color: var(--accent);
 }
 
 .project-content del {
@@ -305,11 +303,11 @@
 }
 
 .project-content a {
-  color: var(--accent);
   text-decoration: underline;
   text-decoration-color: var(--accent);
+  color: var(--white);
 }
 
 .project-content a:hover {
-  color: var(--white);
+  color: var(--accent);
 }
