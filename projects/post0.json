@@ -3,6 +3,7 @@
   "subtitle": "キーボード ✦ Kibodo is the Japanese word for Keyboard",
   "description": "キーボード ✦ The coolest keyboard ever, with magnetical modules, and a sick side-display!",
   "lastUpdated": "Oct 2025",
+
   "cardImage": "assets/images/psychoduck/kibodo/hero.webp",
   "cardLogo": "assets/images/psychoduck/logo64x64.png",
   "cardLogoStyle": "border: 2px solid var(--white); background-color: var(--black);",
@@ -12,35 +13,18 @@
     { "text": "Keyboard", "link": null },
     { "text": "OpenSource", "link": "https://github.com/PsychoDuckTech" }
   ],
+
   "metaTitle": "Kibodo One - Gabriel Yassin's Portfolio",
   "metaImage": "https://gabibrawl.github.io/Portfolio/assets/images/psychoduck/kibodo/hero.webp",
+
   "gallery": [
-    {
-      "src": "assets/images/psychoduck/kibodo/hero.webp",
-      "alt": "Numpad Module",
-      "caption": "Magnetically attachable module"
-    },
-    {
-      "src": "assets/images/psychoduck/kibodo/1.png",
-      "alt": "Build Process",
-      "caption": "Handcrafted construction"
-    },
-    {
-      "src": "assets/images/psychoduck/kibodo/2.png",
-      "alt": "",
-      "caption": "At the Showcase Event"
-    },
-    {
-      "src": "assets/images/psychoduck/kibodo/display.jpg",
-      "alt": "Numpad Module",
-      "caption": "Real Display UI Picture"
-    },
-    {
-      "src": "assets/images/psychoduck/brand.png",
-      "alt": "Display",
-      "caption": "Brand Mascot and Color Palette"
-    }
+    { "src": "assets/images/psychoduck/kibodo/hero.webp", "alt": "Numpad Module", "caption": "Magnetically attachable module" },
+    { "src": "assets/images/psychoduck/kibodo/1.png", "alt": "Build Process", "caption": "Handcrafted construction" },
+    { "src": "assets/images/psychoduck/kibodo/2.png", "alt": "", "caption": "At the Showcase Event" },
+    { "src": "assets/images/psychoduck/kibodo/display.jpg", "alt": "Numpad Module", "caption": "Real Display UI Picture" },
+    { "src": "assets/images/psychoduck/brand.png", "alt": "Display", "caption": "Brand Mascot and Color Palette" }
   ],
+
   "content": [
     {
       "heading": "What is Kibodo One?",
@@ -90,10 +74,8 @@
       "textAfter": "Check out the full project on GitHub or see how Kibodo One can transform your typing experience."
     }
   ],
+
   "links": [
-    {
-      "text": "View on GitHub",
-      "href": "https://github.com/PsychoDuckTech"
-    }
+    { "text": "View on GitHub", "href": "https://github.com/PsychoDuckTech" }
   ]
 }

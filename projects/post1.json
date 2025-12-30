@@ -3,8 +3,9 @@
   "subtitle": "にぶんかつ ✦ Nibunkatsu is the Japanese word for Splitting in Half",
   "description": "にぶんかつ ✦ A fully custom split keyboard!",
   "lastUpdated": "Dec 2025",
-  "cardImage": "assets/images/nibunkatsu/hero.png",
   "flags": ["hack-club", "in-progress"],
+
+  "cardImage": "assets/images/nibunkatsu/hero.png",
   "cardTags": [
     { "text": "Hack Club", "link": null },
     { "text": "Electronics", "link": null },
@@ -12,35 +13,18 @@
     { "text": "Keyboard", "link": null },
     { "text": "OpenSource", "link": "https://github.com/GabiBrawl/Nibunkatsu" }
   ],
+
   "metaTitle": "Nibunkatsu One - Gabriel Yassin's Portfolio",
-  "metaImage": "",
+  "metaImage": "https://gabibrawl.github.io/Portfolio/assets/images/nibunkatsu/hero.png",
+
   "gallery": [
-    {
-      "src": "assets/images/nibunkatsu/hero.png",
-      "alt": "",
-      "caption": ""
-    },
-    {
-      "src": "assets/images/nibunkatsu/1.png",
-      "alt": "Numpad Module",
-      "caption": ""
-    },
-    {
-      "src": "assets/images/nibunkatsu/2.png",
-      "alt": "Build Process",
-      "caption": "Schematics"
-    },
-    {
-      "src": "assets/images/nibunkatsu/3.png",
-      "alt": "Display",
-      "caption": "PCB design"
-    },
-    {
-      "src": "assets/images/nibunkatsu/4.png",
-      "alt": "Display",
-      "caption": "3D Render with CAD case design"
-    }
+    { "src": "assets/images/nibunkatsu/hero.png", "alt": "Keyboard Layout", "caption": "" },
+    { "src": "assets/images/nibunkatsu/1.png", "alt": "Numpad Module", "caption": "" },
+    { "src": "assets/images/nibunkatsu/2.png", "alt": "Schematics", "caption": "Schematics" },
+    { "src": "assets/images/nibunkatsu/3.png", "alt": "PCB Design", "caption": "PCB design" },
+    { "src": "assets/images/nibunkatsu/4.png", "alt": "3D Render", "caption": "3D Render with CAD case design" }
   ],
+
   "content": [
     {
       "heading": "About Nibunkatsu",
@@ -51,12 +35,12 @@
       "text": "Although Nibunkatsu is not an innovation in any realms, it's a very cool concept which I've been aching to try for a while!\n\nBoth halves run the ESP32-S3 MCU, and communicate together using a 3.5mm TRRS cable."
     },
     {
-        "heading": "CAD Design",
-        "text": "This project obliged me to try CAD designing for the first time ever. It looked intimidating at first, but once I got into it, it turned out to be quite straightforward. The case I made for Nibunkatsu is my first ever 3D design fully made by me. I'm proud of the results and feel this represents a significant milestone in my design journey."
+      "heading": "CAD Design",
+      "text": "This project obliged me to try CAD designing for the first time ever. It looked intimidating at first, but once I got into it, it turned out to be quite straightforward. The case I made for Nibunkatsu is my first ever 3D design fully made by me. I'm proud of the results and feel this represents a significant milestone in my design journey."
     },
     {
-        "heading": "Other functionality",
-        "text": "Each half has a distinct feature, the left side has a small 0.91' display with custom UI designed using LOPAKA.app, and the right side features a rotary knob. Both halves work together with layers which are toggleable using special keys on the thumbs."
+      "heading": "Other functionality",
+      "text": "Each half has a distinct feature, the left side has a small 0.91' display with custom UI designed using LOPAKA.app, and the right side features a rotary knob. Both halves work together with layers which are toggleable using special keys on the thumbs."
     },
     {
       "heading": "Open Source",
@@ -68,14 +52,9 @@
       ]
     }
   ],
+
   "links": [
-    {
-      "text": "View on GitHub",
-      "href": "https://github.com/GabiBrawl/Nibunkatsu"
-    },
-    {
-      "text": "View on Blueprint",
-      "href": "https://blueprint.hackclub.com/projects/4052"
-    }
+    { "text": "View on GitHub", "href": "https://github.com/GabiBrawl/Nibunkatsu" },
+    { "text": "View on Blueprint", "href": "https://blueprint.hackclub.com/projects/4052" }
   ]
 }
