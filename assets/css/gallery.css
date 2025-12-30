@@ -1,0 +1,383 @@
+/* Gallery Viewer Styles */
+
+.gallery-viewer {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 15px;
+  height: calc(100vh - 160px);
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+}
+
+.gallery-top-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+  flex-shrink: 0;
+}
+
+.gallery-back {
+  color: var(--white);
+  text-decoration: none;
+  font-weight: bold;
+  padding: 10px 20px;
+  font-family: "Special Gothic Condensed One", sans-serif;
+  font-size: 0.85rem;
+  letter-spacing: 2px;
+  border: 2px solid var(--white);
+  background: var(--black);
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.gallery-back:hover {
+  background: var(--white);
+  color: var(--black);
+}
+
+.gallery-counter {
+  color: var(--white);
+  font-family: "Special Gothic Condensed One", sans-serif;
+  font-size: 0.9rem;
+  letter-spacing: 2px;
+  opacity: 0.7;
+  padding: 10px 20px;
+  border: 2px solid var(--white);
+  background: var(--black);
+}
+
+.gallery-main {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 15px;
+  min-height: 0;
+  max-height: 65vh;
+  position: relative;
+}
+
+.gallery-nav {
+  width: 50px;
+  height: 50px;
+  background: var(--black);
+  border: 2px solid var(--white);
+  color: var(--white);
+  font-size: 2rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.gallery-nav:hover:not(:disabled) {
+  background: var(--white);
+  color: var(--black);
+}
+
+.gallery-nav:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+.gallery-image-container {
+  flex: 1;
+  min-width: 0;
+  min-height: 0;
+  max-height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.gallery-image {
+  max-width: 85%;
+  max-height: 50vh;
+  object-fit: contain;
+  border: 2px solid var(--white);
+  cursor: zoom-in;
+}
+
+.gallery-image-caption {
+  margin-top: 10px;
+  padding: 8px 16px;
+  background: var(--black);
+  border: 2px solid var(--white);
+  color: var(--white);
+  font-family: "Special Gothic Condensed One", sans-serif;
+  font-size: 0.9rem;
+  text-align: center;
+  letter-spacing: 1px;
+  flex-shrink: 0;
+}
+
+.gallery-bottom {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 15px;
+  flex-shrink: 0;
+}
+
+.gallery-thumbnails {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+  flex-wrap: wrap;
+  padding: 12px;
+  border: 2px solid var(--white);
+  background: var(--black);
+}
+
+.gallery-thumb {
+  width: 70px;
+  height: 50px;
+  cursor: pointer;
+  border: 2px solid var(--white);
+  opacity: 0.5;
+  overflow: hidden;
+}
+
+.gallery-thumb:hover {
+  opacity: 0.8;
+}
+
+.gallery-thumb.active {
+  opacity: 1;
+  border-color: var(--accent);
+}
+
+.gallery-thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Mobile Gallery */
+@media (max-width: 768px) {
+  .gallery-viewer {
+    padding: 8px;
+    height: auto;
+    min-height: calc(60vh);
+  }
+
+  .gallery-top-bar {
+    flex-direction: row;
+    gap: 8px;
+    margin-bottom: 8px;
+  }
+
+  .gallery-back {
+    padding: 6px 10px;
+    font-size: 0.7rem;
+    flex: 1;
+    justify-content: center;
+  }
+
+  .gallery-counter {
+    padding: 6px 10px;
+    font-size: 0.7rem;
+  }
+
+  .gallery-main {
+    gap: 0;
+    max-height: none;
+    flex: 0 0 auto;
+  }
+
+  /* Hide nav buttons in main area on mobile */
+  .gallery-main .gallery-nav {
+    display: none;
+  }
+
+  .gallery-image {
+    max-width: 100%;
+    max-height: 50vh;
+  }
+
+  .gallery-image-caption {
+    padding: 4px 10px;
+    font-size: 0.75rem;
+    margin-top: 6px;
+  }
+
+  .gallery-bottom {
+    margin-top: 8px;
+  }
+
+  /* Mobile nav buttons row */
+  .gallery-mobile-nav {
+    display: flex;
+    gap: 8px;
+    justify-content: center;
+  }
+
+  .gallery-mobile-nav .gallery-nav {
+    width: 50%;
+    height: 36px;
+    font-size: 1.3rem;
+  }
+
+  .gallery-thumbnails {
+    padding: 6px;
+    gap: 4px;
+  }
+
+  .gallery-thumb {
+    width: 45px;
+    height: 34px;
+  }
+}
+
+/* Desktop: hide mobile nav */
+@media (min-width: 769px) {
+  .gallery-mobile-nav {
+    display: none;
+  }
+}
+
+/* ==================== Zoom Viewer ==================== */
+
+.zoom-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.95);
+  z-index: 9999;
+  display: flex;
+  flex-direction: column;
+}
+
+.zoom-container {
+  flex: 1;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: grab;
+  position: relative;
+}
+
+.zoom-container:active {
+  cursor: grabbing;
+}
+
+.zoom-image {
+  max-width: 85%;
+  max-height: calc(100% - 20px);
+  object-fit: contain;
+  user-select: none;
+  -webkit-user-drag: none;
+  position: absolute;
+}
+
+.zoom-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 20px;
+  background: var(--black);
+  border-top: 2px solid var(--white);
+  flex-shrink: 0;
+}
+
+.zoom-close {
+  background: var(--black);
+  border: 2px solid var(--white);
+  color: var(--white);
+  padding: 10px 20px;
+  font-family: "Special Gothic Condensed One", sans-serif;
+  font-size: 0.9rem;
+  letter-spacing: 1px;
+  cursor: pointer;
+}
+
+.zoom-close:hover {
+  background: var(--white);
+  color: var(--black);
+}
+
+.zoom-controls {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.zoom-controls button {
+  background: var(--black);
+  border: 2px solid var(--white);
+  color: var(--white);
+  width: 40px;
+  height: 40px;
+  font-size: 1.2rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.zoom-controls button:hover {
+  background: var(--white);
+  color: var(--black);
+}
+
+.zoom-controls .zoom-reset {
+  width: auto;
+  padding: 0 15px;
+  font-family: "Special Gothic Condensed One", sans-serif;
+  font-size: 0.85rem;
+  letter-spacing: 1px;
+}
+
+.zoom-level {
+  color: var(--white);
+  font-family: "Special Gothic Condensed One", sans-serif;
+  font-size: 0.9rem;
+  min-width: 50px;
+  text-align: center;
+}
+
+/* Mobile Zoom */
+@media (max-width: 768px) {
+  .zoom-image {
+    max-width: 95%;
+    max-height: calc(100% - 10px);
+  }
+
+  .zoom-footer {
+    padding: 8px 12px;
+    gap: 8px;
+  }
+
+  .zoom-close {
+    padding: 6px 10px;
+    font-size: 0.75rem;
+  }
+
+  .zoom-controls {
+    gap: 4px;
+  }
+
+  .zoom-controls button {
+    width: 32px;
+    height: 32px;
+    font-size: 0.9rem;
+  }
+
+  .zoom-controls .zoom-reset {
+    padding: 0 8px;
+    font-size: 0.7rem;
+  }
+
+  .zoom-level {
+    font-size: 0.75rem;
+    min-width: 35px;
+  }
+}

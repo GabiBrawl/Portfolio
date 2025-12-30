@@ -204,13 +204,11 @@ function wireCommandPalette() {
       document.documentElement.style.setProperty('--black', '#070707');
       document.documentElement.style.setProperty('--white', '#DED8CB');
       document.documentElement.style.setProperty('--accent', '#FFAB07');
-      document.documentElement.style.setProperty('--star-color', '#070707');
       document.documentElement.style.setProperty('--star-image', 'url("../star.svg")');
     } else {
       document.documentElement.style.setProperty('--black', '#f0f0f0');
       document.documentElement.style.setProperty('--white', '#000000');
-      document.documentElement.style.setProperty('--accent', '#007bff');
-      document.documentElement.style.setProperty('--star-color', '#DED8CB');
+      document.documentElement.style.setProperty('--accent', '#9983FF');
       document.documentElement.style.setProperty('--star-image', 'url("../starW.svg")');
     }
   }

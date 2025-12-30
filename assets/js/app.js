@@ -4,8 +4,9 @@
 (function () {
   'use strict';
 
-// Store loaded project data
+// Store loaded project data - exposed globally for gallery.js
 const loadedProjects = {};
+window.loadedProjects = loadedProjects;
 let cachedProjects = null;  // Constants
   const BACK_LINK_HTML = '<a href="#" class="back-link" onclick="history.pushState(null, \'\', window.location.pathname); window.renderContent(); window.wireInteractions(); return false;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><path d="M19 12H5M12 19l-7-7 7-7"></svg>Back to Portfolio</a>';
   const LOADING_HTML = '<p style="padding: 40px; text-align: center;">Loading project...</p>';
@@ -74,6 +75,10 @@ let cachedProjects = null;  // Constants
   function getViewMode() {
     const params = new URLSearchParams(window.location.search);
     const postId = params.get('post');
+    const img = params.get('img');
+    if (postId && params.has('gallery')) {
+      return { mode: 'gallery', id: postId, imgIndex: img ? parseInt(img) : 0 };
+    }
     return postId ? { mode: 'project', id: postId } : { mode: 'projects' };
   }
 
@@ -86,14 +91,25 @@ let cachedProjects = null;  // Constants
       return;
     }
 
-    if (view.mode === 'project') {
+    // Cleanup gallery keyboard handler if leaving gallery
+    if (window._galleryKeyHandler && view.mode !== 'gallery') {
+      document.removeEventListener('keydown', window._galleryKeyHandler);
+      window._galleryKeyHandler = null;
+    }
+
+    if (view.mode === 'gallery') {
+      window.renderGalleryView(container, view.id, view.imgIndex);
+    } else if (view.mode === 'project') {
       renderProjectView(container, view.id);
     } else {
       renderProjectsListView(container);
     }
   }
 
-function loadProjects() {
+  // Expose renderContent globally for gallery.js
+  window.renderContent = renderContent;
+
+  function loadProjects() {
   if (cachedProjects) {
     return Promise.resolve(cachedProjects);
   }
@@ -218,15 +234,15 @@ function loadProjects() {
       <div class="project-hero">
         <div class="project-carousel">
           <div class="carousel-track">
-            ${data.gallery.map(slide => `
-              <div class="carousel-slide">
+            ${data.gallery.map((slide, i) => `
+              <div class="carousel-slide" data-index="${i}">
                 <img src="${slide.src}" alt="${slide.alt}" loading="lazy" decoding="async">
-                <div class="carousel-caption">${slide.caption}</div>
-                <a href="${slide.src}" target="_blank" class="carousel-open-btn" title="Open image in new tab">⤢</a>
+                <div class="carousel-caption">${slide.caption || ''}</div>
               </div>
             `).join('')}
           </div>
           <div class="carousel-controls"></div>
+          <a href="?post=${projectId}&gallery&img=0" class="carousel-open-btn" title="Open gallery view">⤢</a>
           <div class="carousel-indicators">
             ${data.gallery.map((_, i) => `<span class="carousel-dot ${i === 0 ? 'active' : ''}" data-slide="${i}"></span>`).join('')}
           </div>
@@ -380,9 +396,24 @@ function handleProjectClick(e) {
     const slides = Array.from(track.querySelectorAll('.carousel-slide'));
     const controls = carousel.querySelector('.carousel-controls');
     const dots = Array.from(carousel.querySelectorAll('.carousel-dot'));
+    const openBtn = carousel.querySelector('.carousel-open-btn');
 
     let currentSlide = 0;
     const slideCount = slides.length;
+
+    // Get project ID from current URL
+    const params = new URLSearchParams(window.location.search);
+    const projectId = params.get('post');
+
+    // Gallery open button - navigate without refresh
+    if (openBtn && projectId) {
+      openBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        history.pushState(null, '', `?post=${projectId}&gallery&img=${currentSlide}`);
+        renderContent();
+        wireInteractions();
+      });
+    }
 
     const updateCarousel = (index) => {
       currentSlide = index;
@@ -406,7 +437,7 @@ function handleProjectClick(e) {
     if (controls) {
       controls.addEventListener('click', (e) => {
         const target = e.target;
-        if (target.closest('.carousel-indicators') || target.closest('.carousel-btn') || target.classList.contains('carousel-dot')) {
+        if (target.closest('.carousel-indicators') || target.closest('.carousel-btn') || target.closest('.carousel-open-btn') || target.classList.contains('carousel-dot')) {
           return;
         }
 

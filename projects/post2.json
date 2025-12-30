@@ -17,7 +17,7 @@
   "metaImage": "https://gabibrawl.github.io/Portfolio/assets/images/utsuwa/hero.png",
 
   "gallery": [
-    { "src": "assets/images/utsuwa/hero.png", "alt": "Utsuwa Key", "caption": "" },
+    { "src": "assets/images/utsuwa/hero.png", "alt": "Utsuwa Key"},
     { "src": "assets/images/utsuwa/1.png", "alt": "PCB Top", "caption": "PCB Top" },
     { "src": "assets/images/utsuwa/2.png", "alt": "PCB Bottom", "caption": "PCB Bottom" },
     { "src": "assets/images/utsuwa/3.png", "alt": "PCB Design", "caption": "PCB design" },

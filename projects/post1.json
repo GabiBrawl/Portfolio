@@ -18,8 +18,8 @@
   "metaImage": "https://gabibrawl.github.io/Portfolio/assets/images/nibunkatsu/hero.png",
 
   "gallery": [
-    { "src": "assets/images/nibunkatsu/hero.png", "alt": "Keyboard Layout", "caption": "" },
-    { "src": "assets/images/nibunkatsu/1.png", "alt": "Numpad Module", "caption": "" },
+    { "src": "assets/images/nibunkatsu/hero.png", "alt": "Keyboard Layout"},
+    { "src": "assets/images/nibunkatsu/1.png", "alt": "Numpad Module"},
     { "src": "assets/images/nibunkatsu/2.png", "alt": "Schematics", "caption": "Schematics" },
     { "src": "assets/images/nibunkatsu/3.png", "alt": "PCB Design", "caption": "PCB design" },
     { "src": "assets/images/nibunkatsu/4.png", "alt": "3D Render", "caption": "3D Render with CAD case design" }
