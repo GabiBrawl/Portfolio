@@ -222,6 +222,7 @@ function loadProjects() {
               <div class="carousel-slide">
                 <img src="${slide.src}" alt="${slide.alt}" loading="lazy" decoding="async">
                 <div class="carousel-caption">${slide.caption}</div>
+                <a href="${slide.src}" target="_blank" class="carousel-open-btn" title="Open image in new tab">⤢</a>
               </div>
             `).join('')}
           </div>

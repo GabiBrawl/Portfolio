@@ -194,6 +194,29 @@
   text-align: center;
 }
 
+.carousel-open-btn {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--black);
+  border: 2px solid var(--white);
+  color: var(--white);
+  font-size: 1.5rem;
+  text-decoration: none;
+  z-index: 10;
+  pointer-events: all;
+}
+
+.carousel-open-btn:hover {
+  background: var(--white);
+  color: var(--black);
+}
+
 .carousel-controls {
   position: absolute;
   top: 0;
