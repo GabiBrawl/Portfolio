@@ -4,7 +4,7 @@
   "description": "キーボード ✦ The coolest keyboard ever, with magnetical modules, and a sick side-display!",
   "lastUpdated": "Oct 2025",
 
-  "cardImage": "assets/images/psychoduck/kibodo/hero.webp",
+  "cardImage": "assets/images/psychoduck/kibodo/hero.png",
   "cardLogo": "assets/images/psychoduck/logo64x64.png",
   "cardLogoStyle": "border: 2px solid var(--white); background-color: var(--black);",
   "cardTags": [
@@ -15,10 +15,10 @@
   ],
 
   "metaTitle": "Kibodo One - Gabriel Yassin's Portfolio",
-  "metaImage": "https://gabibrawl.github.io/Portfolio/assets/images/psychoduck/kibodo/hero.webp",
+  "metaImage": "https://gabibrawl.github.io/Portfolio/assets/images/psychoduck/kibodo/hero.png",
 
   "gallery": [
-    { "src": "assets/images/psychoduck/kibodo/hero.webp", "alt": "Numpad Module", "caption": "Magnetically attachable module" },
+    { "src": "assets/images/psychoduck/kibodo/hero.png", "alt": "Numpad Module", "caption": "Magnetically attachable module" },
     { "src": "assets/images/psychoduck/kibodo/1.png", "alt": "Build Process", "caption": "Handcrafted construction" },
     { "src": "assets/images/psychoduck/kibodo/2.png", "alt": "", "caption": "At the Showcase Event" },
     { "src": "assets/images/psychoduck/kibodo/display.jpg", "alt": "Numpad Module", "caption": "Real Display UI Picture" },
