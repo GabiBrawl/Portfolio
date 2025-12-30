@@ -115,7 +115,8 @@ function loadProjects() {
             logo: data.cardLogo,
             logoStyle: data.cardLogoStyle,
             tags: data.cardTags,
-            flags: data.flags || []
+            flags: data.flags || [],
+            lastUpdated: data.lastUpdated || null
           });
         }
         id++;
@@ -257,6 +258,9 @@ function loadProjects() {
     });
 
     html += '</div>';
+    if (data.lastUpdated) {
+      html += `<p class="project-last-updated">Last updated ${data.lastUpdated}</p>`;
+    }
     html += BACK_LINK_HTML;
     html += '</div>';
 

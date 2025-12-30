@@ -78,6 +78,15 @@
   word-spacing: 1px;
 }
 
+.project-last-updated {
+  font-size: 0.85rem;
+  color: var(--white);
+  opacity: 0.4;
+  margin: 30px 0 15px 0;
+  font-family: "Special Gothic Condensed One", sans-serif;
+  text-align: center;
+}
+
 .project-meta {
   display: flex;
   justify-content: center;

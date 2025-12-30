@@ -2,6 +2,7 @@
   "title": "Kibodo One",
   "subtitle": "キーボード ✦ Kibodo is the Japanese word for Keyboard",
   "description": "キーボード ✦ The coolest keyboard ever, with magnetical modules, and a sick side-display!",
+  "lastUpdated": "Oct 2025",
   "cardImage": "assets/images/psychoduck/kibodo/hero.webp",
   "cardLogo": "assets/images/psychoduck/logo64x64.png",
   "cardLogoStyle": "border: 2px solid var(--white); background-color: var(--black);",
