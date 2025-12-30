@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>404 | Gabi's Portfolio</title>
+    <link rel="icon" href="favicon.svg" type="image/svg+xml">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Special+Gothic+Condensed+One&family=Special+Gothic+Expanded+One&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="assets/css/base.css">
+    <link rel="stylesheet" href="assets/css/components.css">
+    <style>
+        body {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        .main {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        .projects {
+            text-align: center;
+        }
+        .title-container {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        .title-container .line {
+            flex: 1;
+            height: 2px;
+            background: var(--white);
+        }
+        .title-container h2 {
+            white-space: nowrap;
+        }
+        .back-link {
+            display: inline-block;
+            color: var(--white);
+            text-decoration: none;
+            padding: 12px 24px;
+            border: 2px solid var(--white);
+            margin-top: 20px;
+        }
+        .back-link:hover {
+            background: var(--white);
+            color: var(--black);
+        }
+        footer {
+            text-align: center;
+            padding: 20px;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: var(--black);
+            color: var(--white);
+        }
+        footer .line {
+            flex: 1;
+            height: 2px;
+            background: var(--white);
+        }
+        footer .gb {
+            margin: 0 10px;
+            font-size: 24px;
+        }
+    </style>
+</head>
+<body>
+    <div class="main">
+        <section class="projects">
+            <div class="title-container">
+                <hr class="line left">
+                <h2>Nothing Here</h2>
+                <hr class="line right">
+            </div>
+            <p>The path you followed leads nowhere.<br>Try heading back home.</p>
+            <a href="/" class="back-link">Back to Portfolio</a>
+        </section>
+    </div>
+    <footer><span class="line"></span><span class="gb">𝕲 // 𝕭</span><span class="line"></span></footer>
+</body>
+</html>
