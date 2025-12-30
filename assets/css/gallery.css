@@ -168,15 +168,14 @@
 
   .gallery-top-bar {
     flex-direction: row;
-    gap: 8px;
-    margin-bottom: 8px;
+    justify-content: space-between;
+    align-items: center;
   }
 
   .gallery-back {
     padding: 6px 10px;
     font-size: 0.7rem;
-    flex: 1;
-    justify-content: center;
+    flex: none;
   }
 
   .gallery-counter {
@@ -188,6 +187,7 @@
     gap: 0;
     max-height: none;
     flex: 0 0 auto;
+    height: 50vh;
   }
 
   /* Hide nav buttons in main area on mobile */
@@ -196,8 +196,8 @@
   }
 
   .gallery-image {
-    max-width: 100%;
-    max-height: 50vh;
+  max-width: 85%;
+  max-height: 40vh;
   }
 
   .gallery-image-caption {
