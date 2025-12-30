@@ -46,7 +46,12 @@
     },
     {
       "heading": "Features",
-      "text": "- Hall Effect sensor for contactless authentication.\n\n- FIDO-2 compliant security architecture.\n\n- Custom-designed PCB with unique artwork.\n\n- Open-source firmware and hardware designs."
+      "list": [
+        "Hall Effect sensor for contactless authentication.",
+        "FIDO-2 compliant security architecture.",
+        "Custom-designed PCB with unique artwork.",
+        "Open-source firmware and hardware designs."
+      ]
     },
     {
       "heading": "Open Source",

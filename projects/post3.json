@@ -36,7 +36,13 @@
     },
     {
       "heading": "Building the Solution",
-      "text": "I took it upon myself to create a custom web platform that would properly showcase B_Media's audiophile gear recommendations. I built a clean interface with:\n\n- Intuitive product categorization and filtering\n\n- Detailed product cards with specifications and reviews\n\n- Mobile-optimized layout design for better usability\n\n- Professional presentation that tries to match B_Media's brand as best as I can"
+      "text": "I took it upon myself to create a custom web platform that would properly showcase B_Media's audiophile gear recommendations. I built a clean interface with:",
+      "list": [
+        "Intuitive product categorization and filtering",
+        "Detailed product cards with specifications and reviews",
+        "Mobile-optimized layout design for better usability",
+        "Professional presentation that tries to match B_Media's brand as best as I can"
+      ]
     },
     {
       "heading": "The Response",

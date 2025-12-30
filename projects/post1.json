@@ -59,7 +59,12 @@
     },
     {
       "heading": "Open Source",
-      "text": "Nibunkatsu One is completely open-source, available on my GitHub (link available on top). This includes:\n\n- Complete PCB schematics and layouts (made in EasyEDA)\n\n- 3D model files for the case (.3MF format)\n\n- The updated Circuit Python code that runs on my own personal build! Based on the KMK keyboard firmware framework"
+      "text": "Nibunkatsu One is completely open-source, available on my GitHub (link available on top). This includes:",
+      "list": [
+        "Complete PCB schematics and layouts (made in EasyEDA)",
+        "3D model files for the case (.3MF format)",
+        "The updated Circuit Python code that runs on my own personal build! Based on the KMK keyboard firmware framework"
+      ]
     }
   ],
   "links": [

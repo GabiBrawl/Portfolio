@@ -55,11 +55,24 @@
     },
     {
       "heading": "The Modular Ecosystem and Tenki One",
-      "text": "The true innovation of Kibodo One lies in its modular system.\n\nTo showcase the real-world functionality of modularity, we created Tenki One, the first module ever for Kibodo, a number pad powered by pogo pins and communicating via Bluetooth LE to Kibodo.\n\n Each module attaches magnetically to the side of the keyboard, creating a customizable peripheral ecosystem.\n\nHere are some future module ideas:\n\n- **Macro Pad Module**: A small numpad-style module for saving frequently used macros\n\n- **Media Control Module**: Dedicated controls for volume, play/pause, and track switching\n\n- **Game Mode Module**: Specialized buttons for gaming configurations and actions\n\n"
+      "text": "The true innovation of Kibodo One lies in its modular system.\n\nTo showcase the real-world functionality of modularity, we created Tenki One, the first module ever for Kibodo, a number pad powered by pogo pins and communicating via Bluetooth LE to Kibodo.\n\nEach module attaches magnetically to the side of the keyboard, creating a customizable peripheral ecosystem.\n\nHere are some future module ideas:",
+      "list": [
+        "**Macro Pad Module**: A small numpad-style module for saving frequently used macros",
+        "**Media Control Module**: Dedicated controls for volume, play/pause, and track switching",
+        "**Game Mode Module**: Specialized buttons for gaming configurations and actions"
+      ]
     },
     {
       "heading": "Technical Specs",
-      "text": "I ran benchmarks on the keyboard and here are most of the specs I can think of:\n\n- 1000Hz+ Polling Rate**\n\n- Gateron Banana Low Profile Switches\n\n- Underglow RGB\n\n- 240x320 TFT LCD\n\n- Runs on PsychOS (more about it below)\n\n\n** Enabling benchmarking eats some performance, so I would expect 10 or 20 extra percent on thar value on normal usage! :P"
+      "text": "I ran benchmarks on the keyboard and here are most of the specs I can think of:",
+      "list": [
+        "1000Hz+ Polling Rate**",
+        "Gateron Banana Low Profile Switches",
+        "Underglow RGB",
+        "240x320 TFT LCD",
+        "Runs on PsychOS (more about it below)"
+      ],
+      "textAfter": "** Enabling benchmarking eats some performance, so I would expect 10 or 20 extra percent on that value on normal usage! :P"
     },
     {
       "heading": "PsychOS",
@@ -67,7 +80,13 @@
     },
     {
       "heading": "Open Source",
-      "text": "Kibodo One is an open-source project, available on GitHub at https://github.com/PsychoDuckTech.\n\n- Complete PCB schematics and layouts\n\n- 3D model files for the case\n\n- 100% custom self-developed firmware source code\n\nCheck out the full project on GitHub or see how Kibodo One can transform your typing experience."
+      "text": "Kibodo One is an open-source project, available on GitHub at https://github.com/PsychoDuckTech.",
+      "list": [
+        "Complete PCB schematics and layouts",
+        "3D model files for the case",
+        "100% custom self-developed firmware source code"
+      ],
+      "textAfter": "Check out the full project on GitHub or see how Kibodo One can transform your typing experience."
     }
   ],
   "links": [

@@ -243,9 +243,13 @@ function loadProjects() {
       if (section.list) {
         html += `
           <ul class="feature-list">
-            ${section.list.map(item => `<li>${item}</li>`).join('')}
+            ${section.list.map(item => `<li>${processMarkdownText(item)}</li>`).join('')}
           </ul>
         `;
+      }
+
+      if (section.textAfter) {
+        html += `<p>${processMarkdownText(section.textAfter)}</p>`;
       }
 
       html += `</section>`;

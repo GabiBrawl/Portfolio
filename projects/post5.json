@@ -50,7 +50,16 @@
     },
     {
       "heading": "Quality Assurance",
-      "text": "Every build goes through rigorous testing before delivery:\n\n- Stress testing with Prime95 and AIDA64 for stability\n- GPU burn-in testing with FurMark and 3DMark\n- Memory stress testing with MemTest86\n- Thermal monitoring under load to ensure optimal cooling\n- Cable check and component verification\n- Windows installation and driver updates (if requested, extra fee may apply)\n\nYou receive a fully tested, optimized system ready to go out of the box."
+      "text": "Every build goes through rigorous testing before delivery:",
+      "list": [
+        "Stress testing with Prime95 and AIDA64 for stability",
+        "GPU burn-in testing with FurMark and 3DMark",
+        "Memory stress testing with MemTest86",
+        "Thermal monitoring under load to ensure optimal cooling",
+        "Cable check and component verification",
+        "Windows installation and driver updates (if requested, extra fee may apply)"
+      ],
+      "textAfter": "You receive a fully tested, optimized system ready to go out of the box."
     }
   ],
   "links": []
