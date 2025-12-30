@@ -62,8 +62,12 @@ function wirePfpEffects() {
   if (!pfp || !wrap) return;
 
   const effects = ['effect-wobble', 'effect-spin', 'effect-bounce'];
+  let isAnimating = false;
 
   function runEffect(type, ev) {
+    if (isAnimating) return;
+    isAnimating = true;
+    
     // visual active state
     pfp.classList.add('effect-active');
 
@@ -73,6 +77,7 @@ function wirePfpEffects() {
     pfp.addEventListener('animationend', function handler() {
       pfp.classList.remove(type);
       pfp.removeEventListener('animationend', handler);
+      isAnimating = false;
     });
 
     // Cleanup active state shortly after last animation
