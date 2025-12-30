@@ -144,6 +144,7 @@ function loadProjects() {
             <div class="project" data-project-id="${project.id}">
               <img src="${project.image}" alt="Project Image" width="400" height="200" loading="lazy" decoding="async">
               ${project.logo ? `<img class="project-logo" src="${project.logo}" alt="Project Logo" style="${project.logoStyle}">` : ''}
+              ${project.flags.includes('in-progress') ? '<span class="in-progress-badge">In Progress</span>' : ''}
               <h3>${project.title}</h3>
               <p>${project.description}</p>
               <div class="tags">

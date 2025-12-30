@@ -3,19 +3,19 @@
   "subtitle": "うつわ ✦ Utsuwa comes from the Japanese word for 'vessel', symbolizing a container for your digital soul",
   "description": "うつわ ✦ A contactless FIDO-2 passkey storing device!",
   "cardImage": "assets/images/utsuwa/hero.png",
-  "flags": ["hack-club"],
+  "flags": ["hack-club",  "in-progress"],
   "cardTags": [
     { "text": "Hack Club", "link": null },
     { "text": "Electronics", "link": null },
     { "text": "Security", "link": null },
-    { "text": "OpenSource", "link": "https://github.com/PsychoDuckTech" }
+    { "text": "OpenSource", "link": "https://github.com/GabiBrawl/Utsuwa" }
   ],
-  "metaTitle": "Kibodo One - Gabriel Yassin's Portfolio",
-  "metaImage": "https://gabibrawl.github.io/Portfolio/assets/images/kibodo.webp",
+  "metaTitle": "Utsuwa Key - Gabriel Yassin's Portfolio",
+  "metaImage": "",
   "gallery": [
     {
       "src": "assets/images/utsuwa/hero.png",
-      "alt": "Keyboard Layout",
+      "alt": "",
       "caption": ""
     },
     {

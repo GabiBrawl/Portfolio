@@ -3,20 +3,20 @@
   "subtitle": "にぶんかつ ✦ Nibunkatsu is the Japanese word for Splitting in Half",
   "description": "にぶんかつ ✦ A fully custom split keyboard!",
   "cardImage": "assets/images/nibunkatsu/hero.png",
-  "flags": ["hack-club"],
+  "flags": ["hack-club", "in-progress"],
   "cardTags": [
     { "text": "Hack Club", "link": null },
     { "text": "Electronics", "link": null },
     { "text": "CAD Modeling", "link": null },
     { "text": "Keyboard", "link": null },
-    { "text": "OpenSource", "link": "https://github.com/PsychoDuckTech" }
+    { "text": "OpenSource", "link": "https://github.com/GabiBrawl/Nibunkatsu" }
   ],
-  "metaTitle": "Kibodo One - Gabriel Yassin's Portfolio",
-  "metaImage": "https://gabibrawl.github.io/Portfolio/assets/images/kibodo.webp",
+  "metaTitle": "Nibunkatsu One - Gabriel Yassin's Portfolio",
+  "metaImage": "",
   "gallery": [
     {
       "src": "assets/images/nibunkatsu/hero.png",
-      "alt": "Keyboard Layout",
+      "alt": "",
       "caption": ""
     },
     {
