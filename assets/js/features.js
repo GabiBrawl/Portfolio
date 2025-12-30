@@ -356,8 +356,8 @@ function wireCommandPalette() {
     } else {
       switch(lowerCmd) {
         case 'contact':
-          response = 'Email: gabiya219@gmail.com\nCopied to clipboard!';
-          navigator.clipboard.writeText('gabiya219@gmail.com').catch(err => console.error('Failed to copy email:', err));
+          response = `Email: ${CONFIG.EMAIL}\nCopied to clipboard!`;
+          navigator.clipboard.writeText(CONFIG.EMAIL).catch(err => console.error('Failed to copy email:', err));
           break;
         case 'help':
           response = 'Available commands:\n\nNavigation:\n  contact - Copy email to clipboard\n\nInfo:\n  whoami - Display user info\n  age - Display age\n  qotd - Quote of the day\n\nFun:\n  cowsay [message] - Cow says message\n  sudo - Run a command as other user\n\nTheme:\n  theme - Toggle theme\n\nTerminal:\n  help - Show this help\n  clear - Clear terminal\n  exit - Close palette\n\nUse pipes: command | cowsay';

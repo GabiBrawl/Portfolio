@@ -1,8 +1,8 @@
 // config.js - Configuration constants
 const CONFIG = {
-  EMAIL: 'gabiya219@gmail.com',
+  EMAIL: 'contact@gabibrawl.dev',
   BIRTH_DATE: '2007-01-29',
-  BASE_URL: 'https://gabibrawl.github.io/Portfolio',
+  BASE_URL: 'https://gabibrawl.dev/',
   MOBILE_BREAKPOINT: 768,
   TECH_SCROLLER_WORDS: [
     'LINUX BTW', 'WINDOWS', 'C++', 'C', 'AI', '$BTC', 'MEMES', 'VS CODE', 'GIT',

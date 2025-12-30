@@ -22,5 +22,5 @@ See [LICENSE](LICENSE) file.
 
 ## Contact
 
-- **Email**: gabiya219@gmail.com
+- **Email**: contact@gabibrawl.dev
 - **X (Twitter)**: [@GabiBrawl](https://x.com/GabiBrawl)
