@@ -54,9 +54,12 @@ let cachedProjects = null;  // Constants
         })
         .catch(error => {
           console.error('Error loading project:', error);
-          const errorMessage = error.message.includes('Project not found') 
-            ? 'Project not found. Please check the URL and try again.'
-            : 'Error loading project: ' + error.message;
+          const isOffline = !navigator.onLine || error.message.includes('fetch') || error.message.includes('network');
+          const errorMessage = isOffline
+            ? 'You appear to be offline. Please check your internet connection to view this project.'
+            : error.message.includes('Project not found') 
+              ? 'Project not found. Please check the URL and try again.'
+              : 'Error loading project: ' + error.message;
           const dynamicContent = document.getElementById('dynamic-content');
           dynamicContent.innerHTML = ERROR_HTML(errorMessage);
         });
@@ -188,7 +191,14 @@ let cachedProjects = null;  // Constants
     }).catch(error => {
       console.error('Error loading project cards:', error);
       const dynamicContent = document.getElementById('dynamic-content');
-      dynamicContent.innerHTML = '<p style="padding: 40px; text-align: center;">Error loading projects</p>';
+      const isOffline = !navigator.onLine || error.message.includes('fetch');
+      dynamicContent.innerHTML = `
+        <div style="padding: 40px; text-align: center;">
+          <h2>Unable to load projects</h2>
+          <p>${isOffline ? 'You appear to be offline. Please check your internet connection.' : 'An error occurred while loading the projects.'}</p>
+          <p><small>Error: ${error.message}</small></p>
+        </div>
+      `;
     });
   }
 
@@ -372,7 +382,12 @@ function handleProjectClick(e) {
         .catch(error => {
           console.error('Error loading project:', error);
           const dynamicContent = document.getElementById('dynamic-content');
-          dynamicContent.innerHTML = ERROR_HTML(`Error loading project: ${error.message}`);
+          const isOffline = !navigator.onLine || error.message.includes('fetch') || error.message.includes('network');
+          dynamicContent.innerHTML = ERROR_HTML(
+            isOffline 
+              ? 'You appear to be offline. Please check your internet connection to view this project.' 
+              : `Error loading project: ${error.message}`
+          );
         });
     } else {
       history.pushState({ projectId }, '', `?post=${projectId}`);

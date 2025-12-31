@@ -227,7 +227,12 @@
         .catch(error => {
           console.error('Error loading gallery:', error);
           const dynamicContent = document.getElementById('dynamic-content');
-          dynamicContent.innerHTML = ERROR_HTML('Could not load gallery');
+          const isOffline = !navigator.onLine || error.message.includes('fetch') || error.message.includes('network');
+          dynamicContent.innerHTML = ERROR_HTML(
+            isOffline 
+              ? 'You appear to be offline. Please check your internet connection to view the gallery.' 
+              : 'Could not load gallery'
+          );
         });
       return;
     }
