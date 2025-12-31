@@ -18,6 +18,8 @@ body {
   background-color: var(--black);
   color: var(--white);
   cursor: url('../cursors/handopen.svg') 10 5, auto;
+  touch-action: manipulation;
+}
   transition: opacity 250ms ease-in-out;
   opacity: 1;
   overflow-x: hidden;

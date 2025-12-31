@@ -263,6 +263,7 @@
   justify-content: center;
   cursor: grab;
   position: relative;
+  touch-action: none;
 }
 
 .zoom-container:active {
