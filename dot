@@ -1,0 +1,5 @@
+#!/bin/bash
+# curl -L gabibrawl.dev/dot | bash
+
+git clone https://github.com/GabiBrawl/archdots.git ~/dotfiles
+cd ~/dotfiles
