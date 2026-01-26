@@ -527,7 +527,7 @@ function wireProjectPageInteractions() {
 function handleBackLinkClick(e) {
   if (e.target.closest('.back-link')) {
     e.preventDefault();
-    history.pushState(null, '', 'index.html');
+    history.pushState(null, '', '');
     renderContent();
     wireInteractions();
   }
