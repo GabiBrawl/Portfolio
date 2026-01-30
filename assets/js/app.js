@@ -140,6 +140,10 @@ let cachedProjects = null;  // Constants
         }
         id++;
       } catch (error) {
+        if (id === 0) {
+          resolve({ offline: true, error: error.message });
+          return;
+        }
         break;
       }
     }
@@ -152,8 +156,22 @@ let cachedProjects = null;  // Constants
     document.querySelector('meta[property="og:title"]').content = "Gabi's Portfolio";
     document.querySelector('meta[property="og:description"]').content = "Full-stack developer, programmer and electronics enthusiast building clean web pages and custom hardware.";
 
+    const dynamicContent = document.getElementById('dynamic-content');
+    dynamicContent.innerHTML = '<p style="padding: 40px; text-align: center;">Loading projects...</p>';
+
     // Load all project card data dynamically
     loadProjects().then(projects => {
+      if (projects.offline) {
+        const dynamicContent = document.getElementById('dynamic-content');
+        dynamicContent.innerHTML = `
+          <div class="error-box">
+            <h2>Unable to load projects</h2>
+            <p>You appear to be offline. Please check your internet connection.</p>
+            <p><small>Error: ${projects.error}</small></p>
+          </div>
+        `;
+        return;
+      }
       const validProjects = projects.filter(p => p !== null);
       
       let html = `<div class="project-grid">`;
@@ -193,7 +211,7 @@ let cachedProjects = null;  // Constants
       const dynamicContent = document.getElementById('dynamic-content');
       const isOffline = !navigator.onLine || error.message.includes('fetch');
       dynamicContent.innerHTML = `
-        <div style="padding: 40px; text-align: center;">
+        <div class="error-box">
           <h2>Unable to load projects</h2>
           <p>${isOffline ? 'You appear to be offline. Please check your internet connection.' : 'An error occurred while loading the projects.'}</p>
           <p><small>Error: ${error.message}</small></p>
@@ -567,6 +585,15 @@ function processMarkdownText(text) {
   window.renderContent = renderContent;
   window.wireInteractions = wireInteractions;
 
-  // window.addEventListener('load', () => {
+  // Register service worker for offline support
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('/sw.js')
+      .then(registration => {
+        console.log('Service Worker registered with scope:', registration.scope);
+      })
+      .catch(error => {
+        console.log('Service Worker registration failed:', error);
+      });
+  }
 
 })();

@@ -326,3 +326,31 @@
 .project-content a:hover {
   color: var(--accent);
 }
+
+/* Error message box */
+.error-box {
+  border: 2px solid var(--white);
+  background: var(--black);
+  color: var(--white);
+  padding: 40px;
+  text-align: center;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.error-box h2 {
+  margin: 0 0 20px 0;
+  color: #ff4444;
+  font-family: "Special Gothic Condensed One", sans-serif;
+  font-size: 2rem;
+  letter-spacing: 2px;
+}
+
+.error-box p {
+  margin: 0 0 15px 0;
+  color: var(--white);
+}
+
+.error-box small {
+  color: #cc6666;
+}
