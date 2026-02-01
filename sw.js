@@ -3,6 +3,7 @@ const urlsToCache = [
   '/',
   '/index.html',
   '/404.html',
+  '/sw.js',
   '/favicon.png',
   '/assets/css/base.css',
   '/assets/css/components.css',
@@ -30,7 +31,8 @@ const urlsToCache = [
   '/projects/post3.json',
   '/projects/post4.json',
   '/projects/post5.json',
-  '/discord/'
+  '/discord/',
+  'https://fonts.googleapis.com/css2?family=Special+Gothic+Condensed+One&family=Special+Gothic+Expanded+One&display=swap'
 ];
 
 self.addEventListener('install', event => {
@@ -59,6 +61,7 @@ self.addEventListener('activate', event => {
 self.addEventListener('fetch', event => {
   const url = event.request.url;
   const isAsset = url.includes('/assets/js/') || url.includes('/assets/css/') || url.includes('/projects/');
+  const isGoogleFont = url.includes('fonts.googleapis.com') || url.includes('fonts.gstatic.com');
 
   if (isAsset) {
     // Network first for JS, CSS, and projects to get updates
@@ -75,6 +78,27 @@ self.addEventListener('fetch', event => {
       }).catch(() => {
         return caches.match(event.request);
       })
+    );
+  } else if (isGoogleFont) {
+    // Cache first for Google Fonts to improve performance
+    event.respondWith(
+      caches.match(event.request)
+        .then(response => {
+          if (response) {
+            return response;
+          }
+          return fetch(event.request).then(response => {
+            if (!response || response.status !== 200 || response.type !== 'basic') {
+              return response;
+            }
+            const responseToCache = response.clone();
+            caches.open(CACHE_NAME)
+              .then(cache => {
+                cache.put(event.request, responseToCache);
+              });
+            return response;
+          });
+        })
     );
   } else {
     // Cache first for others

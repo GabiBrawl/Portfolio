@@ -35,7 +35,7 @@ let cachedProjects = null;  // Constants
       const dynamicContent = document.getElementById('dynamic-content');
       dynamicContent.innerHTML = LOADING_HTML;
       
-      fetch(`projects/post${view.id}.json?v=${Date.now()}`)
+      fetch(`projects/post${view.id}.json?v=1`)
         .then(response => {
           if (!response.ok) {
             throw new Error(`Project not found (HTTP ${response.status})`);
@@ -122,7 +122,7 @@ let cachedProjects = null;  // Constants
     let id = 0;
     while (true) {
       try {
-        const response = await fetch(`projects/post${id}.json?v=${Date.now()}`);
+        const response = await fetch(`projects/post${id}.json?v=1`);
         if (!response.ok) break;
         const data = await response.json();
         if (data && data.title) {
@@ -374,7 +374,7 @@ function handleProjectClick(e) {
       const dynamicContent = document.getElementById('dynamic-content');
       dynamicContent.innerHTML = LOADING_HTML;
       
-      fetch(`projects/post${projectId}.json?v=${Date.now()}`)
+      fetch(`projects/post${projectId}.json?v=1`)
         .then(response => {
           if (!response.ok) throw new Error(`Project not found (HTTP ${response.status})`);
           return response.json();
