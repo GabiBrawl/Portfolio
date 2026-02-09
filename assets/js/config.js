@@ -5,7 +5,7 @@ const CONFIG = {
   BASE_URL: 'https://gabibrawl.dev/',
   MOBILE_BREAKPOINT: 768,
   TECH_SCROLLER_WORDS: [
-    'LINUX BTW', 'WINDOWS', 'C++', 'C', 'AI', '$BTC', 'MEMES', 'VS CODE', 'GIT',
+    'LINUX BTW', 'SKZ', 'C++', 'C', 'AI', '$BTC', 'MEMES', 'VS CODE', 'GIT',
     'COOL SHIT', 'OMARCHY', 'ML', '.AF', 'THINKPAD', 'PROTON', 'ZEN BROWSER',
     'NBHD', 'SOFTCORE', 'NOTHING', 'ART', 'CYBERSIGILISM', 'VALORANT', 'BRAVE',
     'UBUNTU', 'HTML', 'AFFINITY', 'FIGMA', 'YAPPER', 'TESLA', 'ESPRESSIF', 'IoT',
@@ -28,6 +28,7 @@ const CONFIG = {
     "'Greatest thing we can do in life is find the power to forgive.' - Silco",
     "'I think the cycle only ends when we find the will to walk away.' - Silco",
     "'There is no prize to perfection. Only an end to pursuit.' - Viktor",
-    "'In the pursuit of great, we failed to do good' - Viktor"
+    "'In the pursuit of great, we failed to do good' - Viktor",
+    "'A wounded blade of grass smells sweeter' - Hyunjin"
   ]
 };

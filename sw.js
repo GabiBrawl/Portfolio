@@ -1,10 +1,24 @@
 const CACHE_NAME = 'portfolio-v2';
-const urlsToCache = [
+
+// URLs that prioritize cache loading (cache-first strategy)
+const cacheFirstUrls = [
   '/',
   '/index.html',
   '/404.html',
   '/sw.js',
   '/favicon.png',
+  '/assets/cursors/handgrabbing.svg',
+  '/assets/cursors/handopen.svg',
+  '/assets/cursors/handpointing.svg',
+  '/assets/images/embed.png',
+  '/assets/images/pc.jpeg',
+  '/assets/images/pfp400x400.jpg',
+  '/discord/',
+  'https://fonts.googleapis.com/css2?family=Special+Gothic+Condensed+One&family=Special+Gothic+Expanded+One&display=swap'
+];
+
+// URLs that prioritize online loading (network-first strategy)
+const networkFirstUrls = [
   '/assets/css/base.css',
   '/assets/css/components.css',
   '/assets/css/effects.css',
@@ -18,27 +32,13 @@ const urlsToCache = [
   '/assets/js/gallery.js',
   '/assets/js/interactions.js',
   '/assets/js/main.js',
-  '/assets/js/utils.js',
-  '/assets/cursors/handgrabbing.svg',
-  '/assets/cursors/handopen.svg',
-  '/assets/cursors/handpointing.svg',
-  '/assets/images/embed.png',
-  '/assets/images/pc.jpeg',
-  '/assets/images/pfp400x400.jpg',
-  '/projects/post0.json',
-  '/projects/post1.json',
-  '/projects/post2.json',
-  '/projects/post3.json',
-  '/projects/post4.json',
-  '/projects/post5.json',
-  '/discord/',
-  'https://fonts.googleapis.com/css2?family=Special+Gothic+Condensed+One&family=Special+Gothic+Expanded+One&display=swap'
+  '/assets/js/utils.js'
 ];
 
 self.addEventListener('install', event => {
   event.waitUntil(
     caches.open(CACHE_NAME)
-      .then(cache => cache.addAll(urlsToCache))
+      .then(cache => cache.addAll([...cacheFirstUrls, ...networkFirstUrls]))
   );
   self.skipWaiting();
 });
@@ -60,11 +60,12 @@ self.addEventListener('activate', event => {
 
 self.addEventListener('fetch', event => {
   const url = event.request.url;
-  const isAsset = url.includes('/assets/js/') || url.includes('/assets/css/') || url.includes('/projects/');
-  const isGoogleFont = url.includes('fonts.googleapis.com') || url.includes('fonts.gstatic.com');
+  const isNetworkFirst = networkFirstUrls.some(u => url === u || url === location.origin + u) || url.match(/\/projects\/post\d+\.json$/);
 
-  if (isAsset) {
-    // Network first for JS, CSS, and projects to get updates
+  const isCacheFirst = cacheFirstUrls.some(u => url === u || url === location.origin + u) || url.includes('fonts.googleapis.com') || url.includes('fonts.gstatic.com');
+
+  if (isNetworkFirst) {
+    // Network first strategy
     event.respondWith(
       fetch(event.request).then(response => {
         if (!response || response.status !== 200 || response.type !== 'basic') {
@@ -79,8 +80,8 @@ self.addEventListener('fetch', event => {
         return caches.match(event.request);
       })
     );
-  } else if (isGoogleFont) {
-    // Cache first for Google Fonts to improve performance
+  } else if (isCacheFirst) {
+    // Cache first strategy
     event.respondWith(
       caches.match(event.request)
         .then(response => {
@@ -101,7 +102,7 @@ self.addEventListener('fetch', event => {
         })
     );
   } else {
-    // Cache first for others
+    // Default to cache first for any other requests
     event.respondWith(
       caches.match(event.request)
         .then(response => {
