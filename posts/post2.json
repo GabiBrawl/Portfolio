@@ -1,0 +1,51 @@
+{
+  "title": "Utsuwa Key",
+  "subtitle": "うつわ ✦ Utsuwa comes from the Japanese word for 'vessel', symbolizing a container for your digital soul",
+  "description": "うつわ ✦ A contactless FIDO-2 passkey storing device!",
+  "lastUpdated": "Dec 2025",
+  "flags": ["hack-club", "in-progress"],
+
+  "cardImage": "assets/images/utsuwa/hero.png",
+  "cardTags": [
+    { "text": "Hack Club", "link": null },
+    { "text": "Electronics", "link": null },
+    { "text": "Security", "link": null },
+    { "text": "OpenSource", "link": "https://github.com/GabiBrawl/Utsuwa" }
+  ],
+
+  "metaTitle": "Utsuwa Key - Gabriel Yassin's Portfolio",
+  "metaImage": "https://gabibrawl.github.io/Portfolio/assets/images/utsuwa/hero.png",
+
+  "gallery": [
+    { "src": "assets/images/utsuwa/hero.png", "alt": "Utsuwa Key"},
+    { "src": "assets/images/utsuwa/1.png", "alt": "PCB Top", "caption": "PCB Top" },
+    { "src": "assets/images/utsuwa/2.png", "alt": "PCB Bottom", "caption": "PCB Bottom" },
+    { "src": "assets/images/utsuwa/3.png", "alt": "PCB Design", "caption": "PCB design" },
+    { "src": "assets/images/utsuwa/4.png", "alt": "Schematics", "caption": "Schematics" }
+  ],
+
+  "content": [
+    {
+      "heading": "Another Security Key",
+      "text": "A FIDO-2 Hardware passkey storing device that revolutionizes authentication with contactless technology. Unlike standard keys that use mechanical buttons (or exposed copper), **Utsuwa** employs __**Hall Effect Sensors**__, to enable secure authentication via magnetic rings or charms - eliminating physical contact and reducing wear.\n\nBuilt on the RP2354A microcontroller and open-source firmware, Utsuwa features custom PCB artwork, designed on Figma, by me. This device stores FIDO-2 passkeys securely while maintaining a sleek, modern form factor and unique design."
+    },
+    {
+      "heading": "Features",
+      "list": [
+        "Hall Effect sensor for contactless authentication.",
+        "FIDO-2 compliant security architecture.",
+        "Custom-designed PCB with unique artwork.",
+        "Open-source firmware and hardware designs."
+      ]
+    },
+    {
+      "heading": "Open Source",
+      "text": "Utsuwa is completely open-source, available on my GitHub."
+    }
+  ],
+
+  "links": [
+    { "text": "View on GitHub", "href": "https://github.com/GabiBrawl/Utsuwa" },
+    { "text": "View on Blueprint", "href": "https://blueprint.hackclub.com/projects/6307" }
+  ]
+}

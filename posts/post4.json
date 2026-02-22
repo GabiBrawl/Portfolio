@@ -1,0 +1,42 @@
+{
+  "title": "LePlayer Music",
+  "subtitle": "Music Streaming Revolution",
+  "description": "An uncomplete music player or streaming service, built on Svelte.",
+  "lastUpdated": "Dec 2024",
+  "flags": ["disabled"],
+
+  "cardImage": "assets/images/leplayer/hero.png",
+  "cardLogo": "assets/images/leplayer/logo52x52.png",
+  "cardTags": [
+    { "text": "Svelte", "link": null },
+    { "text": "Python", "link": null },
+    { "text": "UI/UX Design", "link": null },
+    { "text": "Early Development", "link": null },
+    { "text": "OpenSource", "link": "https://github.com/LePlayer-Music" }
+  ],
+
+  "metaTitle": "LePlayer Music - Gabriel Yassin's Portfolio",
+  "metaImage": "https://gabibrawl.github.io/Portfolio/assets/images/leplayer/hero.png",
+
+  "gallery": [
+    { "src": "assets/images/leplayer/hero.png", "alt": "Player Interface", "caption": "Clean and intuitive music player interface" },
+    { "src": "assets/images/leplayer/hero.png", "alt": "Playlist View", "caption": "Organize your music into beautiful playlists" },
+    { "src": "assets/images/leplayer/hero.png", "alt": "Discovery Engine", "caption": "Privacy-preserving music discovery engine" },
+    { "src": "assets/images/leplayer/hero.png", "alt": "Social Features", "caption": "Share and discover music with your community" }
+  ],
+
+  "content": [
+    {
+      "heading": "The Vision",
+      "text": "LePlayer Music is not just another music streaming platform. It's a revolution in how we consume music while supporting artists fairly.\n\nIn an era where every interaction is tracked and monetized, LePlayer Music takes a stand: your listening habits should not be commodified. We're building a platform where users are in control of their data, artists earn fair compensation, and the listening experience is genuinely yours."
+    },
+    {
+      "heading": "Join the Revolution",
+      "text": "We're looking for contributors, beta testers, and artists who believe in a better music ecosystem. Whether you're a developer, designer, musician, or just someone tired of being tracked, there's a place for you in the LePlayer Music community.\n\nOur GitHub repository contains the full source code, and we welcome pull requests, bug reports, and feature suggestions. The project is open source under the LGPL 2.1 license. THIS PROJECT IS STILL IN EARLY DEVELOPMENT AND NOT YET PRODUCTION-READY."
+    }
+  ],
+
+  "links": [
+    { "text": "GitHub Repository", "href": "https://github.com/LePlayer-Music" }
+  ]
+}

@@ -10,7 +10,7 @@
  * @param {string} options.ty - Y translation
  * @param {number} options.lifetime - Particle lifetime in ms
  */
-function createParticle({ left, top, color = 'var(--white)', tx = '0px', ty = '0px', lifetime = 1000 }) {
+function createParticle({ left, top, color = 'var(--primary)', tx = '0px', ty = '0px', lifetime = 1000 }) {
   const particle = document.createElement('div');
   particle.className = 'particle';
   particle.style.left = left;
@@ -37,7 +37,7 @@ function smallBurst(x, y, count = 20) {
     createParticle({
       left: x + 'px',
       top: y + 'px',
-      color: 'var(--white)',
+      color: 'var(--primary)',
       tx: px + 'px',
       ty: py + 'px',
       lifetime: 1000

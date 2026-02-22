@@ -19,34 +19,34 @@
 }
 
 .gallery-back {
-  color: var(--white);
+  color: var(--primary);
   text-decoration: none;
   font-weight: bold;
   padding: 10px 20px;
   font-family: "Special Gothic Condensed One", sans-serif;
   font-size: 0.85rem;
   letter-spacing: 2px;
-  border: 2px solid var(--white);
-  background: var(--black);
+  border: 2px solid var(--primary);
+  background: var(--background);
   display: inline-flex;
   align-items: center;
   gap: 8px;
 }
 
 .gallery-back:hover {
-  background: var(--white);
-  color: var(--black);
+  background: var(--primary);
+  color: var(--background);
 }
 
 .gallery-counter {
-  color: var(--white);
+  color: var(--primary);
   font-family: "Special Gothic Condensed One", sans-serif;
   font-size: 0.9rem;
   letter-spacing: 2px;
   opacity: 0.7;
   padding: 10px 20px;
-  border: 2px solid var(--white);
-  background: var(--black);
+  border: 2px solid var(--primary);
+  background: var(--background);
 }
 
 .gallery-main {
@@ -63,9 +63,9 @@
 .gallery-nav {
   width: 50px;
   height: 50px;
-  background: var(--black);
-  border: 2px solid var(--white);
-  color: var(--white);
+  background: var(--background);
+  border: 2px solid var(--primary);
+  color: var(--primary);
   font-size: 2rem;
   cursor: pointer;
   display: flex;
@@ -75,8 +75,8 @@
 }
 
 .gallery-nav:hover:not(:disabled) {
-  background: var(--white);
-  color: var(--black);
+  background: var(--primary);
+  color: var(--background);
 }
 
 .gallery-nav:disabled {
@@ -99,16 +99,16 @@
   max-width: 85%;
   max-height: 50vh;
   object-fit: contain;
-  border: 2px solid var(--white);
+  border: 2px solid var(--primary);
   cursor: zoom-in;
 }
 
 .gallery-image-caption {
   margin-top: 10px;
   padding: 8px 16px;
-  background: var(--black);
-  border: 2px solid var(--white);
-  color: var(--white);
+  background: var(--background);
+  border: 2px solid var(--primary);
+  color: var(--primary);
   font-family: "Special Gothic Condensed One", sans-serif;
   font-size: 0.9rem;
   text-align: center;
@@ -130,15 +130,15 @@
   justify-content: center;
   flex-wrap: wrap;
   padding: 12px;
-  border: 2px solid var(--white);
-  background: var(--black);
+  border: 2px solid var(--primary);
+  background: var(--background);
 }
 
 .gallery-thumb {
   width: 70px;
   height: 50px;
   cursor: pointer;
-  border: 2px solid var(--white);
+  border: 2px solid var(--primary);
   opacity: 0.5;
   overflow: hidden;
 }
@@ -284,15 +284,15 @@
   justify-content: space-between;
   align-items: center;
   padding: 15px 20px;
-  background: var(--black);
-  border-top: 2px solid var(--white);
+  background: var(--background);
+  border-top: 2px solid var(--primary);
   flex-shrink: 0;
 }
 
 .zoom-close {
-  background: var(--black);
-  border: 2px solid var(--white);
-  color: var(--white);
+  background: var(--background);
+  border: 2px solid var(--primary);
+  color: var(--primary);
   padding: 10px 20px;
   font-family: "Special Gothic Condensed One", sans-serif;
   font-size: 0.9rem;
@@ -301,8 +301,8 @@
 }
 
 .zoom-close:hover {
-  background: var(--white);
-  color: var(--black);
+  background: var(--primary);
+  color: var(--background);
 }
 
 .zoom-controls {
@@ -312,9 +312,9 @@
 }
 
 .zoom-controls button {
-  background: var(--black);
-  border: 2px solid var(--white);
-  color: var(--white);
+  background: var(--background);
+  border: 2px solid var(--primary);
+  color: var(--primary);
   width: 40px;
   height: 40px;
   font-size: 1.2rem;
@@ -325,8 +325,8 @@
 }
 
 .zoom-controls button:hover {
-  background: var(--white);
-  color: var(--black);
+  background: var(--primary);
+  color: var(--background);
 }
 
 .zoom-controls .zoom-reset {
@@ -338,7 +338,7 @@
 }
 
 .zoom-level {
-  color: var(--white);
+  color: var(--primary);
   font-family: "Special Gothic Condensed One", sans-serif;
   font-size: 0.9rem;
   min-width: 50px;

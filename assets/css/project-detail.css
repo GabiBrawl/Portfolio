@@ -9,10 +9,10 @@
 
 .project-header {
   margin-bottom: 50px;
-  border: 2px solid var(--white);
+  border: 2px solid var(--primary);
   padding: 40px;
   position: relative;
-  background: var(--black);
+  background: var(--background);
   overflow: hidden;
 }
 
@@ -35,15 +35,15 @@
   bottom: 20px;
   left: calc(50% + 155px);
   transform: translateX(-50%);
-  color: var(--white);
+  color: var(--primary);
   text-decoration: none;
   font-weight: bold;
   padding: 12px 24px;
   font-family: "Special Gothic Condensed One", sans-serif;
   font-size: 0.9rem;
   letter-spacing: 2px;
-  border: 2px solid var(--white);
-  background: var(--black);
+  border: 2px solid var(--primary);
+  background: var(--background);
   display: inline-flex;
   align-items: center;
   gap: 8px;
@@ -55,14 +55,14 @@
 }
 
 .back-link:hover {
-  background: var(--white);
-  color: var(--black);
+  background: var(--primary);
+  color: var(--background);
 }
 
 .title-block h1 {
   font-size: 4rem;
   margin: 40px 0 15px 0;
-  color: var(--white);
+  color: var(--primary);
   font-family: "Special Gothic Expanded One", sans-serif;
   letter-spacing: 2px;
   text-align: center;
@@ -70,7 +70,7 @@
 
 .project-subtitle {
   font-size: 1.1rem;
-  color: var(--white);
+  color: var(--primary);
   opacity: 0.7;
   margin-bottom: 25px;
   font-family: "Special Gothic Condensed One", sans-serif;
@@ -80,7 +80,7 @@
 
 .project-last-updated {
   font-size: 0.85rem;
-  color: var(--white);
+  color: var(--primary);
   opacity: 0.4;
   margin: 30px 0 15px 0;
   font-family: "Special Gothic Condensed One", sans-serif;
@@ -96,11 +96,11 @@
 
 .project-meta span {
   background: transparent;
-  color: var(--white);
+  color: var(--primary);
   padding: 6px 18px;
   font-weight: bold;
   font-family: "Special Gothic Condensed One", sans-serif;
-  border: 1px solid var(--white);
+  border: 1px solid var(--primary);
   letter-spacing: 1px;
 }
 
@@ -112,11 +112,11 @@
 }
 
 .project-links a {
-  color: var(--black);
+  color: var(--background);
   text-decoration: none;
   padding: 12px 20px;
-  border: 2px solid var(--white);
-  background: var(--white);
+  border: 2px solid var(--primary);
+  background: var(--primary);
   font-family: "Special Gothic Condensed One", sans-serif;
   font-size: 0.9rem;
   letter-spacing: 1px;
@@ -124,8 +124,8 @@
 }
 
 .project-links a:hover {
-  background: var(--black);
-  color: var(--white);
+  background: var(--background);
+  color: var(--primary);
 }
 
 .project-status {
@@ -142,9 +142,9 @@
 .project-hero {
   position: relative;
   margin-bottom: 40px;
-  border: 2px solid var(--white);
+  border: 2px solid var(--primary);
   overflow: hidden;
-  background: var(--black);
+  background: var(--background);
 }
 
 /* Carousel Styles */
@@ -176,7 +176,7 @@
   max-width: 85%;
   display: block;
   margin: 0 auto;
-  border: 2px solid var(--white);
+  border: 2px solid var(--primary);
   box-sizing: border-box;
 }
 
@@ -186,8 +186,8 @@
   left: 0;
   right: 0;
   padding: 50px 25px 45px 25px;
-  background: linear-gradient(to top, var(--black) 0%, rgba(7, 7, 7, 0.85) 40%, rgba(7, 7, 7, 0.4) 70%, transparent 100%);
-  color: var(--white);
+  background: linear-gradient(to top, var(--background) 0%, rgba(7, 7, 7, 0.85) 40%, rgba(7, 7, 7, 0.4) 70%, transparent 100%);
+  color: var(--primary);
   font-family: "Special Gothic Condensed One", sans-serif;
   font-size: 1.1rem;
   word-spacing: 1px;
@@ -207,9 +207,9 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: var(--black);
-  border: 2px solid var(--white);
-  color: var(--white);
+  background: var(--background);
+  border: 2px solid var(--primary);
+  color: var(--primary);
   font-size: 1.5rem;
   text-decoration: none;
   z-index: 15;
@@ -217,8 +217,8 @@
 }
 
 .carousel-open-btn:hover {
-  background: var(--white);
-  color: var(--black);
+  background: var(--primary);
+  color: var(--background);
 }
 
 .carousel-controls {
@@ -239,28 +239,28 @@
   transform: translateX(-50%);
   display: flex;
   gap: 10px;
-  z-index: 3;
+  z-index: 15;
 }
 
 .carousel-dot {
   width: 12px;
   height: 12px;
-  border: 2px solid var(--white);
+  border: 2px solid var(--primary);
   background: transparent;
   cursor: url('../cursors/handpointing.svg') 10 5, pointer;
 }
 
 .carousel-dot.active {
-  background: var(--white);
+  background: var(--primary);
 }
 
 .carousel-dot:hover {
-  background: var(--white);
+  background: var(--primary);
 }
 
 .project-hero img {
   height: auto;
-  border: 2px solid var(--white);
+  border: 2px solid var(--primary);
 }
 
 .project-content {
@@ -269,14 +269,14 @@
 }
 
 .project-section {
-  background: var(--black);
+  background: var(--background);
   padding: 30px;
-  border: 2px solid var(--white);
+  border: 2px solid var(--primary);
   margin-bottom: 20px;
 }
 
 .project-section h2 {
-  color: var(--white);
+  color: var(--primary);
   margin-bottom: 20px;
   font-size: 2rem;
   font-family: "Special Gothic Expanded One", sans-serif;
@@ -292,9 +292,9 @@
 
 /* Highlight Box for special content */
 .highlight-box {
-  background: var(--black);
-  border: 2px solid var(--white);
-  border-left: 4px solid var(--white);
+  background: var(--background);
+  border: 2px solid var(--primary);
+  border-left: 4px solid var(--primary);
   padding: 20px;
   margin: 20px 0;
   position: relative;
@@ -303,11 +303,11 @@
 .highlight-box p {
   margin: 0;
   font-weight: bold;
-  color: var(--white);
+  color: var(--primary);
 }
 
 .highlight-box p strong {
-  color: var(--white);
+  color: var(--primary);
 }
 
 /* Features Grid */
@@ -319,20 +319,20 @@
 }
 
 .feature-card, .philosophy-card {
-  background: var(--black);
+  background: var(--background);
   padding: 20px;
-  border: 2px solid var(--white);
+  border: 2px solid var(--primary);
   transition: transform 0.3s ease, border-color 0.3s ease;
 }
 
 .feature-card:hover, .philosophy-card:hover {
   transform: translateY(-5px);
-  border-color: var(--white);
+  border-color: var(--primary);
   opacity: 0.8;
 }
 
 .feature-card h3, .philosophy-card h3 {
-  color: var(--white);
+  color: var(--primary);
   margin-bottom: 10px;
   font-family: "Special Gothic Expanded One", sans-serif;
 }
@@ -346,13 +346,13 @@
 }
 
 .spec-group {
-  background: var(--black);
+  background: var(--background);
   padding: 20px;
-  border: 2px solid var(--white);
+  border: 2px solid var(--primary);
 }
 
 .spec-group h3 {
-  color: var(--white);
+  color: var(--primary);
   margin-bottom: 15px;
   font-family: "Special Gothic Expanded One", sans-serif;
 }
@@ -371,13 +371,13 @@
 
 .spec-group li::before {
   content: "▸";
-  color: var(--white);
+  color: var(--primary);
   position: absolute;
   left: 0;
 }
 
 .spec-group strong {
-  color: var(--white);
+  color: var(--primary);
 }
 
 /* Timeline */
@@ -393,7 +393,7 @@
   top: 0;
   bottom: 0;
   width: 2px;
-  background: var(--white);
+  background: var(--primary);
 }
 
 .timeline-item {
@@ -403,19 +403,19 @@
 }
 
 .timeline-date {
-  background: var(--black);
-  color: var(--white);
+  background: var(--background);
+  color: var(--primary);
   padding: 8px 15px;
   font-weight: bold;
   margin-right: 20px;
   min-width: 120px;
   text-align: center;
   font-family: "Special Gothic Condensed One", sans-serif;
-  border: 2px solid var(--white);
+  border: 2px solid var(--primary);
 }
 
 .timeline-content h4 {
-  color: var(--white);
+  color: var(--primary);
   margin-bottom: 10px;
   font-family: "Special Gothic Expanded One", sans-serif;
 }
@@ -433,13 +433,13 @@
 }
 
 .tech-category {
-  background: var(--black);
+  background: var(--background);
   padding: 20px;
-  border: 2px solid var(--white);
+  border: 2px solid var(--primary);
 }
 
 .tech-category h3 {
-  color: var(--white);
+  color: var(--primary);
   margin-bottom: 15px;
   font-family: "Special Gothic Expanded One", sans-serif;
 }
@@ -452,7 +452,7 @@
 .tech-category li {
   margin-bottom: 8px;
   padding: 5px 0;
-  border-bottom: 1px solid var(--white);
+  border-bottom: 1px solid var(--primary);
   font-family: "Special Gothic Condensed One", sans-serif;
 }
 
@@ -461,7 +461,7 @@
 }
 
 .tech-category strong {
-  color: var(--white);
+  color: var(--primary);
 }
 
 /* Roadmap */
@@ -473,9 +473,9 @@
 }
 
 .roadmap-phase {
-  background: var(--black);
+  background: var(--background);
   padding: 20px;
-  border: 2px solid var(--white);
+  border: 2px solid var(--primary);
 }
 
 .phase-header {
@@ -486,12 +486,12 @@
 }
 
 .phase-number {
-  background: var(--black);
-  color: var(--white);
+  background: var(--background);
+  color: var(--primary);
   padding: 5px 10px;
   font-weight: bold;
   font-family: "Special Gothic Condensed One", sans-serif;
-  border: 2px solid var(--white);
+  border: 2px solid var(--primary);
 }
 
 .phase-status {
@@ -505,15 +505,15 @@
 }
 
 .roadmap-phase.in-progress .phase-status {
-  color: var(--white);
+  color: var(--primary);
 }
 
 .roadmap-phase.planned .phase-status {
-  color: var(--white);
+  color: var(--primary);
 }
 
 .roadmap-phase h4 {
-  color: var(--white);
+  color: var(--primary);
   font-family: "Special Gothic Expanded One", sans-serif;
 }
 
@@ -526,13 +526,13 @@
 }
 
 .ux-item {
-  background: var(--black);
+  background: var(--background);
   padding: 20px;
-  border: 2px solid var(--white);
+  border: 2px solid var(--primary);
 }
 
 .ux-item h4 {
-  color: var(--white);
+  color: var(--primary);
   margin-bottom: 10px;
   font-family: "Special Gothic Expanded One", sans-serif;
 }
@@ -545,20 +545,20 @@
 }
 
 .challenge {
-  background: var(--black);
+  background: var(--background);
   padding: 20px;
-  border: 2px solid var(--white);
-  border-left: 4px solid var(--white);
+  border: 2px solid var(--primary);
+  border-left: 4px solid var(--primary);
 }
 
 .challenge h4 {
-  color: var(--white);
+  color: var(--primary);
   margin-bottom: 10px;
   font-family: "Special Gothic Expanded One", sans-serif;
 }
 
 .challenge strong {
-  color: var(--white);
+  color: var(--primary);
 }
 
 .challenge p {
@@ -574,8 +574,8 @@
 }
 
 .gallery-item {
-  background: var(--black);
-  border: 2px solid var(--white);
+  background: var(--background);
+  border: 2px solid var(--primary);
   overflow: hidden;
   transition: all 0.4s ease;
   position: relative;
@@ -584,7 +584,7 @@
 }
 
 .gallery-item:hover {
-  border-color: var(--white);
+  border-color: var(--primary);
   transform: scale(1.02);
 }
 
@@ -608,7 +608,7 @@
   padding: 15px;
   margin: 0;
   font-size: 0.9rem;
-  color: var(--white);
+  color: var(--primary);
   background: linear-gradient(transparent, rgba(7, 7, 7, 0.95));
   font-family: "Special Gothic Condensed One", sans-serif;
   word-spacing: 1px;
@@ -623,23 +623,23 @@
 }
 
 .link-card {
-  background: var(--black);
+  background: var(--background);
   padding: 20px;
-  border: 2px solid var(--white);
+  border: 2px solid var(--primary);
   text-decoration: none;
-  color: var(--white);
+  color: var(--primary);
   transition: all 0.3s ease;
   display: block;
 }
 
 .link-card:hover {
   transform: translateY(-5px);
-  border-color: var(--white);
+  border-color: var(--primary);
   opacity: 0.8;
 }
 
 .link-card h3 {
-  color: var(--white);
+  color: var(--primary);
   margin-bottom: 10px;
   font-family: "Special Gothic Expanded One", sans-serif;
 }
@@ -657,20 +657,20 @@
 }
 
 .specialization-card {
-  background: var(--black);
+  background: var(--background);
   padding: 20px;
-  border: 2px solid var(--white);
+  border: 2px solid var(--primary);
   transition: transform 0.3s ease;
 }
 
 .specialization-card:hover {
   transform: translateY(-5px);
-  border-color: var(--white);
+  border-color: var(--primary);
   opacity: 0.8;
 }
 
 .specialization-card h3 {
-  color: var(--white);
+  color: var(--primary);
   margin-bottom: 15px;
   font-family: "Special Gothic Expanded One", sans-serif;
 }
@@ -690,7 +690,7 @@
 
 .specialization-card li::before {
   content: "✓";
-  color: var(--white);
+  color: var(--primary);
   position: absolute;
   left: 0;
 }
@@ -704,22 +704,22 @@
 }
 
 .process-step {
-  background: var(--black);
+  background: var(--background);
   padding: 20px;
-  border: 2px solid var(--white);
+  border: 2px solid var(--primary);
   position: relative;
   transition: transform 0.3s ease;
 }
 
 .process-step:hover {
   transform: translateY(-5px);
-  border-color: var(--white);
+  border-color: var(--primary);
   opacity: 0.8;
 }
 
 .step-number {
-  background: var(--black);
-  color: var(--white);
+  background: var(--background);
+  color: var(--primary);
   width: 30px;
   height: 30px;
   display: flex;
@@ -728,11 +728,11 @@
   font-weight: bold;
   margin-bottom: 15px;
   font-family: "Special Gothic Condensed One", sans-serif;
-  border: 2px solid var(--white);
+  border: 2px solid var(--primary);
 }
 
 .process-step h4 {
-  color: var(--white);
+  color: var(--primary);
   margin-bottom: 10px;
   font-family: "Special Gothic Expanded One", sans-serif;
 }
@@ -750,20 +750,20 @@
 }
 
 .quality-item {
-  background: var(--black);
+  background: var(--background);
   padding: 20px;
-  border: 2px solid var(--white);
+  border: 2px solid var(--primary);
   transition: transform 0.3s ease;
 }
 
 .quality-item:hover {
   transform: translateY(-5px);
-  border-color: var(--white);
+  border-color: var(--primary);
   opacity: 0.8;
 }
 
 .quality-item h3 {
-  color: var(--white);
+  color: var(--primary);
   margin-bottom: 10px;
   font-family: "Special Gothic Expanded One", sans-serif;
 }
@@ -781,20 +781,20 @@
 }
 
 .build-card {
-  background: var(--black);
+  background: var(--background);
   padding: 20px;
-  border: 2px solid var(--white);
+  border: 2px solid var(--primary);
   transition: transform 0.3s ease;
 }
 
 .build-card:hover {
   transform: translateY(-5px);
-  border-color: var(--white);
+  border-color: var(--primary);
   opacity: 0.8;
 }
 
 .build-card h4 {
-  color: var(--white);
+  color: var(--primary);
   margin-bottom: 15px;
   font-family: "Special Gothic Expanded One", sans-serif;
 }
@@ -810,7 +810,7 @@
 }
 
 .build-specs strong {
-  color: var(--white);
+  color: var(--primary);
 }
 
 .build-description {
@@ -828,20 +828,20 @@
 }
 
 .expertise-category {
-  background: var(--black);
+  background: var(--background);
   padding: 20px;
-  border: 2px solid var(--white);
+  border: 2px solid var(--primary);
   transition: transform 0.3s ease;
 }
 
 .expertise-category:hover {
   transform: translateY(-5px);
-  border-color: var(--white);
+  border-color: var(--primary);
   opacity: 0.8;
 }
 
 .expertise-category h3 {
-  color: var(--white);
+  color: var(--primary);
   margin-bottom: 15px;
   font-family: "Special Gothic Expanded One", sans-serif;
 }
@@ -861,7 +861,7 @@
 
 .expertise-category li::before {
   content: "•";
-  color: var(--white);
+  color: var(--primary);
   position: absolute;
   left: 0;
 }
@@ -875,20 +875,20 @@
 }
 
 .benefit {
-  background: var(--black);
+  background: var(--background);
   padding: 20px;
-  border: 2px solid var(--white);
+  border: 2px solid var(--primary);
   transition: transform 0.3s ease;
 }
 
 .benefit:hover {
   transform: translateY(-5px);
-  border-color: var(--white);
+  border-color: var(--primary);
   opacity: 0.8;
 }
 
 .benefit h3 {
-  color: var(--white);
+  color: var(--primary);
   margin-bottom: 10px;
   font-family: "Special Gothic Expanded One", sans-serif;
 }
@@ -911,39 +911,39 @@
   font-weight: bold;
   display: inline-block;
   font-family: "Special Gothic Condensed One", sans-serif;
-  border: 2px solid var(--white);
+  border: 2px solid var(--primary);
 }
 
 .cta-button.primary {
-  background: var(--black);
-  color: var(--white);
-  border: 2px solid var(--white);
+  background: var(--background);
+  color: var(--primary);
+  border: 2px solid var(--primary);
 }
 
 .cta-button.primary:hover {
-  background: var(--white);
-  color: var(--black);
+  background: var(--primary);
+  color: var(--background);
 }
 
 .cta-button.secondary {
-  background: var(--black);
-  color: var(--white);
+  background: var(--background);
+  color: var(--primary);
 }
 
 .cta-button.secondary:hover {
-  background: var(--white);
-  color: var(--black);
+  background: var(--primary);
+  color: var(--background);
 }
 
 .service-details {
   margin-top: 30px;
   padding: 20px;
-  background: var(--black);
-  border: 2px solid var(--white);
+  background: var(--background);
+  border: 2px solid var(--primary);
 }
 
 .service-details h4 {
-  color: var(--white);
+  color: var(--primary);
   margin-bottom: 15px;
   font-family: "Special Gothic Expanded One", sans-serif;
 }
@@ -962,7 +962,7 @@
 
 .service-details li::before {
   content: "✓";
-  color: var(--white);
+  color: var(--primary);
   position: absolute;
   left: 0;
 }
@@ -1059,7 +1059,7 @@
 
 .feature-list li::before {
   content: "✓";
-  color: var(--white);
+  color: var(--primary);
   position: absolute;
   left: 0;
   font-weight: bold;
@@ -1083,7 +1083,7 @@
 
 .project-section li::before {
   content: "•";
-  color: var(--white);
+  color: var(--primary);
   position: absolute;
   left: 0;
 }

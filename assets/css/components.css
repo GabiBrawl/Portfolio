@@ -5,7 +5,7 @@
   width: 100px;
   height: 100px;
   border-radius: 50%;
-  border: 2px solid var(--white);
+  border: 2px solid var(--primary);
   object-fit: cover;
 }
 
@@ -43,14 +43,14 @@
 
 #age {
   font-size: 14px;
-  color: var(--white);
+  color: var(--primary);
   margin-left: 10px;
 }
 
 .divider {
   border: none;
   height: 2px;
-  background: var(--white);
+  background: var(--primary);
   margin: 20px 0;
 }
 
@@ -60,22 +60,22 @@
 
 .socials a {
   display: block;
-  color: var(--white);
+  color: var(--primary);
   text-decoration: none;
   margin-bottom: 10px;
   padding: 10px;
-  border: 2px solid var(--white);
+  border: 2px solid var(--primary);
   text-align: center;
 }
 
 .socials a:hover {
-  background: var(--white);
-  color: var(--black);
+  background: var(--primary);
+  color: var(--background);
 }
 
 .socials a.copied {
   background: var(--accent);
-  color: var(--black);
+  color: var(--background);
 }
 
 .social-row {
@@ -93,11 +93,11 @@
 
 .webring-toggle {
   display: block;
-  color: var(--white);
+  color: var(--primary);
   text-decoration: none;
   margin-bottom: 10px;
   padding: 10px;
-  border: 2px solid var(--white);
+  border: 2px solid var(--primary);
   text-align: center;
   background: none;
   cursor: pointer;
@@ -107,8 +107,8 @@
 }
 
 .webring-toggle:hover {
-  background: var(--white);
-  color: var(--black);
+  background: var(--primary);
+  color: var(--background);
 }
 
 .webring-content {
@@ -141,7 +141,7 @@
   height: 2px;
   border: none;
   margin: 0;
-  background: var(--white);
+  background: var(--primary);
 }
 
 .title-container h2 {
@@ -158,17 +158,17 @@
 }
 
 .project {
-  border: 2px solid var(--white);
+  border: 2px solid var(--primary);
   padding: 20px;
-  background-color: var(--black);
-  color: var(--white);
+  background-color: var(--background);
+  color: var(--primary);
   transition: transform 0.3s ease;
   position: relative;
   cursor: url('../cursors/handpointing.svg') 10 5, pointer;
 }
 
 .project:hover {
-  box-shadow: 0 0 0 4px var(--black);
+  box-shadow: 0 0 0 4px var(--background);
   z-index: 10;
 }
 
@@ -202,8 +202,8 @@
   position: absolute;
   top: 10px;
   left: 10px;
-  background: var(--white);
-  color: var(--black);
+  background: var(--primary);
+  color: var(--background);
   font-size: 11px;
   font-weight: bold;
   padding: 4px 8px;
@@ -220,12 +220,12 @@
 .tags span, .tags a {
   display: inline-block;
   padding: 2px 6px;
-  border: 1px solid var(--white);
+  border: 1px solid var(--primary);
   margin-right: 5px;
   margin-bottom: 5px;
   font-size: 12px;
   text-decoration: none;
-  color: var(--white);
+  color: var(--primary);
   transition: all 0.3s ease;
 }
 
@@ -236,8 +236,8 @@
   left: 0;
   right: 0;
   height: 40px;
-  background-color: var(--white);
-  color: var(--black);
+  background-color: var(--primary);
+  color: var(--background);
   overflow: hidden;
   display: flex;
   align-items: center;
@@ -296,7 +296,7 @@
 
 .project-content em {
   font-style: italic;
-  color: var(--white);
+  color: var(--primary);
 }
 
 .project-content u {
@@ -320,7 +320,7 @@
 .project-content a {
   text-decoration: underline;
   text-decoration-color: var(--accent);
-  color: var(--white);
+  color: var(--primary);
 }
 
 .project-content a:hover {
@@ -329,9 +329,9 @@
 
 /* Error message box */
 .error-box {
-  border: 2px solid var(--white);
-  background: var(--black);
-  color: var(--white);
+  border: 2px solid var(--primary);
+  background: var(--background);
+  color: var(--primary);
   padding: 40px;
   text-align: center;
   max-width: 600px;
@@ -348,7 +348,7 @@
 
 .error-box p {
   margin: 0 0 15px 0;
-  color: var(--white);
+  color: var(--primary);
 }
 
 .error-box small {

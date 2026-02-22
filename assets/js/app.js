@@ -1,5 +1,5 @@
-// app.js - Dynamic content renderer for single-page app
-// Handles both projects list view and individual project views based on URL
+// app.js - Dynamic content render for the single-page app
+// Handles both the projects list view and the individual project views based on URL
 
 (function () {
   'use strict';
@@ -35,7 +35,7 @@ let cachedProjects = null;  // Constants
       const dynamicContent = document.getElementById('dynamic-content');
       dynamicContent.innerHTML = LOADING_HTML;
       
-      fetch(`projects/post${view.id}.json`)
+      fetch(`posts/post${view.id}.json`)
         .then(response => {
           if (!response.ok) {
             throw new Error(`Project not found (HTTP ${response.status})`);
@@ -122,7 +122,7 @@ let cachedProjects = null;  // Constants
     let id = 0;
     while (true) {
       try {
-        const response = await fetch(`projects/post${id}.json`);
+        const response = await fetch(`posts/post${id}.json`);
         if (!response.ok) break;
         const data = await response.json();
         if (data && data.title) {
@@ -152,7 +152,7 @@ let cachedProjects = null;  // Constants
   });
 }  function renderProjectsListView(container) {
     // Update page title
-    document.title = "Gabriel Yassin's Portfolio";
+    document.title = "Gabi's Portfolio";
     document.querySelector('meta[property="og:title"]').content = "Gabi's Portfolio";
     document.querySelector('meta[property="og:description"]').content = "Full-stack developer, programmer and electronics enthusiast building clean web pages and custom hardware.";
 
@@ -257,7 +257,7 @@ let cachedProjects = null;  // Constants
 
     html += `</div>`;
 
-    // Carousel
+    // Gallery carousel
     html += `
       <div class="project-hero">
         <div class="project-carousel">
@@ -270,7 +270,7 @@ let cachedProjects = null;  // Constants
             `).join('')}
           </div>
           <div class="carousel-controls"></div>
-          <a href="?post=${projectId}&gallery&img=0" class="carousel-open-btn" title="Open gallery view">⤢</a>
+          <a href="?post=${projectId}&gallery&img=0" class="carousel-open-btn" title="Switch to gallery view">⤢</a>
           <div class="carousel-indicators">
             ${data.gallery.map((_, i) => `<span class="carousel-dot ${i === 0 ? 'active' : ''}" data-slide="${i}"></span>`).join('')}
           </div>
@@ -374,7 +374,7 @@ function handleProjectClick(e) {
       const dynamicContent = document.getElementById('dynamic-content');
       dynamicContent.innerHTML = LOADING_HTML;
       
-      fetch(`projects/post${projectId}.json`)
+      fetch(`posts/post${projectId}.json`)
         .then(response => {
           if (!response.ok) throw new Error(`Project not found (HTTP ${response.status})`);
           return response.json();
@@ -585,7 +585,7 @@ function processMarkdownText(text) {
   window.renderContent = renderContent;
   window.wireInteractions = wireInteractions;
 
-  // Register service worker for offline support
+  // Register service worker
   if ('serviceWorker' in navigator) {
     navigator.serviceWorker.register('/sw.js')
       .then(registration => {

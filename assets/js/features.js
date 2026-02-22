@@ -52,10 +52,8 @@ function wireTechScroller() {
     const scroller = document.querySelector('.scroller-content');
     if (!scroller) return;
 
-    const words = CONFIG.TECH_SCROLLER_WORDS;
-
     // Merge and shuffle
-    const randomizedWords = shuffleArray(words);
+    const randomizedWords = shuffleArray(CONFIG.TECH_SCROLLER_WORDS);
 
     // Build HTML with star separators; duplicate sequence for seamless infinite loop
     const buildSequence = seq => seq.map(w => `<span class="star"></span> ${w} `).join('');
@@ -79,7 +77,7 @@ function wireTechScroller() {
     let last = performance.now();
     let offset = 0; // negative px (we'll subtract)
     let sequenceWidth = scroller.scrollWidth / 2 || 0; // half since we duplicated sequence
-    const durationSeconds = 30; // original approximate duration for one loop
+    const durationSeconds = 69; // original approximate duration for one loop
 
     function update(now) {
       const dt = (now - last) / 1000; // seconds
@@ -130,6 +128,11 @@ function wireCommandPalette() {
     const inputLines = message.split('\n');
     const maxWidth = 40;
     const lines = [];
+      const cow = `        \\   ^__^
+         \\  (oo)\\_______
+            (__)\\       )\\/\\
+                ||----w |
+                ||     ||`;
 
     for (const inputLine of inputLines) {
       if (inputLine.trim() === '') {
@@ -162,11 +165,6 @@ function wireCommandPalette() {
       const top = ' ' + '_'.repeat(len + 2);
       const middle = '< ' + lines[0] + ' >';
       const bottom = ' ' + '-'.repeat(len + 2);
-      const cow = `        \\   ^__^
-         \\  (oo)\\_______
-            (__)\\       )\\/\\
-                ||----w |
-                ||     ||`;
       return top + '\n' + middle + '\n' + bottom + '\n' + cow;
     } else {
       // Multi-line - create proper multi-line bubble
@@ -188,11 +186,6 @@ function wireCommandPalette() {
       result += '\\ ' + lastLine + ' '.repeat(maxLineLength - lastLine.length) + ' /\n';
       result += ' ' + '-'.repeat(maxLineLength + 2) + '\n';
       
-      const cow = `        \\   ^__^
-         \\  (oo)\\_______
-            (__)\\       )\\/\\
-                ||----w |
-                ||     ||`;
       
       return result + cow;
     }
@@ -201,13 +194,13 @@ function wireCommandPalette() {
   function toggleTheme() {
     isDark = !isDark;
     if (isDark) {
-      document.documentElement.style.setProperty('--black', '#070707');
-      document.documentElement.style.setProperty('--white', '#DED8CB');
+      document.documentElement.style.setProperty('--background', '#070707');
+      document.documentElement.style.setProperty('--primary', '#DED8CB');
       document.documentElement.style.setProperty('--accent', '#FFAB07');
       document.documentElement.style.setProperty('--star-image', 'url("../star.svg")');
     } else {
-      document.documentElement.style.setProperty('--black', '#f0f0f0');
-      document.documentElement.style.setProperty('--white', '#000000');
+      document.documentElement.style.setProperty('--background', '#f0f0f0');
+      document.documentElement.style.setProperty('--primary', '#000000');
       document.documentElement.style.setProperty('--accent', '#9983FF');
       document.documentElement.style.setProperty('--star-image', 'url("../starW.svg")');
     }
@@ -240,13 +233,11 @@ function wireCommandPalette() {
       // List of all assets to cache
       const assetsToCache = [
         // Project JSON files
-        ...Array.from({length: 6}, (_, i) => `/projects/post${i}.json`),
+        ...Array.from({length: 6}, (_, i) => `/posts/post${i}.json`),
         // Images
         '/assets/images/embed.png',
         '/assets/images/pc.jpeg',
         '/assets/images/pfp400x400.jpg',
-        // Discord page
-        '/discord/',
         // Additional assets
         '/favicon.png',
         '/assets/star.svg',
@@ -288,7 +279,7 @@ function wireCommandPalette() {
       // First pass: count total images
       for (let i = 0; i < 6; i++) {
         try {
-          const response = await fetch(`/projects/post${i}.json`);
+          const response = await fetch(`/posts/post${i}.json`);
           const project = await response.json();
 
           // Count gallery images
@@ -309,7 +300,7 @@ function wireCommandPalette() {
       // Second pass: cache images
       for (let i = 0; i < 6; i++) {
         try {
-          const response = await fetch(`/projects/post${i}.json`);
+          const response = await fetch(`/posts/post${i}.json`);
           const project = await response.json();
 
           // Cache gallery images
@@ -397,15 +388,15 @@ function wireCommandPalette() {
 
   const terminal = document.createElement('div');
   terminal.style.cssText = `
-    background: var(--black);
-    color: var(--white);
+    background: var(--background);
+    color: var(--primary);
     font-family: monospace;
     padding: 20px;
     width: 80%;
     max-width: 600px;
     max-height: 80vh;
     overflow-y: auto;
-    border: 2px solid var(--white);
+    border: 2px solid var(--primary);
   `;
 
   const output = document.createElement('div');
@@ -420,12 +411,12 @@ function wireCommandPalette() {
 
   const prompt = document.createElement('span');
   prompt.textContent = '$';
-  prompt.style.cssText = `color: var(--white); font-family: monospace; font-size: 14px; margin-right: 8px;`;
+  prompt.style.cssText = `color: var(--primary); font-family: monospace; font-size: 14px; margin-right: 8px;`;
 
   const input = document.createElement('input');
   input.style.cssText = `
     background: transparent;
-    color: var(--white);
+    color: var(--primary);
     border: none;
     font-family: monospace;
     width: 100%;
@@ -447,7 +438,7 @@ function wireCommandPalette() {
     overlay.style.display = 'flex';
     input.focus();
     if (output.textContent === '') {
-      output.textContent = 'Welcome to Gabi\'s Command Palette!\nType "help" for available commands.\n\n';
+      output.textContent = 'Welcome to the Terminal!\nIn case of doubt, type "help".\n\n';
     }
   }
 
@@ -519,7 +510,22 @@ function wireCommandPalette() {
           navigator.clipboard.writeText(CONFIG.EMAIL).catch(err => console.error('Failed to copy email:', err));
           break;
         case 'help':
-          response = 'Available commands:\n\nNavigation:\n  contact - Copy email to clipboard\n\nInfo:\n  whoami - Display user info\n  age - Display age\n  qotd - Quote of the day\n\nFun:\n  cowsay [message] - Cow says message\n  sudo - Run a command as other user\n\nTheme:\n  theme - Toggle theme\n\nCache:\n  cache - Download and cache all website assets for offline use\n\nTerminal:\n  help - Show this help\n  clear - Clear terminal\n  exit - Close palette\n\nUse pipes: command | cowsay';
+          response = 'Available commands:\n\n\
+Info:\n\
+  whoami - Displays the user info\n\
+  contact - Copies email to clipboard\n\
+  age - Displays age\n\
+  qotd - Prints a random quote\n\n\
+Fun:\n\
+  cowsay [message] - Cow says a message\n\
+  sudo - Run a command as other user\n\
+  theme - Toggle the secret theme\n\
+  cache - Download and cache all assets for offline functionality\n\n\
+This terminal:\n\
+  help - Shows this screen\n\
+  clear - Clears the terminal screen\n\
+  exit - Closes the terminal\n\n\
+Piping support: command | cowsay';
           break;
         case 'whoami':
           response = 'GabiBrawl // Full-stack developer and electronics enthusiast';
@@ -532,7 +538,7 @@ function wireCommandPalette() {
           break;
         case 'theme':
           toggleTheme();
-          response = 'Theme toggled!';
+          response = 'Enjoy! ^^';
           break;
         case 'cache':
           // Show terminal if not visible
@@ -574,7 +580,7 @@ function wireCommandPalette() {
       e.preventDefault();
       // Tab completion
       const currentValue = input.value.trim();
-      const commands = ['contact', 'whoami', 'sudo', 'age', 'qotd', 'cowsay', 'theme', 'help', 'clear', 'exit'];
+      const commands = ['contact', 'whoami', 'sudo', 'age', 'qotd', 'cowsay', 'theme', 'help', 'clear', 'exit', 'cache'];
       
       if (currentValue === '') {
         // Show all commands

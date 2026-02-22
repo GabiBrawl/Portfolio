@@ -2,14 +2,14 @@
 .sidebar {
   width: 310px;
   height: 100vh;
-  background-color: var(--black);
-  color: var(--white);
+  background-color: var(--background);
+  color: var(--primary);
   padding: 20px;
   box-sizing: border-box;
   position: fixed;
   left: 0;
   top: 0;
-  border-right: 2px solid var(--white);
+  border-right: 2px solid var(--primary);
 }
 
 .sidebar p {
@@ -19,8 +19,8 @@
 .main {
   margin-left: 310px;
   padding: 20px;
-  background-color: var(--black);
-  color: var(--white);
+  background-color: var(--background);
+  color: var(--primary);
   display: flex;
   flex-direction: column;
   min-height: calc(100vh - 40px);
@@ -35,14 +35,14 @@ footer {
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: var(--black);
-  color: var(--white);
+  background-color: var(--background);
+  color: var(--primary);
 }
 
 .line {
   flex: 1;
   height: 2px;
-  background: var(--white);
+  background: var(--primary);
 }
 
 .gb {

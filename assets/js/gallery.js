@@ -215,7 +215,7 @@
       const dynamicContent = document.getElementById('dynamic-content');
       dynamicContent.innerHTML = LOADING_HTML;
 
-      fetch(`projects/post${projectId}.json`)
+      fetch(`posts/post${projectId}.json`)
         .then(response => {
           if (!response.ok) throw new Error('Project not found');
           return response.json();
