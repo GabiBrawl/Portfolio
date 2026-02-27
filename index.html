@@ -22,14 +22,14 @@
 
     <link rel="icon" href="favicon.png" type="image/png">
 
-        <!-- Critical inline style to prevent flashes / layout glitches while page loads -->
+        <!-- Inline styling to prevent layout glitches while page loads -->
         <style>
             /* Hide page immediately; will be removed on window.load */
             html.preload body {
                 opacity: 0;
                 pointer-events: none;
             }
-            /* Smooth fade when we remove the preload class */
+            /* Smooth fade when removing the preload class */
             body {
                 transition: opacity 250ms ease-in-out;
                 opacity: 1;
@@ -62,7 +62,6 @@
     <link rel="prefetch" href="assets/starW.svg">
 </head><body>
     <div class="sidebar">
-    <!-- Profile picture wrapper: clickable for fun effects -->
     <div class="pfp-wrap">
         <img src="assets/images/pfp400x400.jpg" alt="Profile Picture" class="pfp" width="100" height="100" loading="eager" decoding="async" tabindex="0" aria-label="Profile picture — click for a surprise">
     </div>
@@ -94,11 +93,9 @@
             <a class="large show-more-btn" id="show-more-socials">Show More</a>
         </div>
         
-        
-        <!-- Infinite scrolling tech text -->
         <div class="tech-scroller">
             <div class="scroller-content" aria-hidden="false"></div>
-            <!-- Fallback for users with JavaScript disabled: show a simple notice -->
+            <!-- simple notice fallback for users with JavaScript disabled -->
             <noscript>
                 <div class="scroller-fallback">JavaScript failed to generate the scroller content — please enable JavaScript and reload the page.</div>
             </noscript>
@@ -112,7 +109,7 @@
                 <hr class="line right">
             </div>
             <div id="dynamic-content">
-                <!-- Content will be rendered here by postApp.js -->
+                <!-- Content will be rendered here by app.js -->
             </div>
         </section>
         <footer><span class="line"></span><span class="gb">𝕲 // 𝕭</span><span class="line"></span></footer>
