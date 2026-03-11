@@ -35,10 +35,60 @@ const networkFirstUrls = [
   '/assets/js/utils.js'
 ];
 
+let currentHashes = {};
+
+async function loadHashes() {
+  try {
+    const response = await fetch('/hashes.txt');
+    if (!response.ok) throw new Error('Failed to load hashes');
+    const text = await response.text();
+    const hashes = {};
+    text.split('\n').forEach(line => {
+      if (line.trim()) {
+        const [hash, file] = line.split('  ');
+        hashes[file] = hash;
+      }
+    });
+    return hashes;
+  } catch (e) {
+    console.warn('Could not load hashes file:', e);
+    return {};
+  }
+}
+
+async function checkForUpdates() {
+  const newHashes = await loadHashes();
+  const changedFiles = [];
+  for (const [file, newHash] of Object.entries(newHashes)) {
+    if (currentHashes[file] !== newHash) {
+      changedFiles.push(file);
+    }
+  }
+  return changedFiles;
+}
+
+async function updateCache(changedFiles) {
+  const cache = await caches.open(CACHE_NAME);
+  for (const file of changedFiles) {
+    try {
+      const response = await fetch(file);
+      if (response.ok) {
+        await cache.put(file, response);
+      }
+    } catch (e) {
+      console.warn(`Failed to update cache for ${file}:`, e);
+    }
+  }
+  currentHashes = await loadHashes();
+}
+
 self.addEventListener('install', event => {
   event.waitUntil(
-    caches.open(CACHE_NAME)
-      .then(cache => cache.addAll([...cacheFirstUrls, ...networkFirstUrls]))
+    (async () => {
+      currentHashes = await loadHashes();
+      const cache = await caches.open(CACHE_NAME);
+      await cache.addAll([...cacheFirstUrls, ...networkFirstUrls]);
+    })()
   );
   self.skipWaiting();
 });

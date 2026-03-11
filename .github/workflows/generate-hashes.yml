@@ -1,0 +1,29 @@
+name: Generate File Hashes
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  generate-hashes:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+      with:
+        token: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Generate file hashes
+      run: |
+        find . -type f -not -path './.git/*' -not -path './.github/*' -not -path './node_modules/*' -exec sha256sum {} \; | sort > hashes.txt
+
+    - name: Commit and push hashes
+      run: |
+        git config --local user.email "action@github.com"
+        git config --local user.name "GitHub Action"
+        git add hashes.txt
+        git commit -m "Update file hashes" || echo "No changes to commit"
+        git push

@@ -407,15 +407,9 @@
   left: 0;
 }
 
-
-
-
-
 .feature-card h3, .philosophy-card h3 {
   margin-bottom: 10px;
 }
-
-
 
 .spec-group h3 {
   margin-bottom: 15px;
@@ -469,8 +463,6 @@
 }
 
 /* Roadmap */
-
-
 .phase-header {
   display: flex;
   justify-content: space-between;
@@ -586,8 +578,6 @@
 }
 
 /* Process Timeline */
-
-
 .process-step {
   position: relative;
 }
@@ -640,8 +630,6 @@
   font-family: "Special Gothic Condensed One", sans-serif;
 }
 
-
-
 .build-description {
   opacity: 0.9;
   font-style: italic;
@@ -654,10 +642,6 @@
 
 .benefit h3 {
   margin-bottom: 10px;
-}
-
-.benefit p {
-  font-family: "Special Gothic Condensed One", sans-serif;
 }
 
 .benefit p {
