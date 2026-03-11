@@ -587,9 +587,20 @@ function processMarkdownText(text) {
 
   // Register service worker
   if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.addEventListener('message', event => {
+      if (event.data?.source === 'service-worker' && event.data?.type === 'debug') {
+        console.log('[SW debug]', event.data.message, event.data.data || '');
+      }
+    });
+
+    navigator.serviceWorker.addEventListener('controllerchange', () => {
+      console.log('[SW debug] controller changed', navigator.serviceWorker.controller?.scriptURL || 'no controller');
+    });
+
     navigator.serviceWorker.register('/sw.js')
       .then(registration => {
         console.log('Service Worker registered with scope:', registration.scope);
+        console.log('[SW debug] page controlled:', !!navigator.serviceWorker.controller);
       })
       .catch(error => {
         console.log('Service Worker registration failed:', error);

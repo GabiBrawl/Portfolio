@@ -40,6 +40,18 @@ const networkFirstUrls = [
 let currentHashes = {};
 let hashCheckInFlight = null;
 
+async function broadcastDebug(message, data) {
+  const clients = await self.clients.matchAll({ includeUncontrolled: true, type: 'window' });
+  clients.forEach(client => {
+    client.postMessage({
+      source: 'service-worker',
+      type: 'debug',
+      message,
+      data
+    });
+  });
+}
+
 function isSameOriginAsset(url) {
   return url.startsWith('/');
 }
@@ -54,6 +66,7 @@ function normalizeManifestPath(path) {
 
 async function loadHashes() {
   try {
+    await broadcastDebug('Fetching hash manifest', { url: `${HASHES_URL}?sw-hash-check=...` });
     const response = await fetch(`${HASHES_URL}?sw-hash-check=${Date.now()}`, { cache: 'no-store' });
     if (!response.ok) throw new Error('Failed to load hashes');
     const text = await response.text();
@@ -67,9 +80,11 @@ async function loadHashes() {
       }
     });
     console.log('[SW] Hash manifest fetched', Object.keys(hashes).length);
+    await broadcastDebug('Hash manifest fetched', { count: Object.keys(hashes).length });
     return hashes;
   } catch (e) {
     console.warn('Could not load hashes file:', e);
+    await broadcastDebug('Hash manifest fetch failed', { error: String(e) });
     return {};
   }
 }
@@ -126,9 +141,11 @@ async function invalidateChangedAssetsByHash() {
 
   if (changedFiles.length > 0) {
     console.log('[SW] Invalidating changed files', changedFiles);
+    await broadcastDebug('Invalidating changed cached files', { files: changedFiles });
     await invalidateCacheEntries(changedFiles);
   } else {
     console.log('[SW] No hash differences found');
+    await broadcastDebug('No hash differences found');
   }
 
   await writeStoredHashes(cache, latestHashes);
@@ -154,6 +171,7 @@ function checkHashesOnceBeforeNavigation() {
 self.addEventListener('install', event => {
   event.waitUntil(
     (async () => {
+      await broadcastDebug('Service worker install started');
       currentHashes = await loadHashes();
       const cache = await caches.open(CACHE_NAME);
       const precacheUrls = getPrecacheUrls();
@@ -168,6 +186,7 @@ self.addEventListener('install', event => {
       });
 
       await writeStoredHashes(cache, currentHashes);
+      await broadcastDebug('Service worker install finished', { precached: precacheUrls.length });
     })()
   );
   self.skipWaiting();
@@ -176,6 +195,7 @@ self.addEventListener('install', event => {
 self.addEventListener('activate', event => {
   event.waitUntil(
     (async () => {
+      await broadcastDebug('Service worker activate started');
       const cacheNames = await caches.keys();
       await Promise.all(
         cacheNames.map(cacheName => {
@@ -185,6 +205,7 @@ self.addEventListener('activate', event => {
           return Promise.resolve();
         })
       );
+      await broadcastDebug('Service worker activate finished');
     })()
   );
   self.clients.claim();
@@ -272,6 +293,7 @@ self.addEventListener('fetch', event => {
   if (event.request.mode === 'navigate' || event.request.destination === 'document') {
     event.respondWith(
       (async () => {
+        await broadcastDebug('Navigation intercepted', { url: event.request.url });
         await checkHashesOnceBeforeNavigation();
         return handleRequest(event.request);
       })()
