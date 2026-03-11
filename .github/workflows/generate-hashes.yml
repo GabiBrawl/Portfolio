@@ -6,24 +6,38 @@ on:
       - main
   workflow_dispatch:
 
+permissions:
+  contents: write
+
 jobs:
   generate-hashes:
     runs-on: ubuntu-latest
+    env:
+      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
 
     steps:
     - name: Checkout repository
       uses: actions/checkout@v4
       with:
-        token: ${{ secrets.GITHUB_TOKEN }}
+        fetch-depth: 0
 
     - name: Generate file hashes
       run: |
-        find . -type f -not -path './.git/*' -not -path './.github/*' -not -path './node_modules/*' -exec sha256sum {} \; | sort > hashes.txt
+        find . -type f \
+          -not -path './.git/*' \
+          -not -path './.github/*' \
+          -not -path './node_modules/*' \
+          -not -name 'hashes.txt' \
+          -exec sha256sum {} \; | sort > hashes.txt
 
     - name: Commit and push hashes
       run: |
         git config --local user.email "action@github.com"
         git config --local user.name "GitHub Action"
         git add hashes.txt
-        git commit -m "Update file hashes" || echo "No changes to commit"
+        if git diff --staged --quiet; then
+          echo "No changes to commit"
+          exit 0
+        fi
+        git commit -m "Update hashes.txt [skip ci]"
         git push

@@ -1,4 +1,6 @@
 const CACHE_NAME = 'portfolio-v2';
+const HASHES_URL = '/hashes.txt';
+const HASHES_STATE_KEY = '/__hashes_state__.json';
 
 // URLs that prioritize cache loading (cache-first strategy)
 const cacheFirstUrls = [
@@ -37,16 +39,22 @@ const networkFirstUrls = [
 
 let currentHashes = {};
 
+function normalizeManifestPath(path) {
+  return path.replace(/^\.\//, '/');
+}
+
 async function loadHashes() {
   try {
-    const response = await fetch('/hashes.txt');
+    const response = await fetch(HASHES_URL, { cache: 'no-store' });
     if (!response.ok) throw new Error('Failed to load hashes');
     const text = await response.text();
     const hashes = {};
     text.split('\n').forEach(line => {
       if (line.trim()) {
-        const [hash, file] = line.split('  ');
-        hashes[file] = hash;
+        const [hash, file] = line.trim().split(/\s{2,}/);
+        if (hash && file) {
+          hashes[normalizeManifestPath(file)] = hash;
+        }
       }
     });
     return hashes;
@@ -56,22 +64,32 @@ async function loadHashes() {
   }
 }
 
-async function checkForUpdates() {
-  const newHashes = await loadHashes();
-  const changedFiles = [];
-  for (const [file, newHash] of Object.entries(newHashes)) {
-    if (currentHashes[file] !== newHash) {
-      changedFiles.push(file);
-    }
+async function readStoredHashes(cache) {
+  const response = await cache.match(HASHES_STATE_KEY);
+  if (!response) {
+    return {};
   }
-  return changedFiles;
+  try {
+    return await response.json();
+  } catch {
+    return {};
+  }
+}
+
+async function writeStoredHashes(cache, hashes) {
+  await cache.put(
+    HASHES_STATE_KEY,
+    new Response(JSON.stringify(hashes), {
+      headers: { 'Content-Type': 'application/json' }
+    })
+  );
 }
 
 async function updateCache(changedFiles) {
   const cache = await caches.open(CACHE_NAME);
   for (const file of changedFiles) {
     try {
-      const response = await fetch(file);
+      const response = await fetch(file, { cache: 'no-store' });
       if (response.ok) {
         await cache.put(file, response);
       }
@@ -79,7 +97,26 @@ async function updateCache(changedFiles) {
       console.warn(`Failed to update cache for ${file}:`, e);
     }
   }
-  currentHashes = await loadHashes();
+}
+
+async function refreshChangedAssets() {
+  const cache = await caches.open(CACHE_NAME);
+  const previousHashes = await readStoredHashes(cache);
+  const latestHashes = await loadHashes();
+  const changedFiles = [];
+
+  for (const [file, hash] of Object.entries(latestHashes)) {
+    if (previousHashes[file] !== hash) {
+      changedFiles.push(file);
+    }
+  }
+
+  if (changedFiles.length > 0) {
+    await updateCache(changedFiles);
+  }
+
+  await writeStoredHashes(cache, latestHashes);
+  currentHashes = latestHashes;
 }
 
 self.addEventListener('install', event => {
@@ -87,7 +124,8 @@ self.addEventListener('install', event => {
     (async () => {
       currentHashes = await loadHashes();
       const cache = await caches.open(CACHE_NAME);
-      await cache.addAll([...cacheFirstUrls, ...networkFirstUrls]);
+      await cache.addAll([...cacheFirstUrls, ...networkFirstUrls, HASHES_URL]);
+      await writeStoredHashes(cache, currentHashes);
     })()
   );
   self.skipWaiting();
@@ -95,15 +133,18 @@ self.addEventListener('install', event => {
 
 self.addEventListener('activate', event => {
   event.waitUntil(
-    caches.keys().then(cacheNames => {
-      return Promise.all(
+    (async () => {
+      const cacheNames = await caches.keys();
+      await Promise.all(
         cacheNames.map(cacheName => {
           if (cacheName !== CACHE_NAME) {
             return caches.delete(cacheName);
           }
+          return Promise.resolve();
         })
       );
-    })
+      await refreshChangedAssets();
+    })()
   );
   self.clients.claim();
 });
