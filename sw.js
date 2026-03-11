@@ -46,7 +46,7 @@ function normalizeManifestPath(path) {
 
 async function loadHashes() {
   try {
-    const response = await fetch(HASHES_URL, { cache: 'no-store' });
+    const response = await fetch(`${HASHES_URL}?sw-hash-check=${Date.now()}`, { cache: 'no-store' });
     if (!response.ok) throw new Error('Failed to load hashes');
     const text = await response.text();
     const hashes = {};
@@ -58,6 +58,7 @@ async function loadHashes() {
         }
       }
     });
+    console.log('[SW] Hash manifest fetched', Object.keys(hashes).length);
     return hashes;
   } catch (e) {
     console.warn('Could not load hashes file:', e);
@@ -116,7 +117,10 @@ async function invalidateChangedAssetsByHash() {
   }
 
   if (changedFiles.length > 0) {
+    console.log('[SW] Invalidating changed files', changedFiles);
     await invalidateCacheEntries(changedFiles);
+  } else {
+    console.log('[SW] No hash differences found');
   }
 
   await writeStoredHashes(cache, latestHashes);
