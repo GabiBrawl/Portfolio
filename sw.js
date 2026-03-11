@@ -40,6 +40,14 @@ const networkFirstUrls = [
 let currentHashes = {};
 let hashCheckInFlight = null;
 
+function isSameOriginAsset(url) {
+  return url.startsWith('/');
+}
+
+function getPrecacheUrls() {
+  return [...new Set([...cacheFirstUrls, ...networkFirstUrls, HASHES_URL].filter(isSameOriginAsset))];
+}
+
 function normalizeManifestPath(path) {
   return path.replace(/^\.\//, '/');
 }
@@ -148,7 +156,17 @@ self.addEventListener('install', event => {
     (async () => {
       currentHashes = await loadHashes();
       const cache = await caches.open(CACHE_NAME);
-      await cache.addAll([...cacheFirstUrls, ...networkFirstUrls, HASHES_URL]);
+      const precacheUrls = getPrecacheUrls();
+      const results = await Promise.allSettled(
+        precacheUrls.map(url => cache.add(url))
+      );
+
+      results.forEach((result, index) => {
+        if (result.status === 'rejected') {
+          console.warn('[SW] Precache failed for', precacheUrls[index], result.reason);
+        }
+      });
+
       await writeStoredHashes(cache, currentHashes);
     })()
   );
