@@ -38,6 +38,7 @@ const networkFirstUrls = [
 ];
 
 let currentHashes = {};
+let hashCheckInFlight = null;
 
 function normalizeManifestPath(path) {
   return path.replace(/^\.\//, '/');
@@ -85,21 +86,18 @@ async function writeStoredHashes(cache, hashes) {
   );
 }
 
-async function updateCache(changedFiles) {
+async function invalidateCacheEntries(changedFiles) {
   const cache = await caches.open(CACHE_NAME);
   for (const file of changedFiles) {
     try {
-      const response = await fetch(file, { cache: 'no-store' });
-      if (response.ok) {
-        await cache.put(file, response);
-      }
+      await cache.delete(file);
     } catch (e) {
-      console.warn(`Failed to update cache for ${file}:`, e);
+      console.warn(`Failed to delete cache for ${file}:`, e);
     }
   }
 }
 
-async function refreshChangedAssets() {
+async function invalidateChangedAssetsByHash() {
   const cache = await caches.open(CACHE_NAME);
   const previousHashes = await readStoredHashes(cache);
   const latestHashes = await loadHashes();
@@ -111,12 +109,34 @@ async function refreshChangedAssets() {
     }
   }
 
+  for (const file of Object.keys(previousHashes)) {
+    if (!(file in latestHashes)) {
+      changedFiles.push(file);
+    }
+  }
+
   if (changedFiles.length > 0) {
-    await updateCache(changedFiles);
+    await invalidateCacheEntries(changedFiles);
   }
 
   await writeStoredHashes(cache, latestHashes);
   currentHashes = latestHashes;
+}
+
+function checkHashesOnceBeforeNavigation() {
+  if (hashCheckInFlight) {
+    return hashCheckInFlight;
+  }
+
+  hashCheckInFlight = invalidateChangedAssetsByHash()
+    .catch(error => {
+      console.warn('Hash check failed:', error);
+    })
+    .finally(() => {
+      hashCheckInFlight = null;
+    });
+
+  return hashCheckInFlight;
 }
 
 self.addEventListener('install', event => {
@@ -143,75 +163,99 @@ self.addEventListener('activate', event => {
           return Promise.resolve();
         })
       );
-      await refreshChangedAssets();
     })()
   );
   self.clients.claim();
 });
 
-self.addEventListener('fetch', event => {
-  const url = event.request.url;
+function handleRequest(request) {
+  const url = request.url;
   const isNetworkFirst = networkFirstUrls.some(u => url === u || url === location.origin + u) || url.match(/\/projects\/post\d+\.json$/);
-
   const isCacheFirst = cacheFirstUrls.some(u => url === u || url === location.origin + u) || url.includes('fonts.googleapis.com') || url.includes('fonts.gstatic.com');
 
   if (isNetworkFirst) {
-    // Network first strategy
-    event.respondWith(
-      fetch(event.request).then(response => {
-        if (!response || response.status !== 200 || response.type !== 'basic') {
-          return caches.match(event.request);
-        }
-        const responseToCache = response.clone();
-        caches.open(CACHE_NAME).then(cache => {
-          cache.put(event.request, responseToCache);
-        });
-        return response;
-      }).catch(() => {
-        return caches.match(event.request);
-      })
-    );
-  } else if (isCacheFirst) {
-    // Cache first strategy
-    event.respondWith(
-      caches.match(event.request)
-        .then(response => {
-          if (response) {
-            return response;
-          }
-          return fetch(event.request).then(response => {
-            if (!response || response.status !== 200 || response.type !== 'basic') {
-              return response;
-            }
-            const responseToCache = response.clone();
-            caches.open(CACHE_NAME)
-              .then(cache => {
-                cache.put(event.request, responseToCache);
-              });
-            return response;
-          });
-        })
-    );
-  } else {
-    // Default to cache first for any other requests
-    event.respondWith(
-      caches.match(event.request)
-        .then(response => {
-          if (response) {
-            return response;
-          }
-          return fetch(event.request).then(response => {
-            if (!response || response.status !== 200 || response.type !== 'basic') {
-              return response;
-            }
-            const responseToCache = response.clone();
-            caches.open(CACHE_NAME)
-              .then(cache => {
-                cache.put(event.request, responseToCache);
-              });
-            return response;
-          });
-        })
-    );
+    return fetch(request).then(response => {
+      if (!response || response.status !== 200 || response.type !== 'basic') {
+        return caches.match(request);
+      }
+      const responseToCache = response.clone();
+      caches.open(CACHE_NAME).then(cache => {
+        cache.put(request, responseToCache);
+      });
+      return response;
+    }).catch(() => {
+      return caches.match(request);
+    });
   }
+
+  if (isCacheFirst) {
+    return caches.match(request)
+      .then(response => {
+        if (response) {
+          return response;
+        }
+        return fetch(request).then(fetchResponse => {
+          if (!fetchResponse || fetchResponse.status !== 200 || fetchResponse.type !== 'basic') {
+            return fetchResponse;
+          }
+          const responseToCache = fetchResponse.clone();
+          caches.open(CACHE_NAME)
+            .then(cache => {
+              cache.put(request, responseToCache);
+            });
+          return fetchResponse;
+        });
+      });
+  }
+
+  return caches.match(request)
+    .then(response => {
+      if (response) {
+        return response;
+      }
+      return fetch(request).then(fetchResponse => {
+        if (!fetchResponse || fetchResponse.status !== 200 || fetchResponse.type !== 'basic') {
+          return fetchResponse;
+        }
+        const responseToCache = fetchResponse.clone();
+        caches.open(CACHE_NAME)
+          .then(cache => {
+            cache.put(request, responseToCache);
+          });
+        return fetchResponse;
+      });
+    });
+}
+
+self.addEventListener('fetch', event => {
+  const requestUrl = new URL(event.request.url);
+
+  if (requestUrl.origin === location.origin && requestUrl.pathname === HASHES_URL) {
+    event.respondWith(
+      fetch(event.request, { cache: 'no-store' })
+        .then(response => {
+          if (response && response.status === 200) {
+            const responseToCache = response.clone();
+            caches.open(CACHE_NAME).then(cache => {
+              cache.put(HASHES_URL, responseToCache);
+            });
+          }
+          return response;
+        })
+        .catch(() => caches.match(HASHES_URL))
+    );
+    return;
+  }
+
+  if (event.request.mode === 'navigate' || event.request.destination === 'document') {
+    event.respondWith(
+      (async () => {
+        await checkHashesOnceBeforeNavigation();
+        return handleRequest(event.request);
+      })()
+    );
+    return;
+  }
+
+  event.respondWith(handleRequest(event.request));
 });
