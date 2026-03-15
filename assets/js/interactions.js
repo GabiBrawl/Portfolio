@@ -85,6 +85,7 @@ function wirePfpEffects() {
   }
 
   function onActivate(ev) {
+    if (ev.target.closest('.sidebar-ko-fi')) return;
     ev.preventDefault();
     const chosen = pickRandom(effects);
     runEffect(chosen, ev);
@@ -94,15 +95,6 @@ function wirePfpEffects() {
   // keyboard activation (Enter / Space)
   pfp.addEventListener('keydown', (e) => {
     if (e.key === 'Enter' || e.key === ' ') onActivate(e);
-  });
-  // small hover hint: occasionally nudge
-  wrap.addEventListener('mouseenter', () => {
-    // tiny, non-intrusive cue
-    pfp.animate([
-      { transform: 'translateY(0)' },
-      { transform: 'translateY(-4px)' },
-      { transform: 'translateY(0)' }
-    ], { duration: 350, easing: 'ease-out' });
   });
 }
 

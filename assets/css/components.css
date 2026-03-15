@@ -111,8 +111,50 @@ a.large {
   display: none;
 }
 
+.sidebar-ko-fi {
+  position: absolute;
+  right: -6px;
+  bottom: -4px;
+  width: 32px;
+  height: 32px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--primary);
+  text-decoration: none;
+  transition: opacity 180ms ease, transform 180ms ease, border-color 180ms ease;
+  z-index: 2;
+}
+
+.sidebar-ko-fi:hover,
+.sidebar-ko-fi:focus-visible {
+  opacity: 1;
+  transform: translateY(-1px) scale(1.04);
+  border-color: var(--primary);
+}
+
+.sidebar-ko-fi:hover .sidebar-ko-fi-icon,
+.sidebar-ko-fi:focus-visible .sidebar-ko-fi-icon {
+  background-image: url('../kofi_symbol_original.svg');
+}
+
+.sidebar-ko-fi-icon {
+  width: 100%;
+  height: 100%;
+  display: block;
+  background: url('../kofi_symbol.svg') center / contain no-repeat;
+  transition: background-image 180ms ease;
+}
+
 /* Mobile socials adjustments */
 @media (max-width: 768px) {
+  .sidebar-ko-fi {
+    right: -4px;
+    bottom: -2px;
+    width: 26px;
+    height: 26px;
+  }
+
   .socials .show-more-btn {
     display: block !important;
   }
