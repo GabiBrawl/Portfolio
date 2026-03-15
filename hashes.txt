@@ -20,6 +20,7 @@
 405de5ba9f286acfefad619de78e19503e33dd4c50345e4baa43ef910a77adf8  ./assets/images/nibunkatsu/8.png
 453ae769e061f0815e27487e59a3b6f9f6c55e813e4b35a07c2f5cca54d80f12  ./google1a7819b6fec98879.html
 478af00a24dfcf3d1f92fbf1b7250cab66c0d36dc8742dea5a129d9460979b93  ./assets/flag-orpheus-top.svg
+481716950fa805d6c26b9f6eef42618be4f214e1295a8d206c9119189b974f80  ./index.html
 4c5092e2f225ea1ccf80873dc74eef8882e14f8f77d03410de71fb2fec0b3dc9  ./assets/images/b_media/2.png
 565d1dacdbf3af49332d468d1fc81b369a67aa937108e1a3166bc0552ebbcc0a  ./assets/images/psychoduck/kibodo/2.png
 56df6859c2267e107ecf5fbb405308bae6116c811beadebf664de1c143820ddf  ./posts/post0.json
@@ -34,7 +35,6 @@
 7f2303943ad5a7c8fb1b5cf8b157375ebb1957b510a6b8b5a204abf198c542e7  ./posts/post4.json
 84ff5544607362e77615df938df31d2b18680e00f61ce402b41c0bf2b9d323c9  ./assets/js/app.js
 879147c208ea9034b04141060c88d7273147c1dd42256030c68fadd5315f0ada  ./assets/images/utsuwa/4.png
-88b64a8d1a419df77c75fb0e528705136640af41b50f0ebeef19a7f4daee744b  ./index.html
 899d399e882bcd612533481784b8f96124d76ad3828dbc407ecfa0b50a155236  ./assets/images/psychoduck/brand.png
 89a9a3a2e4cd860abb4994adc6fec6ac8d01bfed7a95373b75e0ba121324c505  ./sw.js
 8cf31044a7bf60f4e64973202e1da5a72462f1fc96da6e9117a1870db023c230  ./assets/images/leplayer/hero.png
