@@ -64,7 +64,7 @@
     <div class="sidebar">
     <div class="pfp-wrap">
         <img src="assets/images/pfp400x400.jpg" alt="Profile Picture" class="pfp" width="100" height="100" loading="eager" decoding="async" tabindex="0" aria-label="Profile picture — click for a surprise">
-        <a href="https://ko-fi.com/gabibrawl" class="sidebar-ko-fi" target="_blank" rel="noopener noreferrer" aria-label="Support me on Ko-fi" title="Support me on Ko-fi">
+        <a href="https://ko-fi.com/gabibrawl" class="sidebar-ko-fi" id="kofi-trigger" aria-label="Support me on Ko-fi" title="Support me on Ko-fi" aria-controls="kofi-widget-panel" aria-expanded="false">
             <span aria-hidden="true" class="sidebar-ko-fi-icon"></span>
         </a>
     </div>
@@ -115,6 +115,7 @@
         </section>
         <footer><span class="line"></span><span class="gb">𝕲 // 𝕭</span><span class="line"></span></footer>
     </div>
+    <div class="kofi-widget-panel" id="kofi-widget-panel" hidden></div>
     
     <script src="assets/js/utils.js"></script>
     <script src="assets/js/config.js"></script>

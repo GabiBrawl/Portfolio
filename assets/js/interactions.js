@@ -185,3 +185,62 @@ function wireWebringToggle() {
     }
   });
 }
+
+/**
+ * Wires up Ko-fi widget toggle
+ */
+function wireKoFiWidget() {
+  const trigger = document.getElementById('kofi-trigger');
+  const panel = document.getElementById('kofi-widget-panel');
+  const koFiWidgetUrl = 'https://ko-fi.com/gabibrawl/?hidefeed=true&widget=true&embed=true&preview=true';
+
+  if (!trigger || !panel) return;
+
+  if (panel.parentElement !== document.body) {
+    document.body.appendChild(panel);
+  }
+
+  let hasLoadedIframe = false;
+
+  const ensureIframe = () => {
+    let iframe = panel.querySelector('#kofiframe');
+    if (iframe) return iframe;
+
+    iframe = document.createElement('iframe');
+    iframe.id = 'kofiframe';
+    iframe.title = 'gabibrawl';
+    iframe.className = 'kofi-widget-frame';
+    iframe.loading = 'lazy';
+    panel.appendChild(iframe);
+    return iframe;
+  };
+
+  const setOpen = (isOpen) => {
+    if (isOpen && !hasLoadedIframe) {
+      const iframe = ensureIframe();
+      iframe.setAttribute('src', koFiWidgetUrl);
+      hasLoadedIframe = true;
+    }
+
+    panel.hidden = !isOpen;
+    trigger.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+  };
+
+  trigger.addEventListener('click', (e) => {
+    e.preventDefault();
+    const isOpen = !panel.hidden;
+    setOpen(!isOpen);
+  });
+
+  document.addEventListener('click', (e) => {
+    if (panel.hidden) return;
+    if (trigger.contains(e.target) || panel.contains(e.target)) return;
+    setOpen(false);
+  });
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && !panel.hidden) {
+      setOpen(false);
+    }
+  });
+}

@@ -1,4 +1,4 @@
-const CACHE_NAME = 'portfolio-v2';
+const CACHE_NAME = 'portfolio-v3';
 const HASHES_URL = '/hashes.txt';
 const HASHES_STATE_KEY = '/__hashes_state__.json';
 

@@ -146,13 +146,45 @@ a.large {
   transition: background-image 180ms ease;
 }
 
+.kofi-widget-panel {
+  position: fixed;
+  right: 32px;
+  bottom: 20px;
+  width: min(420px, calc(100vw - 40px));
+  max-height: 80vh;
+  border: 2px solid var(--primary);
+  background: var(--background);
+  z-index: 20000;
+  overflow: auto;
+}
+
+.kofi-widget-frame {
+  border: none;
+  width: 100%;
+  padding: 4px 4px 1px 4px;
+  box-sizing: border-box;
+  height: 590px;
+}
+
 /* Mobile socials adjustments */
 @media (max-width: 768px) {
   .sidebar-ko-fi {
     right: -4px;
     bottom: -2px;
-    width: 26px;
-    height: 26px;
+    width: 32px;
+    height: 32px;
+  }
+
+  .kofi-widget-panel {
+    left: 10px;
+    right: 10px;
+    bottom: 10px;
+    width: auto;
+    max-height: 85vh;
+  }
+
+  .kofi-widget-frame {
+    height: min(590px, 82vh);
   }
 
   .socials .show-more-btn {
