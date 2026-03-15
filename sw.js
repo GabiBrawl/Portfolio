@@ -85,7 +85,7 @@ async function loadHashes() {
   } catch (e) {
     console.warn('Could not load hashes file:', e);
     await broadcastDebug('Hash manifest fetch failed', { error: String(e) });
-    return {};
+    return null;
   }
 }
 
@@ -125,6 +125,13 @@ async function invalidateChangedAssetsByHash() {
   const cache = await caches.open(CACHE_NAME);
   const previousHashes = await readStoredHashes(cache);
   const latestHashes = await loadHashes();
+
+  if (latestHashes === null) {
+    console.log('[SW] Hash manifest unavailable (offline?), skipping cache invalidation');
+    await broadcastDebug('Hash check skipped (manifest unavailable)');
+    return;
+  }
+
   const changedFiles = [];
 
   for (const [file, hash] of Object.entries(latestHashes)) {
@@ -172,7 +179,7 @@ self.addEventListener('install', event => {
   event.waitUntil(
     (async () => {
       await broadcastDebug('Service worker install started');
-      currentHashes = await loadHashes();
+      currentHashes = await loadHashes() ?? {};
       const cache = await caches.open(CACHE_NAME);
       const precacheUrls = getPrecacheUrls();
       const results = await Promise.allSettled(
