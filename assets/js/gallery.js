@@ -282,6 +282,7 @@
           <div class="gallery-image-container">
             <img src="${currentImage.src}" alt="${currentImage.alt}" class="gallery-image">
             ${currentImage.caption ? `<div class="gallery-image-caption">${currentImage.caption}</div>` : ''}
+            <p class="gallery-image-hint">Click image to zoom ✦ クリックで拡大</p>
           </div>
 
           <button class="gallery-nav gallery-next" ${currentIndex === gallery.length - 1 ? 'disabled' : ''} aria-label="Next image">›</button>

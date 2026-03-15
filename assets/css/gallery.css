@@ -116,6 +116,17 @@
   flex-shrink: 0;
 }
 
+.gallery-image-hint {
+  margin-top: 6px;
+  color: var(--primary);
+  font-family: "Special Gothic Condensed One", sans-serif;
+  font-size: 1rem;
+  letter-spacing: 1.5px;
+  text-align: center;
+  opacity: 0.45;
+  flex-shrink: 0;
+}
+
 .gallery-bottom {
   display: flex;
   flex-direction: column;
