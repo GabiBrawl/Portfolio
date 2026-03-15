@@ -29,6 +29,7 @@
 6508f3f6a648cdb38a51c0746c621be1fb05b1a1bcd9b8fdfaeeb9e5d1a5c2d0  ./assets/css/gallery.css
 653499b17eb1efd16cb7de9fb7e956f25b9c9a1c888e3f3aee0bd2fed87bf777  ./assets/starW.svg
 6dfea6863102cf268e9b5ddb82f0562e4fb60aef45cfe3516e1bb3b900d0ed52  ./assets/images/nibunkatsu/hero.png
+73346a7515ef7257a96b5d4678b43ba271e84248996fa04173b2323ff1fa8135  ./sw.js
 7c3067fcc6e0582c68faf5464a73c5ebeca0daf522f37cfff361253e989a0def  ./assets/js/interactions.js
 7d63407754c9619bc2e090341eda3d767c96ed80f03be4eebcefe8fab6d6139f  ./assets/images/nibunkatsu/3.png
 7f2303943ad5a7c8fb1b5cf8b157375ebb1957b510a6b8b5a204abf198c542e7  ./posts/post4.json
@@ -41,7 +42,6 @@
 9611ba3db1d401fd5deed2df0621ca8d14b650bf1df716ef6c63829285c31bf3  ./assets/images/buttons/coffee.gif
 999069730a2e3cfbe32438c39ec444aeafe0a4e6b994676504f1993db73f4dfc  ./assets/star.svg
 9d35e359582809a2baccfb8eaf446a4da7b4f9452e543a040b9b586d3809ff32  ./CNAME
-a16031cf25c6439e9de764a517fd7c550b130bd0388127e4281640c5927a5c0f  ./sw.js
 a62784cc1cb4949656aa5da38fd1772354a6ce8bc80c9070f8a28763b345d34c  ./assets/images/psychoduck/duck.svg
 a823d5bf3d21f22fd9463ecf806a25219caf67473c100a47893ab9159c71cbc0  ./.well-known/discord
 a8d3280332da1e7603d7c1e57a92f581cee38540273b8facd75f411462007a27  ./assets/images/b_media/hero.png
