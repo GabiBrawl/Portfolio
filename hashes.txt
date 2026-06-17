@@ -37,6 +37,7 @@
 879147c208ea9034b04141060c88d7273147c1dd42256030c68fadd5315f0ada  ./assets/images/utsuwa/4.png
 899d399e882bcd612533481784b8f96124d76ad3828dbc407ecfa0b50a155236  ./assets/images/psychoduck/brand.png
 89a9a3a2e4cd860abb4994adc6fec6ac8d01bfed7a95373b75e0ba121324c505  ./sw.js
+8b454cd02be8b96f97a15f0ed40b0a6d60c5b472f62041524e5163aac60af15d  ./README.md
 8cf31044a7bf60f4e64973202e1da5a72462f1fc96da6e9117a1870db023c230  ./assets/images/leplayer/hero.png
 8d346aecb3bca9572862958c8a71d8441ee065edd21f63db148f47b6a550363f  ./assets/cursors/handgrabbing.svg
 8f633aad4706feaf46dbcc2de422fc0a494f81ec852f30d551d8bb03af1900b4  ./assets/kofi_symbol.svg
@@ -50,7 +51,6 @@ a8d3280332da1e7603d7c1e57a92f581cee38540273b8facd75f411462007a27  ./assets/image
 adfbaec8229a6f3ea723db8677aefd81bed3ac27854064f915491409b7aabf4e  ./assets/images/nibunkatsu/2.png
 b117133180ad73014865927b0fcf5f5c597aeef454d2df70e112e9032b73a260  ./assets/images/nibunkatsu/1.png
 b1e413879df304c48e863c37dbd8f03e400f6d87a0682e4809e7f1172eed943d  ./assets/images/psychoduck/kibodo/hero.png
-b5057b2c226e5484a2f8e45faf10ae160d09df5c8bdf55b43dbd2d4d11b6b5a4  ./README.md
 ba2ee9724ac46bb8505f77f79ab72c921dfc4e8587785d49b1eb9ae59c87dfa4  ./assets/images/pc.jpeg
 bbae74f8903fe121a5076f80e26054d6c3762c63591fba28863efa017d473446  ./favicon.svg
 be55e8191a4fbfb98404ae51c544723d7389cf1ba7aef847b3e472a8d348ea3f  ./sitemap.xml
