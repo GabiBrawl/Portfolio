@@ -1,4 +1,4 @@
-# My Portfolio
+# My Portfolio ✦ さくひんしゅう
 
 ![website preview](/assets/images/embed.png)
 A modern, interactive and opinionated portfolio by me, for me, showcasing my projects which I'm most proud of.
