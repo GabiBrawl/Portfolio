@@ -20,7 +20,6 @@
 405de5ba9f286acfefad619de78e19503e33dd4c50345e4baa43ef910a77adf8  ./assets/images/nibunkatsu/8.png
 453ae769e061f0815e27487e59a3b6f9f6c55e813e4b35a07c2f5cca54d80f12  ./google1a7819b6fec98879.html
 478af00a24dfcf3d1f92fbf1b7250cab66c0d36dc8742dea5a129d9460979b93  ./assets/flag-orpheus-top.svg
-481716950fa805d6c26b9f6eef42618be4f214e1295a8d206c9119189b974f80  ./index.html
 4c5092e2f225ea1ccf80873dc74eef8882e14f8f77d03410de71fb2fec0b3dc9  ./assets/images/b_media/2.png
 565d1dacdbf3af49332d468d1fc81b369a67aa937108e1a3166bc0552ebbcc0a  ./assets/images/psychoduck/kibodo/2.png
 56df6859c2267e107ecf5fbb405308bae6116c811beadebf664de1c143820ddf  ./posts/post0.json
@@ -31,6 +30,7 @@
 653499b17eb1efd16cb7de9fb7e956f25b9c9a1c888e3f3aee0bd2fed87bf777  ./assets/starW.svg
 6dfea6863102cf268e9b5ddb82f0562e4fb60aef45cfe3516e1bb3b900d0ed52  ./assets/images/nibunkatsu/hero.png
 78353fda598ef9685aac80b9d7fb23897d0b4c5845413e76658295e87ab94b91  ./assets/css/components.css
+7ba6853b4c76fc7fa987a98e4c3b926a48c61f585aa98561b58d9f70a79f88be  ./design.md
 7d63407754c9619bc2e090341eda3d767c96ed80f03be4eebcefe8fab6d6139f  ./assets/images/nibunkatsu/3.png
 7f2303943ad5a7c8fb1b5cf8b157375ebb1957b510a6b8b5a204abf198c542e7  ./posts/post4.json
 84ff5544607362e77615df938df31d2b18680e00f61ce402b41c0bf2b9d323c9  ./assets/js/app.js
@@ -53,6 +53,7 @@ b117133180ad73014865927b0fcf5f5c597aeef454d2df70e112e9032b73a260  ./assets/image
 b1e413879df304c48e863c37dbd8f03e400f6d87a0682e4809e7f1172eed943d  ./assets/images/psychoduck/kibodo/hero.png
 ba2ee9724ac46bb8505f77f79ab72c921dfc4e8587785d49b1eb9ae59c87dfa4  ./assets/images/pc.jpeg
 bbae74f8903fe121a5076f80e26054d6c3762c63591fba28863efa017d473446  ./favicon.svg
+bc8eaa22f7162c4575410a0c00439312d3638f7ea4b138eacfdb791767e0bb3d  ./index.html
 be55e8191a4fbfb98404ae51c544723d7389cf1ba7aef847b3e472a8d348ea3f  ./sitemap.xml
 bf27497eb50077a79a70ec76ddbb8f8b28a320644168d9d3bfbd4067660bd045  ./assets/images/nibunkatsu/6.png
 bf4b8944baf21def758300b189706ff7b3f658e97d09cc7682197e7e56330fda  ./assets/cursors/handopen.svg
