@@ -200,7 +200,7 @@ function wireKoFiWidget() {
     document.body.appendChild(panel);
   }
 
-  let hasLoadedIframe = false;
+  let isIframeLoaded = false;
 
   const ensureIframe = () => {
     let iframe = panel.querySelector('#kofiframe');
@@ -211,18 +211,29 @@ function wireKoFiWidget() {
     iframe.title = 'gabibrawl';
     iframe.className = 'kofi-widget-frame';
     iframe.loading = 'lazy';
+    iframe.addEventListener('load', () => {
+      isIframeLoaded = true;
+      panel.classList.remove('is-loading');
+    });
     panel.appendChild(iframe);
     return iframe;
   };
 
   const setOpen = (isOpen) => {
-    if (isOpen && !hasLoadedIframe) {
+    if (isOpen && !isIframeLoaded) {
       const iframe = ensureIframe();
-      iframe.setAttribute('src', koFiWidgetUrl);
-      hasLoadedIframe = true;
+      panel.classList.add('is-loading');
+      if (!iframe.getAttribute('src')) {
+        iframe.setAttribute('src', koFiWidgetUrl);
+      }
+    }
+
+    if (!isOpen) {
+      panel.classList.remove('is-loading');
     }
 
     panel.hidden = !isOpen;
+    panel.setAttribute('aria-busy', isOpen && !isIframeLoaded ? 'true' : 'false');
     trigger.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
   };
 

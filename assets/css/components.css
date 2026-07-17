@@ -122,7 +122,8 @@ a.large {
   justify-content: center;
   color: var(--primary);
   text-decoration: none;
-  transition: opacity 180ms ease, transform 180ms ease, border-color 180ms ease;
+  transform-origin: center;
+  transition: opacity 220ms cubic-bezier(0.16, 1, 0.3, 1), transform 220ms cubic-bezier(0.16, 1, 0.3, 1), border-color 220ms ease;
   z-index: 2;
 }
 
@@ -133,17 +134,40 @@ a.large {
   border-color: var(--primary);
 }
 
-.sidebar-ko-fi:hover .sidebar-ko-fi-icon,
-.sidebar-ko-fi:focus-visible .sidebar-ko-fi-icon {
-  background-image: url('../kofi_symbol_original.svg');
+.sidebar-ko-fi:active {
+  transform: translateY(-1px) scale(1.04);
 }
 
 .sidebar-ko-fi-icon {
   width: 100%;
   height: 100%;
   display: block;
-  background: url('../kofi_symbol.svg') center / contain no-repeat;
-  transition: background-image 180ms ease;
+  transform-origin: center;
+}
+
+.sidebar-ko-fi-icon .kofi-layer-shell,
+.sidebar-ko-fi-icon .kofi-layer-core,
+.sidebar-ko-fi-icon .kofi-layer-heart {
+  transition: fill 220ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.sidebar-ko-fi-icon .kofi-layer-shell {
+  fill: #DED8CB;
+}
+
+.sidebar-ko-fi-icon .kofi-layer-core,
+.sidebar-ko-fi-icon .kofi-layer-heart {
+  fill: #070707;
+}
+
+.sidebar-ko-fi:hover .sidebar-ko-fi-icon .kofi-layer-shell,
+.sidebar-ko-fi:focus-visible .sidebar-ko-fi-icon .kofi-layer-shell {
+  fill: #FFFFFF;
+}
+
+.sidebar-ko-fi:hover .sidebar-ko-fi-icon .kofi-layer-heart,
+.sidebar-ko-fi:focus-visible .sidebar-ko-fi-icon .kofi-layer-heart {
+  fill: #FF5A16;
 }
 
 .kofi-widget-panel {
@@ -158,12 +182,41 @@ a.large {
   overflow: auto;
 }
 
+.kofi-widget-panel.is-loading {
+  overflow: hidden;
+  background: var(--background);
+}
+
+.kofi-widget-panel.is-loading::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  display: block;
+  background: url('../kofi_symbol_original.svg') center / 86px 86px no-repeat;
+  opacity: 0.88;
+  animation: kofi-loader-pulse 1.15s ease-in-out infinite;
+  pointer-events: none;
+}
+
 .kofi-widget-frame {
   border: none;
   width: 100%;
   padding: 4px 4px 1px 4px;
   box-sizing: border-box;
   height: 590px;
+}
+
+@keyframes kofi-loader-pulse {
+  0%,
+  100% {
+    transform: scale(0.94);
+    opacity: 0.55;
+  }
+
+  50% {
+    transform: scale(1.04);
+    opacity: 0.9;
+  }
 }
 
 /* Mobile socials adjustments */
