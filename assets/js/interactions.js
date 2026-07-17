@@ -271,3 +271,112 @@ function wireKoFiWidget() {
     }
   });
 }
+
+/**
+ * Wires up the secret 7-click footer easter egg to open the telemetry dashboard
+ */
+/**
+ * Wires up the secret 7-click footer easter egg to open the telemetry dashboard
+ */
+function wireSecretDashboard() {
+  const footer = document.querySelector('footer');
+  const dashboard = document.getElementById('nerdy-dashboard');
+  if (!footer || !dashboard) return;
+
+  let clickCount = 0;
+  let clickTimeout = null;
+
+  footer.addEventListener('click', (e) => {
+    const isFooterTarget = e.target.closest('.gb') || e.target.classList.contains('line') || e.target.tagName === 'FOOTER';
+    if (!isFooterTarget) return;
+
+    e.preventDefault();
+    window.getSelection().removeAllRanges(); 
+    
+    clickCount++;
+
+    clearTimeout(clickTimeout);
+    clickTimeout = setTimeout(() => { clickCount = 0; }, 2500);
+
+    if (clickCount === 7) {
+      clickCount = 0;
+      clearTimeout(clickTimeout);
+      
+      if (!dashboard.hidden) return;
+
+      // Plain console report structure
+      dashboard.innerHTML = `
+        <h3>[ DEVELOPER DIAGNOSTICS ]</h3>
+        <div class="nerdy-grid">
+          <div class="nerdy-card">
+            <h4>REPOSITORY TRANSMISSION</h4>
+            <p id="diag-commit">Accessing network array...</p>
+          </div>
+          <div class="nerdy-card">
+            <h4>RUNTIME PIPELINE</h4>
+            <p id="diag-runtime">Loading layout footprints...</p>
+          </div>
+          <div class="nerdy-card">
+            <h4>CONNECTIVITY PROFILE</h4>
+            <p id="diag-network">Querying infrastructure...</p>
+          </div>
+        </div>
+      `;
+
+      dashboard.hidden = false;
+      dashboard.removeAttribute('hidden');
+
+      fetchLatestCommit();
+      populateRuntimeMetrics();
+    }
+  });
+
+  async function fetchLatestCommit() {
+    const commitEl = document.getElementById('diag-commit');
+    if (!commitEl) return;
+    try {
+      // Fetching the last 2 items so we can isolate the actual user push code block
+      const res = await fetch('https://api.github.com/repos/GabiBrawl/Portfolio/commits?per_page=2');
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      const data = await res.json();
+      
+      // data[0] is the automated workflow update. data[1] is your actual prior manual change commit.
+      const trueCommit = data[1] || data[0]; 
+      
+      commitEl.innerHTML = `
+        SHA: ${trueCommit.sha.substring(0, 7)}<br>
+        MSG: "${trueCommit.commit.message.split('\n')[0]}"<br>
+        DATE: ${new Date(trueCommit.commit.committer.date).toLocaleDateString()}
+      `;
+    } catch (err) {
+      commitEl.innerHTML = `ERROR: Tree payload unreachable.<br>STATUS: Offline / Rate-Limited`;
+    }
+  }
+
+  function populateRuntimeMetrics() {
+    const runtimeEl = document.getElementById('diag-runtime');
+    const networkEl = document.getElementById('diag-network');
+
+    let memUsage = 'N/A';
+    if (window.performance && window.performance.memory) {
+      memUsage = `${Math.round(window.performance.memory.usedJSHeapSize / (1024 * 1024))}MB`;
+    }
+
+    if (runtimeEl) {
+      runtimeEl.innerHTML = `
+        DOM_NODES: ${document.getElementsByTagName('*').length}<br>
+        ALLOC_HEAP: ${memUsage}<br>
+        RESOLUTION: ${window.screen.width}x${window.screen.height}
+      `;
+    }
+
+    // ✦ FIXED: Changed the assignment target back from runtimeEl to networkEl ✦
+    if (networkEl) {
+      networkEl.innerHTML = `
+        PROTOCOL: ${window.location.protocol.toUpperCase().replace(':', '')}<br>
+        CACHE_CONTROLLER: ${navigator.serviceWorker && navigator.serviceWorker.controller ? 'ACTIVE' : 'BYPASS'}<br>
+        NET_STATUS: ${navigator.onLine ? 'ONLINE' : 'OFFLINE'}
+      `;
+    }
+  }
+}

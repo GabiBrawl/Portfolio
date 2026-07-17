@@ -71,3 +71,62 @@ footer {
     margin-top: 20px;
   }
 }
+/* 𝕲 // 𝕭 Typography & Haptic Cleanups */
+.gb {
+  margin: 0 10px;
+  font-size: 24px;
+  user-select: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  cursor: url('../cursors/handpointing.svg') 10 5, pointer; /* Direct blueprint cursor link */
+  transition: transform 100ms ease;
+}
+
+.gb:active {
+  transform: scale(0.95);
+}
+
+/* Telemetry Dashboard - Strict Minimalist System Dump */
+.nerdy-dashboard {
+  padding: 25px 0 10px 0;
+  background-color: var(--background);
+  color: var(--primary);
+}
+
+.nerdy-dashboard h3 {
+  font-family: "Special Gothic Expanded One", sans-serif;
+  font-weight: 400;
+  font-size: 0.95rem;
+  margin: 0 0 25px 0;
+  letter-spacing: 1.5px;
+  color: var(--primary); /* Removed orange accent highlight entirely */
+}
+
+.nerdy-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 25px;
+}
+
+.nerdy-card {
+  /* Removed layout box borders to make it look like a continuous console report stream */
+  background: transparent; 
+}
+
+.nerdy-card h4 {
+  font-family: "Special Gothic Expanded One", sans-serif;
+  font-weight: 400;
+  margin: 0 0 8px 0;
+  font-size: 0.75rem;
+  letter-spacing: 1px;
+  color: var(--primary);
+  opacity: 0.5;
+}
+
+.nerdy-card p {
+  margin: 0;
+  font-family: monospace; /* Pure unformatted system monospace string outputs */
+  font-size: 0.85rem;
+  line-height: 1.6;
+  color: var(--primary);
+}

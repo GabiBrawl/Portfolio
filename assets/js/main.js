@@ -15,6 +15,7 @@
     wireShowMoreSocials();
     wireWebringToggle();
     wireKoFiWidget();
+    wireSecretDashboard();
   });
 
   // Remove preload class on window load
