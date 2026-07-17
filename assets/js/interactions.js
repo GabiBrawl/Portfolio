@@ -1,14 +1,18 @@
 /* interactions.js - User interaction handlers */
 
 /**
- * Wires up project hover interactions efficiently using event delegation
+ * Wires up project hover interactions with a single-card spam blocker
+ * AND restores the rapid-hover 'crazyParty' easter egg!
  */
 function wireProjectHoverInteractions() {
   const container = document.getElementById('dynamic-content');
   if (!container || container._hoverWired) return; // Prevent double-wiring completely!
   container._hoverWired = true;
 
-  // Track hovers using a single root delegate listener
+  // ✦ EASTER EGG TRACKING STATE ✦
+  let hoverCount = 0;
+  let lastHoverTime = 0;
+
   container.addEventListener('mouseover', (e) => {
     const card = e.target.closest('.project');
     if (!card || card.classList.contains('is-hovered')) return;
@@ -17,17 +21,37 @@ function wireProjectHoverInteractions() {
     const isMobile = window.innerWidth <= CONFIG.MOBILE_BREAKPOINT;
     
     if (!isMobile) {
-      // Calculate a slight tilt angle cleanly
+      const now = Date.now();
+
+      // 1. Calculate a slight visual tilt angle cleanly
       const randomAngle = (Math.random() - 0.5) * 6;
       card.style.transform = `scale(1.03) rotate(${randomAngle}deg)`;
       
-      // OPTIMIZATION: Reduce particle count from 20 to 6 to stop DOM-bombing
-      const tag = card.querySelector('.tags a');
-      if (tag) {
-        const rect = tag.getBoundingClientRect();
-        const centerX = rect.left + rect.width / 2;
-        const centerY = rect.top + rect.height / 2;
-        smallBurst(centerX, centerY, 17); 
+      // 2. ✦ TRACK GLOBAL RAPID HOVER FOR CRAZY PARTY EASTER EGG ✦
+      if (now - lastHoverTime < 2000) {
+        hoverCount++;
+        if (hoverCount > 45) {
+          crazyParty(); // Set off the big colorful burst!
+          hoverCount = 0; // Reset counter
+        }
+      } else {
+        hoverCount = 1; // Reset counter if they took too long
+      }
+      lastHoverTime = now;
+
+      // 3. SINGLE-CARD SPAM BLOCKER: Check if previous local particles are still alive
+      const particleLifetime = 700;
+      
+      if (!card._lastBurstTime || (now - card._lastBurstTime >= particleLifetime)) {
+        const tag = card.querySelector('.tags a');
+        if (tag) {
+          const rect = tag.getBoundingClientRect();
+          const centerX = rect.left + rect.width / 2;
+          const centerY = rect.top + rect.height / 2;
+          
+          smallBurst(centerX, centerY, 17); 
+          card._lastBurstTime = now; // Lock this specific card's local burst
+        }
       }
     }
   });
@@ -36,7 +60,7 @@ function wireProjectHoverInteractions() {
     const card = e.target.closest('.project');
     if (!card) return;
     
-    // Ensure the mouse is genuinely leaving the card boundary, not just moving inside child tags
+    // Ensure the mouse is genuinely leaving the card boundary
     const related = e.relatedTarget;
     if (related && card.contains(related)) return;
 
