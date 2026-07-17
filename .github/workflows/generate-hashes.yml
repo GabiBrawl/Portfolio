@@ -23,12 +23,15 @@ jobs:
 
     - name: Generate file hashes
       run: |
+        # Find files, calculate sha256 sums, format paths cleanly, and sort them
         find . -type f \
           -not -path './.git/*' \
           -not -path './.github/*' \
           -not -path './node_modules/*' \
           -not -name 'hashes.txt' \
-          -exec sha256sum {} \; | sort > hashes.txt
+          -exec sha256sum {} \; | \
+          sed 's|\s\+\./|  /|' | \
+          sort > hashes.txt
 
     - name: Commit and push hashes
       run: |
