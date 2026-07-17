@@ -284,10 +284,15 @@ a.large {
   border: 2px solid var(--primary);
   padding: 20px;
   background-color: var(--background);
-  color: var(--primary);
-  transition: transform 0.3s ease;
+  color: var(--primary); 
+  /*transition: transform 0.3s ease;*/
   position: relative;
   cursor: url('../cursors/handpointing.svg') 10 5, pointer;
+  
+  /* ✦ ADD THESE COMPOSITOR ACCELERATION RULES ✦ */
+  transition: transform 0.3s cubic-bezier(0.25, 1, 0.5, 1), box-shadow 0.2s ease;
+  will-change: transform;
+  transform: translate3d(0, 0, 0); 
 }
 
 .project:hover {
@@ -345,7 +350,7 @@ a.large {
   color: var(--primary);
 }
 
-/* Tech Scroller */
+/* Tech Scroller Parent Box */
 .tech-scroller {
   position: absolute;
   bottom: 0;
@@ -360,17 +365,36 @@ a.large {
   font-family: "Special Gothic Condensed One", sans-serif;
   font-size: 16px;
   font-weight: 400;
+  
+  /* CRITICAL BOOST: Tells the browser this container will never affect 
+     the layout or painting of the rest of the portfolio page */
+  contain: layout paint; 
 }
 
+/* The Animated Text Inner Wrap */
 .scroller-content {
   display: inline-block;
   white-space: nowrap;
-  animation: scroll-left 30s linear infinite;
+  will-change: transform;
+  transform: translate3d(0, 0, 0);
+  backface-visibility: hidden;
+  perspective: 1000px;
+
+  /* ✦ THE ULTIMATE PERFORMANCE FIXES ✦ */
+  -webkit-font-smoothing: antialiased;  /* Disables CPU subpixel font rendering */
+  -moz-osx-font-smoothing: grayscale;   /* Forces clean grayscale smoothing for Firefox */
+  text-rendering: optimizeSpeed;        /* Tells the layout engine to favor frame rates over micro-kerning */
 }
 
+/* Hard-Accelerated Infinite Keyframes */
 @keyframes scroll-left {
-  0% { transform: translateX(0); }
-  100% { transform: translateX(-50%); }
+  0% { 
+    transform: translate3d(0, 0, 0); 
+  }
+  100% { 
+    /* Shifting via 3D coordinates offloads 100% of the movement to the GPU */
+    transform: translate3d(-50%, 0, 0); 
+  }
 }
 
 .star {

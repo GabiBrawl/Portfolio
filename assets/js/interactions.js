@@ -1,55 +1,47 @@
 /* interactions.js - User interaction handlers */
 
 /**
- * Wires up project hover interactions
+ * Wires up project hover interactions efficiently using event delegation
  */
 function wireProjectHoverInteractions() {
-  const cards = document.querySelectorAll('.project');
-  let hoverCount = 0;
-  let lastHoverTime = 0;
+  const container = document.getElementById('dynamic-content');
+  if (!container || container._hoverWired) return; // Prevent double-wiring completely!
+  container._hoverWired = true;
 
-  cards.forEach(card => {
-    card.addEventListener('mouseenter', () => {
-      const isMobile = window.innerWidth <= CONFIG.MOBILE_BREAKPOINT;
-      if (!isMobile) {
-        const randomAngle = (Math.random() - 0.5) * 9; // small tilt
-        card.style.transform = `scale(1.05) rotate(${randomAngle}deg)`;
+  // Track hovers using a single root delegate listener
+  container.addEventListener('mouseover', (e) => {
+    const card = e.target.closest('.project');
+    if (!card || card.classList.contains('is-hovered')) return;
+    
+    card.classList.add('is-hovered');
+    const isMobile = window.innerWidth <= CONFIG.MOBILE_BREAKPOINT;
+    
+    if (!isMobile) {
+      // Calculate a slight tilt angle cleanly
+      const randomAngle = (Math.random() - 0.5) * 6;
+      card.style.transform = `scale(1.03) rotate(${randomAngle}deg)`;
+      
+      // OPTIMIZATION: Reduce particle count from 20 to 6 to stop DOM-bombing
+      const tag = card.querySelector('.tags a');
+      if (tag) {
+        const rect = tag.getBoundingClientRect();
+        const centerX = rect.left + rect.width / 2;
+        const centerY = rect.top + rect.height / 2;
+        smallBurst(centerX, centerY, 17); 
       }
-      // No transform on mobile - only color changes
+    }
+  });
 
-      // small burst from the first 'a' tag inside .tags (if present) - disabled on mobile
-      if (!isMobile) {
-        const tag = card.querySelector('.tags a');
-        if (tag) {
-          const rect = tag.getBoundingClientRect();
-          const centerX = rect.left + rect.width / 2;
-          const centerY = rect.top + rect.height / 2;
-          smallBurst(centerX, centerY, 20);
-        }
-      }
+  container.addEventListener('mouseout', (e) => {
+    const card = e.target.closest('.project');
+    if (!card) return;
+    
+    // Ensure the mouse is genuinely leaving the card boundary, not just moving inside child tags
+    const related = e.relatedTarget;
+    if (related && card.contains(related)) return;
 
-      // track rapid hovering for 'crazy party' - disabled on mobile
-      if (!isMobile) {
-        const now = Date.now();
-        if (now - lastHoverTime < 2000) {
-          hoverCount++;
-          if (hoverCount > 45) {
-            crazyParty();
-            hoverCount = 0;
-          }
-        } else {
-          hoverCount = 1;
-        }
-        lastHoverTime = now;
-      }
-    });
-
-    card.addEventListener('mouseleave', () => {
-      const isMobile = window.innerWidth <= 768;
-      if (!isMobile) {
-        card.style.transform = '';
-      }
-    });
+    card.classList.remove('is-hovered');
+    card.style.transform = '';
   });
 }
 

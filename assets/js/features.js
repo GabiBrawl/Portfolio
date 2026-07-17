@@ -28,14 +28,9 @@ function wireEmailCopy() {
 }
 
 /**
- * Wires up the tech scroller
+ * Wires up the tech scroller efficiently using compositor-optimized CSS animations
  */
 function wireTechScroller() {
-  /**
-   * Fisher-Yates shuffle algorithm
-   * @param {Array} arr - Array to shuffle
-   * @returns {Array} Shuffled array
-   */
   function shuffleArray(arr) {
     const a = arr.slice();
     for (let i = a.length - 1; i > 0; i--) {
@@ -45,73 +40,23 @@ function wireTechScroller() {
     return a;
   }
 
-  /**
-   * Builds the scroller content
-   */
-  function buildScroller() {
-    const scroller = document.querySelector('.scroller-content');
-    if (!scroller) return;
+  const scroller = document.querySelector('.scroller-content');
+  if (!scroller) return;
 
-    // Merge and shuffle
-    const randomizedWords = shuffleArray(CONFIG.TECH_SCROLLER_WORDS);
+  // 1. Shuffle all configuration words
+  const shuffled = shuffleArray(CONFIG.TECH_SCROLLER_WORDS);
 
-    // Build HTML with star separators; duplicate sequence for seamless infinite loop
-    const buildSequence = seq => seq.map(w => `<span class="star"></span> ${w} `).join('');
-    // Duplicate sequence for seamless looping
-    const html = buildSequence(randomizedWords) + buildSequence(randomizedWords);
-    scroller.innerHTML = html;
-  }
+  // 2. PERFORMANCE BOOST: Slice the array to only 12 words!
+  // This keeps the DOM element lightweight and well within GPU layout limits.
+  const optimizedSubset = shuffled.slice(0, 12);
 
-  /**
-   * Starts the smooth scroller animation
-   */
-  let _rafId = null;
-  function startScrollerAnimation() {
-    const scroller = document.querySelector('.scroller-content');
-    if (!scroller) return;
+  // 3. Build HTML sequence with star separators
+  const buildSequence = seq => seq.map(w => `<span class="star"></span> ${w} `).join('');
+  scroller.innerHTML = buildSequence(optimizedSubset) + buildSequence(optimizedSubset);
 
-    // disable any CSS animation on the element
-    scroller.style.animation = 'none';
-    scroller.style.willChange = 'transform';
-
-    let last = performance.now();
-    let offset = 0; // negative px (we'll subtract)
-    let sequenceWidth = scroller.scrollWidth / 2 || 0; // half since we duplicated sequence
-    const durationSeconds = 69; // original approximate duration for one loop
-
-    function update(now) {
-      const dt = (now - last) / 1000; // seconds
-      last = now;
-      // recalc if sequenceWidth is 0 or on resize (lazy: check each frame occasionally)
-      if (!sequenceWidth || scroller._lastWidth !== scroller.scrollWidth) {
-        sequenceWidth = scroller.scrollWidth / 2 || 0;
-        scroller._lastWidth = scroller.scrollWidth;
-      }
-
-      // compute speed based on current sequence width so resizing keeps a consistent period
-      const speed = sequenceWidth > 0 ? sequenceWidth / durationSeconds : 0;
-      offset -= speed * dt;
-
-      // wrap smoothly
-      if (sequenceWidth > 0 && -offset >= sequenceWidth) {
-        offset += sequenceWidth;
-      }
-
-      scroller.style.transform = `translateX(${offset}px)`;
-      _rafId = requestAnimationFrame(update);
-    }
-
-    if (_rafId) cancelAnimationFrame(_rafId);
-    _rafId = requestAnimationFrame(update);
-  }
-
-  function stopScrollerAnimation() {
-    if (_rafId) cancelAnimationFrame(_rafId);
-    _rafId = null;
-  }
-
-  buildScroller();
-  startScrollerAnimation();
+  // 4. Set animation configurations
+  scroller.style.animation = 'scroll-left 25s linear infinite'; // Shorter text moves faster, so 25s keeps the speed perfect
+  scroller.style.willChange = 'transform';
 }
 
 /**
