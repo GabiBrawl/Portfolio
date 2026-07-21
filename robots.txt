@@ -1,0 +1,6 @@
+User-agent: *
+Allow: /
+Disallow: /discord/
+Disallow: /404.html
+
+Sitemap: https://www.gabibrawl.dev/sitemap.xml
