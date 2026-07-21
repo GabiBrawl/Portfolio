@@ -273,10 +273,8 @@ function wireKoFiWidget() {
 }
 
 /**
- * Wires up the secret 7-click footer easter egg to open the telemetry dashboard
- */
-/**
- * Wires up the secret 7-click footer easter egg to open the telemetry dashboard
+ * Wires up the secret 7-click footer easter egg to open the telemetry dashboard.
+ * Features a clean, unadorned console readout with a 1-second dynamic data loop.
  */
 function wireSecretDashboard() {
   const footer = document.querySelector('footer');
@@ -285,13 +283,14 @@ function wireSecretDashboard() {
 
   let clickCount = 0;
   let clickTimeout = null;
+  let telemetryInterval = null; 
 
   footer.addEventListener('click', (e) => {
     const isFooterTarget = e.target.closest('.gb') || e.target.classList.contains('line') || e.target.tagName === 'FOOTER';
     if (!isFooterTarget) return;
 
     e.preventDefault();
-    window.getSelection().removeAllRanges(); 
+    window.getSelection().removeAllRanges(); // Clears text selection highlights
     
     clickCount++;
 
@@ -304,7 +303,7 @@ function wireSecretDashboard() {
       
       if (!dashboard.hidden) return;
 
-      // Plain console report structure
+      // Render raw structural layout
       dashboard.innerHTML = `
         <h3>[ DEVELOPER DIAGNOSTICS ]</h3>
         <div class="nerdy-grid">
@@ -326,8 +325,14 @@ function wireSecretDashboard() {
       dashboard.hidden = false;
       dashboard.removeAttribute('hidden');
 
+      // Execute data pipelines
       fetchLatestCommit();
-      populateRuntimeMetrics();
+      populateStaticMetrics();
+
+      // Spin up background telemetry loop
+      clearInterval(telemetryInterval); 
+      updateLiveTelemetry(); 
+      telemetryInterval = setInterval(updateLiveTelemetry, 1000);
     }
   });
 
@@ -335,12 +340,11 @@ function wireSecretDashboard() {
     const commitEl = document.getElementById('diag-commit');
     if (!commitEl) return;
     try {
-      // Fetching the last 2 items so we can isolate the actual user push code block
       const res = await fetch('https://api.github.com/repos/GabiBrawl/Portfolio/commits?per_page=2');
       if (!res.ok) throw new Error(`HTTP ${res.status}`);
       const data = await res.json();
       
-      // data[0] is the automated workflow update. data[1] is your actual prior manual change commit.
+      // Bypasses automated workflow pushes, target-isolates your manual code commits
       const trueCommit = data[1] || data[0]; 
       
       commitEl.innerHTML = `
@@ -353,30 +357,64 @@ function wireSecretDashboard() {
     }
   }
 
-  function populateRuntimeMetrics() {
-    const runtimeEl = document.getElementById('diag-runtime');
+  function populateStaticMetrics() {
     const networkEl = document.getElementById('diag-network');
+    if (!networkEl) return;
 
+    const protocol = window.location.protocol.toUpperCase().replace(':', '');
+    const swActive = navigator.serviceWorker && navigator.serviceWorker.controller ? 'ACTIVE' : 'BYPASS';
+    const resolution = `${window.screen.width}x${window.screen.height}`;
+
+    let platform = navigator.platform || 'UNKNOWN';
+    if (navigator.userAgentData && navigator.userAgentData.platform) {
+      platform = navigator.userAgentData.platform;
+    }
+
+    let bootLatency = 'N/A';
+    if (window.performance) {
+      const [navigation] = performance.getEntriesByType('navigation');
+      if (navigation) {
+        bootLatency = `${Math.round(navigation.duration)}ms`;
+      }
+    }
+
+    networkEl.innerHTML = `
+      PROTOCOL: ${protocol}<br>
+      CACHE_CTRL: ${swActive}<br>
+      DISPLAY: ${resolution}<br>
+      OS_PLATFORM: ${platform.toUpperCase()}<br>
+      BOOT_LATENCY: ${bootLatency}
+    `;
+  }
+
+  function updateLiveTelemetry() {
+    const runtimeEl = document.getElementById('diag-runtime');
+    if (!runtimeEl) return;
+
+    // Pull active JavaScript memory allocation live
     let memUsage = 'N/A';
     if (window.performance && window.performance.memory) {
       memUsage = `${Math.round(window.performance.memory.usedJSHeapSize / (1024 * 1024))}MB`;
     }
 
-    if (runtimeEl) {
-      runtimeEl.innerHTML = `
-        DOM_NODES: ${document.getElementsByTagName('*').length}<br>
-        ALLOC_HEAP: ${memUsage}<br>
-        RESOLUTION: ${window.screen.width}x${window.screen.height}
-      `;
-    }
+    const domNodes = document.getElementsByTagName('*').length;
+    const netMode = navigator.onLine ? 'ONLINE' : 'OFFLINE';
 
-    // ✦ FIXED: Changed the assignment target back from runtimeEl to networkEl ✦
-    if (networkEl) {
-      networkEl.innerHTML = `
-        PROTOCOL: ${window.location.protocol.toUpperCase().replace(':', '')}<br>
-        CACHE_CONTROLLER: ${navigator.serviceWorker && navigator.serviceWorker.controller ? 'ACTIVE' : 'BYPASS'}<br>
-        NET_STATUS: ${navigator.onLine ? 'ONLINE' : 'OFFLINE'}
-      `;
-    }
+    // Calculate system session uptime string
+    const uptimeSeconds = Math.floor(performance.now() / 1000);
+    const uptimeFormatted = uptimeSeconds >= 60 
+      ? `${Math.floor(uptimeSeconds / 60)}m ${uptimeSeconds % 60}s` 
+      : `${uptimeSeconds}s`;
+
+    // ✦ REPLACEMENT: Swapped out the mobile network api for universal processor thread mapping ✦
+    const cpuThreads = navigator.hardwareConcurrency || 'UNKNOWN';
+
+    runtimeEl.innerHTML = `
+      DOM_NODES: ${domNodes}<br>
+      ALLOC_HEAP: ${memUsage}<br>
+      NET_STATUS: ${netMode}<br>
+      SYS_UPTIME: ${uptimeFormatted}<br>
+      CPU_THREADS: ${cpuThreads}
+    `;
   }
 }
