@@ -186,7 +186,7 @@
   left: 0;
   right: 0;
   padding: 50px 25px 45px 25px;
-  background: linear-gradient(to top, var(--background) 0%, rgba(7, 7, 7, 0.85) 40%, rgba(7, 7, 7, 0.4) 70%, transparent 100%);
+  background: linear-gradient(to top, var(--background) 0%, transparent 100%);
   color: var(--primary);
   font-family: "Special Gothic Condensed One", sans-serif;
   font-size: 1.1rem;
