@@ -51,7 +51,7 @@ footer {
 }
 
 /* Mobile Layout */
-@media (max-width: 768px) {
+@media (max-width: var(--mobile-breakpoint)) {
   .sidebar {
     width: 100%;
     height: auto;

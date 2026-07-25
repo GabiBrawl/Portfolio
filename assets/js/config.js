@@ -3,7 +3,7 @@ const CONFIG = {
   EMAIL: 'contact@gabibrawl.dev',
   BIRTH_DATE: '2007-01-29',
   BASE_URL: 'https://gabibrawl.dev/',
-  MOBILE_BREAKPOINT: 768,
+  MOBILE_BREAKPOINT: 885,
   TECH_SCROLLER_WORDS: [
     'LINUX BTW', 'SKZ', 'C++', 'C', 'JOOSTICE', 'VS CODE', 'GIT', 'CYBERSEC',
     'COOL SHIT', 'ML', 'THINKPAD', 'PROTON', 'ZEN BROWSER', 'FLAC',

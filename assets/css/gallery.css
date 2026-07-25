@@ -170,7 +170,7 @@
 }
 
 /* Mobile Gallery */
-@media (max-width: 768px) {
+@media (max-width: var(--mobile-breakpoint)) {
   .gallery-viewer {
     padding: 8px;
     height: auto;
@@ -357,7 +357,7 @@
 }
 
 /* Mobile Zoom */
-@media (max-width: 768px) {
+@media (max-width: var(--mobile-breakpoint)) {
   .zoom-image {
     max-width: 95%;
     max-height: calc(100% - 10px);
