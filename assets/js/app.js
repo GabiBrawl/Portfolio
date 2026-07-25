@@ -7,7 +7,10 @@
 // Store loaded project data - exposed globally for gallery.js
 const loadedProjects = {};
 window.loadedProjects = loadedProjects;
-let cachedProjects = null;  // Constants
+let cachedProjects = null;
+let currentGalleryPreviewCount = null;
+
+  // Constants
   const BACK_LINK_HTML = '<a href="#" class="back-link" onclick="history.pushState(null, \'\', window.location.pathname); window.renderContent(); window.wireInteractions(); return false;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><path d="M19 12H5M12 19l-7-7 7-7"></svg>Back to Portfolio</a>';
   const LOADING_HTML = '<p style="padding: 40px; text-align: center;">Loading project...</p>';
   const ERROR_HTML = (message) => `
@@ -21,7 +24,6 @@ let cachedProjects = null;  // Constants
           `;
 
   document.addEventListener('DOMContentLoaded', () => {
-    // Wait for the DOM to be fully ready
     const container = document.getElementById('main-content');
     if (!container) {
       console.error('main-content element not found');
@@ -29,12 +31,11 @@ let cachedProjects = null;  // Constants
     }
 
     const view = getViewMode();
-    
-    // If it's a project view and data isn't loaded yet, load it first
+
     if (view.mode === 'project' && !loadedProjects[view.id]) {
       const dynamicContent = document.getElementById('dynamic-content');
       dynamicContent.innerHTML = LOADING_HTML;
-      
+
       fetch(`posts/post${view.id}.json`)
         .then(response => {
           if (!response.ok) {
@@ -57,14 +58,13 @@ let cachedProjects = null;  // Constants
           const isOffline = !navigator.onLine || error.message.includes('fetch') || error.message.includes('network');
           const errorMessage = isOffline
             ? 'You appear to be offline. Please check your internet connection to view this project.'
-            : error.message.includes('Project not found') 
+            : error.message.includes('Project not found')
               ? 'Project not found. Please check the URL and try again.'
               : 'Error loading project: ' + error.message;
           const dynamicContent = document.getElementById('dynamic-content');
           dynamicContent.innerHTML = ERROR_HTML(errorMessage);
         });
     } else {
-      // Normal project list view
       renderContent();
       wireInteractions();
     }
@@ -74,6 +74,38 @@ let cachedProjects = null;  // Constants
     renderContent();
     wireInteractions();
   });
+
+  // Re-render the gallery strip if a resize changes how many tiles fit
+  // (e.g. rotating a phone, or crossing the mobile breakpoint on desktop).
+  let resizeDebounce;
+  window.addEventListener('resize', () => {
+    clearTimeout(resizeDebounce);
+    resizeDebounce = setTimeout(() => {
+      const view = getViewMode();
+      if (view.mode !== 'project' || !loadedProjects[view.id]) return;
+      const data = loadedProjects[view.id];
+      if (!data.gallery || data.gallery.length === 0) return;
+      if (computeGalleryPreviewCount() !== currentGalleryPreviewCount) {
+        renderProjectView(document.getElementById('main-content'), view.id);
+      }
+    }, 200);
+  });
+
+  // One row of gallery tiles on desktop, two rows on mobile — column count
+  // is derived from the same tile-width/gap math as the CSS grid so it
+  // lines up with however many tiles actually fit per row.
+  function computeGalleryPreviewCount() {
+    const isMobile = window.innerWidth <= CONFIG.MOBILE_BREAKPOINT;
+    const sidebarWidth = isMobile ? 0 : 310; // matches .sidebar width in layout.css
+    const mainPadding = 40; // .main's 20px padding on each side
+    const rawWidth = window.innerWidth - sidebarWidth - mainPadding;
+    const availableWidth = Math.min(Math.max(rawWidth, 0), 1200);
+    const tileMinWidth = isMobile ? 100 : 160; // matches .gallery-strip minmax()
+    const gap = 12;
+    const columns = Math.max(1, Math.floor((availableWidth + gap) / (tileMinWidth + gap)));
+    const rows = isMobile ? 2 : 1;
+    return Math.max(1, (columns * rows) - 1);
+  }
 
   function getViewMode() {
     const params = new URLSearchParams(window.location.search);
@@ -88,13 +120,12 @@ let cachedProjects = null;  // Constants
   function renderContent() {
     const view = getViewMode();
     const container = document.getElementById('main-content');
-    
+
     if (!container) {
       console.error('main-content element not found');
       return;
     }
 
-    // Cleanup gallery keyboard handler if leaving gallery
     if (window._galleryKeyHandler && view.mode !== 'gallery') {
       document.removeEventListener('keydown', window._galleryKeyHandler);
       window._galleryKeyHandler = null;
@@ -109,57 +140,49 @@ let cachedProjects = null;  // Constants
     }
   }
 
-  // Expose renderContent globally for gallery.js
   window.renderContent = renderContent;
 
+  // Loads the lightweight card manifest instead of every full post JSON.
   function loadProjects() {
-  if (cachedProjects) {
-    return Promise.resolve(cachedProjects);
-  }
-  
-  return new Promise(async (resolve) => {
-    const projects = [];
-    let id = 0;
-    while (true) {
-      try {
-        const response = await fetch(`posts/post${id}.json`);
-        if (!response.ok) break;
-        const data = await response.json();
-        if (data && data.title) {
-          projects.push({
-            id,
-            title: data.title,
-            description: data.description,
-            image: data.cardImage,
-            logo: data.cardLogo,
-            logoStyle: data.cardLogoStyle,
-            tags: data.cardTags,
-            flags: data.flags || [],
-            lastUpdated: data.lastUpdated || null
-          });
-        }
-        id++;
-      } catch (error) {
-        if (id === 0) {
-          resolve({ offline: true, error: error.message });
-          return;
-        }
-        break;
-      }
+    if (cachedProjects) {
+      return Promise.resolve(cachedProjects);
     }
-    cachedProjects = projects;
-    resolve(projects);
-  });
-}  function renderProjectsListView(container) {
-    // Update page title
+
+    return fetch('posts/index.json')
+      .then(response => {
+        if (!response.ok) {
+          throw new Error(`Project index not found (HTTP ${response.status})`);
+        }
+        return response.json();
+      })
+      .then(manifest => {
+        const projects = manifest.map(entry => ({
+          id: entry.id,
+          title: entry.title,
+          description: entry.description,
+          image: entry.cardImage,
+          logo: entry.cardLogo,
+          logoStyle: entry.cardLogoStyle,
+          tags: entry.cardTags || [],
+          flags: entry.flags || [],
+          lastUpdated: entry.lastUpdated || null
+        }));
+        cachedProjects = projects;
+        return projects;
+      })
+      .catch(error => ({ offline: true, error: error.message }));
+  }
+
+  function renderProjectsListView(container) {
     document.title = "Gabi's Portfolio";
-    document.querySelector('meta[property="og:title"]').content = "Gabi's Portfolio";
-    document.querySelector('meta[property="og:description"]').content = "Full-stack developer, programmer and electronics enthusiast building clean web pages and custom hardware.";
+    const ogTitle = document.querySelector('meta[property="og:title"]');
+    if (ogTitle) ogTitle.content = "Gabi's Portfolio";
+    const ogDesc = document.querySelector('meta[property="og:description"]');
+    if (ogDesc) ogDesc.content = "Full-stack developer, programmer and electronics enthusiast building clean web pages and custom hardware.";
 
     const dynamicContent = document.getElementById('dynamic-content');
     dynamicContent.innerHTML = '<p style="padding: 40px; text-align: center;">Loading projects...</p>';
 
-    // Load all project card data dynamically
     loadProjects().then(projects => {
       if (projects.offline) {
         const dynamicContent = document.getElementById('dynamic-content');
@@ -173,21 +196,21 @@ let cachedProjects = null;  // Constants
         return;
       }
       const validProjects = projects.filter(p => p !== null);
-      
+
       let html = `<div class="project-grid">`;
 
       validProjects.forEach(project => {
         if (!project.flags.includes('disabled')) {
           html += `
-            <div class="project" data-project-id="${project.id}">
+            <div class="project" data-project-id="${project.id}" tabindex="0" role="button" aria-label="Open ${project.title}">
               <img src="${project.image}" alt="Project Image" width="400" height="200" loading="lazy" decoding="async">
               ${project.logo ? `<img class="project-logo" src="${project.logo}" alt="Project Logo" style="${project.logoStyle}">` : ''}
               ${project.flags.includes('in-progress') ? '<span class="in-progress-badge">In Progress</span>' : ''}
               <h3>${project.title}</h3>
               <p>${project.description}</p>
               <div class="tags">
-                ${project.tags.map(tag => 
-                  tag.link 
+                ${project.tags.map(tag =>
+                  tag.link
                     ? `<a href="${tag.link}" target="_blank">${tag.text}</a>`
                     : `<span>${tag.text}</span>`
                 ).join('')}
@@ -201,8 +224,7 @@ let cachedProjects = null;  // Constants
 
       const dynamicContent = document.getElementById('dynamic-content');
       dynamicContent.innerHTML = html;
-      
-      // Wire interactions after DOM update
+
       setTimeout(() => {
         wireInteractions();
       }, 0);
@@ -221,13 +243,11 @@ let cachedProjects = null;  // Constants
   }
 
   function renderProjectView(container, projectId) {
-    // Check if container exists
     if (!container) {
       console.error('main-content element not found for rendering');
       return;
     }
 
-    // Check if data is loaded
     if (!loadedProjects[projectId]) {
       const dynamicContent = document.getElementById('dynamic-content');
       dynamicContent.innerHTML = LOADING_HTML;
@@ -236,6 +256,8 @@ let cachedProjects = null;  // Constants
 
     const data = loadedProjects[projectId];
     updateMetaTags(data);
+
+    const sections = (data.content || []).map((section, i) => Object.assign({}, section, { id: `sec-${i}` }));
 
     let html = `
 <div class="project-detail">
@@ -250,38 +272,29 @@ let cachedProjects = null;  // Constants
             </div>
             ` : ''}
           </div>
-    `;
-
-    html += `
-    `;
-
-    html += `</div>`;
-
-    // Gallery carousel
-    html += `
-      <div class="project-hero">
-        <div class="project-carousel">
-          <div class="carousel-track">
-            ${data.gallery.map((slide, i) => `
-              <div class="carousel-slide" data-index="${i}">
-                <img src="${slide.src}" alt="${slide.alt}" loading="lazy" decoding="async">
-                <div class="carousel-caption">${slide.caption || ''}</div>
-              </div>
-            `).join('')}
-          </div>
-          <div class="carousel-controls"></div>
-          <a href="?post=${projectId}&gallery&img=0" class="carousel-open-btn" title="Switch to gallery view">⤢</a>
-          <div class="carousel-indicators">
-            ${data.gallery.map((_, i) => `<span class="carousel-dot ${i === 0 ? 'active' : ''}" data-slide="${i}"></span>`).join('')}
-          </div>
         </div>
-      </div>
     `;
 
-    // Content sections
+    // Gallery strip (click through to the full gallery viewer) — replaces the old autoplay carousel
+    if (data.gallery && data.gallery.length > 0) {
+      const previewCount = computeGalleryPreviewCount();
+      currentGalleryPreviewCount = previewCount;
+      const preview = data.gallery.slice(0, previewCount);
+      html += `<div class="gallery-strip">`;
+      html += preview.map((img, i) => `
+        <a href="?post=${projectId}&gallery&img=${i}" class="gallery-strip-item" data-gallery-index="${i}">
+          <img src="${img.src}" alt="${img.alt || ''}" loading="lazy" decoding="async">
+        </a>
+      `).join('');
+      if (data.gallery.length > previewCount) {
+        html += `<a href="?post=${projectId}&gallery&img=0" class="gallery-strip-more" data-gallery-index="0">+${data.gallery.length - previewCount}</a>`;
+      }
+      html += `</div>`;
+    }
+
     html += '<div class="project-content">';
-    data.content.forEach(section => {
-      html += `<section class="project-section"><h2>${section.heading}</h2>`;
+    sections.forEach(section => {
+      html += `<section class="project-section" id="${section.id}"><h2>${section.heading}</h2>`;
 
       if (section.text) {
         html += `<p>${processMarkdownText(section.text)}</p>`;
@@ -309,26 +322,57 @@ let cachedProjects = null;  // Constants
     html += BACK_LINK_HTML;
     html += '</div>';
 
+    // Slim right-edge "tick marks" section nav — hover reveals the name, current section highlights on scroll
+    if (sections.length > 0) {
+      html += `
+        <nav class="side-toc" aria-label="Section navigation">
+          ${sections.map(s => `<a href="#${s.id}" class="side-toc-tick"><span class="side-toc-label">${s.heading}</span></a>`).join('')}
+        </nav>
+      `;
+    }
+
     const dynamicContent = document.getElementById('dynamic-content');
     dynamicContent.innerHTML = html;
 
-    // Initialize carousel after rendering
     setTimeout(() => {
-      initializeCarousel();
+      initializeSideToc();
       wireInteractions();
     }, 0);
   }
 
+  // Highlights the tick for whichever section is currently in view
+  function initializeSideToc() {
+    const nav = document.querySelector('.side-toc');
+    if (!nav || !('IntersectionObserver' in window)) return;
+
+    const ticks = Array.from(nav.querySelectorAll('.side-toc-tick'));
+    const sections = ticks.map(tick => document.querySelector(tick.getAttribute('href')));
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (!entry.isIntersecting) return;
+        const index = sections.indexOf(entry.target);
+        if (index === -1) return;
+        ticks.forEach(t => t.classList.remove('is-active'));
+        ticks[index].classList.add('is-active');
+      });
+    }, { rootMargin: '-40% 0px -50% 0px' });
+
+    sections.forEach(section => {
+      if (section) observer.observe(section);
+    });
+  }
+
   function updateMetaTags(data) {
     document.title = data.metaTitle;
-    
+
     const setMetaContent = (selector, content) => {
       const element = document.querySelector(selector);
       if (element) {
         element.content = content;
       }
     };
-    
+
     setMetaContent('meta[property="og:title"]', data.metaTitle);
     setMetaContent('meta[property="og:description"]', data.description);
     setMetaContent('meta[property="og:image"]', data.metaImage);
@@ -343,21 +387,18 @@ function wireInteractions() {
   const view = getViewMode();
 
   if (view.mode === 'projects') {
-    // Use event delegation for project card clicks
     const container = document.getElementById('dynamic-content');
-    
-    // Remove existing listener to prevent duplicates
+
     container.removeEventListener('click', handleProjectClick);
-    
-    // Add the listener
+    container.removeEventListener('keydown', handleProjectKeydown);
+
     container.addEventListener('click', handleProjectClick);
-    
-    // Wire up hover effects for project cards
+    container.addEventListener('keydown', handleProjectKeydown);
+
     if (typeof wireProjectHoverInteractions === 'function') {
       wireProjectHoverInteractions();
     }
   } else {
-    // Wire up interactions for project page
     wireProjectPageInteractions();
   }
 }
@@ -368,12 +409,21 @@ function handleProjectClick(e) {
     const projectId = card.dataset.projectId;
     navigateToProject(projectId);
   }
-}  function navigateToProject(projectId) {
-    // Load project data if not already loaded
+}
+
+function handleProjectKeydown(e) {
+  if (e.key !== 'Enter' && e.key !== ' ') return;
+  const card = e.target.closest('.project');
+  if (!card || e.target.closest('a')) return;
+  e.preventDefault();
+  navigateToProject(card.dataset.projectId);
+}
+
+  function navigateToProject(projectId) {
     if (!loadedProjects[projectId]) {
       const dynamicContent = document.getElementById('dynamic-content');
       dynamicContent.innerHTML = LOADING_HTML;
-      
+
       fetch(`posts/post${projectId}.json`)
         .then(response => {
           if (!response.ok) throw new Error(`Project not found (HTTP ${response.status})`);
@@ -385,7 +435,6 @@ function handleProjectClick(e) {
             history.pushState({ projectId }, '', `?post=${projectId}`);
             renderContent();
             wireInteractions();
-            // Scroll to main content area on mobile after content loads
             if (window.innerWidth <= CONFIG.MOBILE_BREAKPOINT) {
               const mainContent = document.getElementById('main-content');
               if (mainContent) {
@@ -402,8 +451,8 @@ function handleProjectClick(e) {
           const dynamicContent = document.getElementById('dynamic-content');
           const isOffline = !navigator.onLine || error.message.includes('fetch') || error.message.includes('network');
           dynamicContent.innerHTML = ERROR_HTML(
-            isOffline 
-              ? 'You appear to be offline. Please check your internet connection to view this project.' 
+            isOffline
+              ? 'You appear to be offline. Please check your internet connection to view this project.'
               : `Error loading project: ${error.message}`
           );
         });
@@ -411,7 +460,6 @@ function handleProjectClick(e) {
       history.pushState({ projectId }, '', `?post=${projectId}`);
       renderContent();
       wireInteractions();
-      // Scroll to main content area on mobile after content loads
       if (window.innerWidth <= CONFIG.MOBILE_BREAKPOINT) {
         const mainContent = document.getElementById('main-content');
         if (mainContent) {
@@ -421,171 +469,53 @@ function handleProjectClick(e) {
     }
   }
 
-  function initializeCarousel() {
-    const carousel = document.querySelector('.project-carousel');
-    if (!carousel) return;
-
-    const track = carousel.querySelector('.carousel-track');
-    const slides = Array.from(track.querySelectorAll('.carousel-slide'));
-    const controls = carousel.querySelector('.carousel-controls');
-    const dots = Array.from(carousel.querySelectorAll('.carousel-dot'));
-    const openBtn = carousel.querySelector('.carousel-open-btn');
-
-    let currentSlide = 0;
-    const slideCount = slides.length;
-
-    // Get project ID from current URL
-    const params = new URLSearchParams(window.location.search);
-    const projectId = params.get('post');
-
-    // Gallery open button - navigate without refresh
-    if (openBtn && projectId) {
-      openBtn.addEventListener('click', (e) => {
-        e.preventDefault();
-        history.pushState(null, '', `?post=${projectId}&gallery&img=${currentSlide}`);
-        renderContent();
-        wireInteractions();
-      });
-    }
-
-    const updateCarousel = (index) => {
-      currentSlide = index;
-      const offset = -currentSlide * 100;
-      track.style.transform = `translateX(${offset}%)`;
-      dots.forEach((dot, i) => {
-        dot.classList.toggle('active', i === currentSlide);
-      });
-    };
-
-    const nextSlide = () => {
-      const next = (currentSlide + 1) % slideCount;
-      updateCarousel(next);
-    };
-
-    const prevSlide = () => {
-      const prev = (currentSlide - 1 + slideCount) % slideCount;
-      updateCarousel(prev);
-    };
-
-    if (controls) {
-      controls.addEventListener('click', (e) => {
-        const target = e.target;
-        if (target.closest('.carousel-indicators') || target.closest('.carousel-btn') || target.closest('.carousel-open-btn') || target.classList.contains('carousel-dot')) {
-          return;
-        }
-
-        const rect = controls.getBoundingClientRect();
-        const clickX = e.clientX - rect.left;
-        const centerX = rect.width / 2;
-
-        if (clickX < centerX) {
-          prevSlide();
-        } else {
-          nextSlide();
-        }
-      });
-    }
-
-    dots.forEach((dot, index) => {
-      dot.addEventListener('click', () => {
-        updateCarousel(index);
-      });
-    });
-
-    document.addEventListener('keydown', (e) => {
-      if (e.key === 'ArrowLeft') prevSlide();
-      if (e.key === 'ArrowRight') nextSlide();
-    });
-
-    let touchStartX = 0;
-    let touchEndX = 0;
-
-    carousel.addEventListener('touchstart', (e) => {
-      touchStartX = e.changedTouches[0].screenX;
-    });
-
-    carousel.addEventListener('touchend', (e) => {
-      touchEndX = e.changedTouches[0].screenX;
-      const handleSwipe = () => {
-        if (touchStartX - touchEndX > 50) {
-          nextSlide();
-        }
-        if (touchEndX - touchStartX > 50) {
-          prevSlide();
-        }
-      };
-      handleSwipe();
-    });
-
-    // Auto-play functionality
-    let autoplayInterval = setInterval(nextSlide, 5000);
-
-    // Pause autoplay on hover
-    carousel.addEventListener('mouseenter', () => {
-      clearInterval(autoplayInterval);
-    });
-
-    // Resume autoplay on mouse leave
-    carousel.addEventListener('mouseleave', () => {
-      autoplayInterval = setInterval(nextSlide, 5000);
-    });
-  }
-
 function wireProjectPageInteractions() {
-  // Use event delegation for back button
   const container = document.getElementById('dynamic-content');
-  
-  // Remove existing listener to prevent duplicates
-  container.removeEventListener('click', handleBackLinkClick);
-  
-  // Add the listener
-  container.addEventListener('click', handleBackLinkClick);
+
+  container.removeEventListener('click', handleProjectPageClick);
+  container.addEventListener('click', handleProjectPageClick);
 }
 
-function handleBackLinkClick(e) {
-  if (e.target.closest('.back-link')) {
+function handleProjectPageClick(e) {
+  const backLink = e.target.closest('.back-link');
+  if (backLink) {
     e.preventDefault();
     history.pushState(null, '', '');
+    renderContent();
+    wireInteractions();
+    return;
+  }
+
+  const galleryItem = e.target.closest('.gallery-strip-item, .gallery-strip-more');
+  if (galleryItem) {
+    e.preventDefault();
+    const params = new URLSearchParams(window.location.search);
+    const projectId = params.get('post');
+    const imgIndex = galleryItem.dataset.galleryIndex || 0;
+    history.pushState(null, '', `?post=${projectId}&gallery&img=${imgIndex}`);
     renderContent();
     wireInteractions();
   }
 }
 
 function processMarkdownText(text) {
-  // Handle paragraph breaks first
   let processed = text.replace(/\n\n/g, '</p><p>');
-  
-  // Process underline first (to avoid conflicts with bold)
+
   processed = processed.replace(/__(.*?)__/g, '<u>$1</u>');
-  
-  // Process bold
   processed = processed.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
-  
-  // Process italics (*text* or _text_)
   processed = processed.replace(/(?<!\*)\*(?!\*)([^*]+?)(?<!\*)\*(?!\*)/g, '<em>$1</em>');
   processed = processed.replace(/(?<!_)_([^_]+?)_(?!_)/g, '<em>$1</em>');
-  
-  // Process strikethrough
   processed = processed.replace(/~~(.*?)~~/g, '<del>$1</del>');
-  
-  // Process inline code
   processed = processed.replace(/`([^`]+?)`/g, '<code>$1</code>');
-  
-  // Process links [text](url)
   processed = processed.replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" target="_blank">$1</a>');
-  
-  // Process line breaks within paragraphs
   processed = processed.replace(/\n/g, '<br>');
-  
+
   return processed;
 }
 
-  // No longer needed - handled at DOMContentLoaded
-  // Expose functions globally for back button navigation
   window.renderContent = renderContent;
   window.wireInteractions = wireInteractions;
 
-  // Register service worker
   if ('serviceWorker' in navigator) {
     navigator.serviceWorker.addEventListener('message', event => {
       if (event.data?.source === 'service-worker' && event.data?.type === 'debug') {

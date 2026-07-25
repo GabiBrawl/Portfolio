@@ -1,7 +1,7 @@
 // ==========================================================================
 // CONFIGURATION & FLAGS
 // ==========================================================================
-const IS_DEVELOPMENT = false; // ✦ SET TO TRUE FOR DEV, FALSE FOR PROD ✦
+const IS_DEVELOPMENT = true; // ✦ SET TO TRUE FOR DEV, FALSE FOR PROD ✦
 const CACHE_NAME = 'portfolio-v4.3'; // Increment this when pushing production updates
 const HASHES_URL = '/hashes.txt';
 const HASHES_STATE_KEY = '/__hashes_state__.json';

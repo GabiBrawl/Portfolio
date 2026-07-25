@@ -1,6 +1,7 @@
 /* CSS Variables and Base Styles */
 :root {
   --background: #070707;
+  --disabled: #6a6965;
   --primary: #DED8CB;
   --accent: #FFAB07;
   --star-image: url("../star.svg");

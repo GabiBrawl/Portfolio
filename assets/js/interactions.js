@@ -23,7 +23,7 @@ function wireProjectHoverInteractions() {
     if (!isMobile) {
       const now = Date.now();
 
-      // 1. Calculate a slight visual tilt angle cleanly
+      // 1. Calculate a slight visual tilt
       const randomAngle = (Math.random() - 0.5) * 6;
       card.style.transform = `scale(1.03) rotate(${randomAngle}deg)`;
       
