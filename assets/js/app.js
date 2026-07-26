@@ -131,6 +131,11 @@ let currentGalleryPreviewCount = null;
       window._galleryKeyHandler = null;
     }
 
+    if (window._sideTocMoveHandler && view.mode !== 'project') {
+      document.removeEventListener('mousemove', window._sideTocMoveHandler);
+      window._sideTocMoveHandler = null;
+    }
+
     if (view.mode === 'gallery') {
       window.renderGalleryView(container, view.id, view.imgIndex);
     } else if (view.mode === 'project') {
@@ -343,10 +348,29 @@ let currentGalleryPreviewCount = null;
   // Highlights the tick for whichever section is currently in view
   function initializeSideToc() {
     const nav = document.querySelector('.side-toc');
-    if (!nav || !('IntersectionObserver' in window)) return;
+
+    if (window._sideTocMoveHandler) {
+      document.removeEventListener('mousemove', window._sideTocMoveHandler);
+      window._sideTocMoveHandler = null;
+    }
+
+    if (!nav) return;
+
+    const edgeZoneWidth = 90;
+    window._sideTocMoveHandler = (e) => {
+      const isNearEdge = e.clientX >= window.innerWidth - edgeZoneWidth;
+      nav.classList.toggle('edge-hover', isNearEdge);
+    };
+    document.addEventListener('mousemove', window._sideTocMoveHandler);
+
+    if (!('IntersectionObserver' in window)) return;
 
     const ticks = Array.from(nav.querySelectorAll('.side-toc-tick'));
     const sections = ticks.map(tick => document.querySelector(tick.getAttribute('href')));
+
+    if (ticks.length > 0) {
+      ticks[0].classList.add('is-active');
+    }
 
     const observer = new IntersectionObserver((entries) => {
       entries.forEach(entry => {

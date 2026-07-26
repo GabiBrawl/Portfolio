@@ -214,6 +214,7 @@
   justify-content: center;
   gap: 16px;
   z-index: 50;
+  pointer-events: none;
 }
 
 .side-toc-tick {
@@ -223,9 +224,11 @@
   justify-content: flex-end;
   width: 2px;
   height: 2px;
-  background: var(--disabled);
+  background: var(--primary);
+  opacity: 0.4;
   text-decoration: none;
   transition: all 0.2s ease;
+  pointer-events: auto;
 }
 
 .side-toc-tick:focus-visible,
@@ -237,7 +240,7 @@
 
 .side-toc-label {
   position: absolute;
-  right: 38px;
+  right: 16px;
   white-space: nowrap;
   background: var(--background);
   border: 2px solid var(--primary);
@@ -252,7 +255,7 @@
   transition: all 0.2s ease;
 }
 
-.side-toc:hover .side-toc-tick.is-active .side-toc-label,
+.side-toc.edge-hover .side-toc-tick.is-active .side-toc-label,
 .side-toc-tick:focus-visible .side-toc-label {
   opacity: 1;
   transform: translateX(0);
