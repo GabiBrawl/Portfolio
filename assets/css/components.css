@@ -220,7 +220,7 @@ a.large {
 }
 
 /* Mobile socials adjustments */
-@media (max-width: var(--mobile-breakpoint)) {
+@media (max-width: 885px) {
   .sidebar-ko-fi {
     right: -4px;
     bottom: -2px;
@@ -370,7 +370,7 @@ a.large {
 }
 
 /* Mobile project grid */
-@media (max-width: var(--mobile-breakpoint)) {
+@media (max-width: 885px) {
   .project-grid {
     grid-template-columns: 1fr;
   }

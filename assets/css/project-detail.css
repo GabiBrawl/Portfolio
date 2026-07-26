@@ -698,7 +698,7 @@
 }
 
 /* Mobile Responsiveness */
-@media (max-width: var(--mobile-breakpoint)) {
+@media (max-width: 885px) {
   .project-header {
     padding: 30px 20px;
   }
