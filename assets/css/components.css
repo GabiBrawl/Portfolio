@@ -142,19 +142,6 @@
   outline-offset: 2px;
 }
 
-.crate-glitch {
-  position: absolute;
-  left: 0;
-  top: 0;
-  width: 100px;
-  height: 100px;
-  background: var(--accent);
-  opacity: 0;
-  mix-blend-mode: difference;
-  pointer-events: none;
-  z-index: 6;
-}
-
 .crate-close {
   position: absolute;
   left: -30px;

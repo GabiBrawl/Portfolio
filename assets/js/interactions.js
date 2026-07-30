@@ -81,7 +81,6 @@ function wirePfpEffects() {
   const front = stage.querySelector('.crate-front');
   const left = stage.querySelector('.crate-left');
   const right = stage.querySelector('.crate-right');
-  const glitch = stage.querySelector('.crate-glitch');
   const close = stage.querySelector('.crate-close');
   const caption = wrap.querySelector('.crate-caption');
   if (!front || !left || !right) return;
@@ -98,12 +97,23 @@ function wirePfpEffects() {
   }
 
   function flashGlitch() {
-    if (!glitch) return;
-    glitch.style.transition = 'none';
-    glitch.style.opacity = '0.5';
+    [front, left, right].forEach(el => {
+      if (!el) return;
+      el.style.transition = 'none';
+      el.style.filter = 'invert(1)';
+    });
     requestAnimationFrame(() => {
-      glitch.style.transition = 'opacity 0.18s ease';
-      glitch.style.opacity = '0';
+      [front, left, right].forEach(el => {
+        if (!el) return;
+        el.style.transition = 'filter 0.15s ease';
+        el.style.filter = '';
+      });
+      setTimeout(() => {
+        [front, left, right].forEach(el => {
+          if (!el) return;
+          el.style.transition = '';
+        });
+      }, 160);
     });
   }
 
