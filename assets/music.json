@@ -1,0 +1,32 @@
+[
+  {
+    "name": "My <3 Playlist",
+    "artist": "Playlist",
+    "image": "https://image-cdn-fa.spotifycdn.com/image/ab67706c0000da849182d551ddefebd7a1851c1a",
+    "url": "https://open.spotify.com/playlist/29FRF3n8TgRjY5Y2lGGFwV"
+  },
+  {
+    "name": "RUN IT",
+    "artist": "Stray Kids",
+    "image": "https://i.scdn.co/image/ab67616d0000b273023b7265626fd61ab376745e",
+    "url": "https://open.spotify.com/album/0qq4ARUCMYdH7iEN6Wcq2a"
+  },
+  {
+    "name": "Kleinkunst",
+    "artist": "Joost",
+    "image": "https://i.scdn.co/image/ab67616d0000b273cfa0b10348b4a0168015e521",
+    "url": "https://open.spotify.com/album/0dVJ6kqv5wj2qDUobhMdAe"
+  },
+  {
+    "name": "(((((ultraSOUND)))))+",
+    "artist": "The Neighbourhood",
+    "image": "https://i.scdn.co/image/ab67616d0000b2739ea16fcc48f914ea0225b5bf",
+    "url": "https://open.spotify.com/album/5Wa03W4vfkVvMETp0QOKcZ"
+  },
+  {
+    "name": "I Love You.",
+    "artist": "The Neighbourhood",
+    "image": "https://i.scdn.co/image/ab67616d0000b2738265a736a1eb838ad5a0b921",
+    "url": "https://open.spotify.com/album/4xkM0BwLM9H2IUcbYzpcBI"
+  }
+]

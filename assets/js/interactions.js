@@ -73,44 +73,159 @@ function wireProjectHoverInteractions() {
  * Wires up profile picture click effects
  */
 function wirePfpEffects() {
+  const stage = document.querySelector('.pfp-stage');
   const pfp = document.querySelector('.pfp');
   const wrap = document.querySelector('.pfp-wrap');
-  if (!pfp || !wrap) return;
+  if (!stage || !pfp || !wrap) return;
 
-  const effects = ['effect-wobble', 'effect-spin', 'effect-bounce'];
-  let isAnimating = false;
+  const front = stage.querySelector('.crate-front');
+  const left = stage.querySelector('.crate-left');
+  const right = stage.querySelector('.crate-right');
+  const glitch = stage.querySelector('.crate-glitch');
+  const close = stage.querySelector('.crate-close');
+  const caption = wrap.querySelector('.crate-caption');
+  if (!front || !left || !right) return;
 
-  function runEffect(type, ev) {
-    if (isAnimating) return;
-    isAnimating = true;
-    
-    // visual active state
-    pfp.classList.add('effect-active');
+  let albums = [];
+  let idx = 0;
+  let dealt = false;
+  let suppressClick = false;
+  let touchStartX = null;
+  let touchStartY = null;
 
-    // All remaining effects are CSS animation classes applied to the image
-    pfp.classList.add(type);
-    // remove the class when animation ends
-    pfp.addEventListener('animationend', function handler() {
-      pfp.classList.remove(type);
-      pfp.removeEventListener('animationend', handler);
-      isAnimating = false;
+  function wrapIndex(n) {
+    return ((n % albums.length) + albums.length) % albums.length;
+  }
+
+  function flashGlitch() {
+    if (!glitch) return;
+    glitch.style.transition = 'none';
+    glitch.style.opacity = '0.5';
+    requestAnimationFrame(() => {
+      glitch.style.transition = 'opacity 0.18s ease';
+      glitch.style.opacity = '0';
+    });
+  }
+
+  function paint() {
+    if (!albums.length) return;
+    const current = albums[idx];
+    front.style.backgroundImage = `url("${current.image}")`;
+    left.style.backgroundImage = `url("${albums[wrapIndex(idx - 1)].image}")`;
+    right.style.backgroundImage = `url("${albums[wrapIndex(idx + 1)].image}")`;
+    if (caption) {
+      caption.textContent = current.name;
+      caption.classList.add('is-visible');
+    }
+    [front, left, right].forEach(el => el.setAttribute('aria-hidden', 'false'));
+  }
+
+  function deal() {
+    if (!albums.length || dealt) return;
+    dealt = true;
+    paint();
+    stage.classList.add('is-dealt');
+    flashGlitch();
+  }
+
+  function putBack() {
+    if (!dealt) return;
+    dealt = false;
+    stage.classList.remove('is-dealt');
+    if (caption) caption.classList.remove('is-visible');
+    [front, left, right].forEach(el => el.setAttribute('aria-hidden', 'true'));
+    pfp.focus();
+  }
+
+  function cycle(direction) {
+    if (!albums.length || !dealt) return;
+    idx = wrapIndex(idx + direction);
+    flashGlitch();
+    setTimeout(paint, 60);
+  }
+
+  function openCurrentAlbum() {
+    if (!albums.length || !dealt || suppressClick) return;
+    window.open(albums[idx].url, '_blank', 'noopener');
+  }
+
+  // Touch devices: swipe the front album left/right to cycle instead of
+  // relying on precisely tapping the thin peeking edges.
+  function handleTouchStart(e) {
+    if (!dealt) return;
+    const touch = e.touches[0];
+    touchStartX = touch.clientX;
+    touchStartY = touch.clientY;
+  }
+
+  function handleTouchEnd(e) {
+    if (!dealt || touchStartX === null) return;
+    const touch = e.changedTouches[0];
+    const dx = touch.clientX - touchStartX;
+    const dy = touch.clientY - touchStartY;
+    touchStartX = null;
+    touchStartY = null;
+
+    if (Math.abs(dx) < 40 || Math.abs(dx) < Math.abs(dy)) return;
+
+    suppressClick = true;
+    setTimeout(() => { suppressClick = false; }, 300);
+    cycle(dx < 0 ? 1 : -1);
+  }
+
+  fetch('assets/music.json')
+    .then(response => {
+      if (!response.ok) throw new Error(`Music list not found (HTTP ${response.status})`);
+      return response.json();
+    })
+    .then(data => {
+      albums = Array.isArray(data) ? data.filter(a => a && a.image && a.url) : [];
+    })
+    .catch(error => {
+      console.log('Album crate unavailable:', error.message);
     });
 
-    // Cleanup active state shortly after last animation
-    setTimeout(() => pfp.classList.remove('effect-active'), 900);
-  }
-
-  function onActivate(ev) {
-    if (ev.target.closest('.sidebar-ko-fi')) return;
-    ev.preventDefault();
-    const chosen = pickRandom(effects);
-    runEffect(chosen, ev);
-  }
-
-  wrap.addEventListener('click', onActivate);
-  // keyboard activation (Enter / Space)
+  pfp.addEventListener('click', deal);
   pfp.addEventListener('keydown', (e) => {
-    if (e.key === 'Enter' || e.key === ' ') onActivate(e);
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault();
+      deal();
+    }
+  });
+
+  front.addEventListener('click', openCurrentAlbum);
+  front.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault();
+      openCurrentAlbum();
+    }
+  });
+
+  left.addEventListener('click', () => cycle(-1));
+  left.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault();
+      cycle(-1);
+    }
+  });
+
+  right.addEventListener('click', () => cycle(1));
+  right.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault();
+      cycle(1);
+    }
+  });
+
+  front.addEventListener('touchstart', handleTouchStart, { passive: true });
+  front.addEventListener('touchend', handleTouchEnd, { passive: true });
+
+  if (close) {
+    close.addEventListener('click', putBack);
+  }
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && dealt) putBack();
   });
 }
 
