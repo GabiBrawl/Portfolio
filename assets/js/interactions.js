@@ -96,27 +96,6 @@ function wirePfpEffects() {
     return ((n % albums.length) + albums.length) % albums.length;
   }
 
-  function flashGlitch() {
-    [front, left, right].forEach(el => {
-      if (!el) return;
-      el.style.transition = 'none';
-      el.style.filter = 'invert(1)';
-    });
-    requestAnimationFrame(() => {
-      [front, left, right].forEach(el => {
-        if (!el) return;
-        el.style.transition = 'filter 0.15s ease';
-        el.style.filter = '';
-      });
-      setTimeout(() => {
-        [front, left, right].forEach(el => {
-          if (!el) return;
-          el.style.transition = '';
-        });
-      }, 160);
-    });
-  }
-
   function paint() {
     if (!albums.length) return;
     const current = albums[idx];
@@ -135,7 +114,7 @@ function wirePfpEffects() {
     dealt = true;
     paint();
     stage.classList.add('is-dealt');
-    flashGlitch();
+    // flashGlitch();
   }
 
   function putBack() {
@@ -150,8 +129,7 @@ function wirePfpEffects() {
   function cycle(direction) {
     if (!albums.length || !dealt) return;
     idx = wrapIndex(idx + direction);
-    flashGlitch();
-    setTimeout(paint, 60);
+    paint();
   }
 
   function openCurrentAlbum() {

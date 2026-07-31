@@ -2,9 +2,10 @@
 // CONFIGURATION & FLAGS
 // ==========================================================================
 const IS_DEVELOPMENT = false; // ✦ SET TO TRUE FOR DEV, FALSE FOR PROD ✦
-const CACHE_NAME = 'portfolio-v4.6'; // Increment this when pushing production updates
+const CACHE_NAME = 'portfolio-v4.7'; // Increment this when pushing production updates
 const HASHES_URL = '/hashes.txt';
 const HASHES_STATE_KEY = '/__hashes_state__.json';
+const POSTS_COUNT = 6
 
 // URLs that prioritize cache loading (cache-first strategy)
 // NOTE: '/sw.js' has been permanently removed from here to prevent cache-locking!
@@ -38,7 +39,8 @@ const networkFirstUrls = [
   '/assets/js/gallery.js',
   '/assets/js/interactions.js',
   '/assets/js/main.js',
-  '/assets/js/utils.js'
+  '/assets/js/utils.js',
+  '/assets/music.json'
 ];
 
 let currentHashes = {};
@@ -272,3 +274,33 @@ self.addEventListener('fetch', event => {
 
   event.respondWith(handleRequest(event.request));
 });
+
+self.addEventListener('message', event => {
+  if (event.data?.type === 'CACHE_ALL_ASSETS') {
+    event.waitUntil(cacheAllAssetsInSW());
+  }
+});
+
+async function cacheAllAssetsInSW() {
+  const cache = await caches.open(CACHE_NAME); // same cache the rest of the pipeline uses
+  const assetsToCache = [
+    ...Array.from({ length: POSTS_COUNT }, (_, i) => `/posts/post${i}.json`),
+    ...getPrecacheUrls(), // reuse the existing list instead of a second hardcoded one
+    '/assets/star.svg',
+    '/assets/starW.svg',
+    '/assets/music.json',
+    '/assets/button88x31.png',
+    '/assets/flag-orpheus-top.svg'
+  ];
+
+  let completed = 0;
+  for (const url of assetsToCache) {
+    try {
+      const response = await fetch(url);
+      if (response.ok) await cache.put(url, response);
+    } catch (e) { /* fall through */ }
+    completed++;
+    await broadcastDebug('cache-progress', { completed, total: assetsToCache.length, url });
+  }
+  await broadcastDebug('cache-complete', { total: assetsToCache.length });
+}

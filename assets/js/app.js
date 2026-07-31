@@ -543,6 +543,13 @@ function processMarkdownText(text) {
   if ('serviceWorker' in navigator) {
     navigator.serviceWorker.addEventListener('message', event => {
       if (event.data?.source === 'service-worker' && event.data?.type === 'debug') {
+        if (event.data.message === 'cache-progress') {
+          const { completed, total, url } = event.data.data;
+          window.terminalUpdateProgress?.(`[${completed}/${total}] ✓ Cached: ${url}`);
+        }
+        if (event.data.message === 'cache-complete') {
+          window.terminalUpdateProgress?.('Asset caching complete!');
+        }
         console.log('[SW debug]', event.data.message, event.data.data || '');
       }
     });

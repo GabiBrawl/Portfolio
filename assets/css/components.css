@@ -5,6 +5,10 @@
   display: flex;
   flex-direction: column;
   align-items: center;
+  user-select: none;
+  -webkit-user-select: none; /* Safari/older iOS still need the prefix */
+  -webkit-touch-callout: none; /* stops the iOS long-press "copy/select" menu on the image itself */
+
 }
 
 .pfp-stage {
@@ -96,6 +100,7 @@
 .crate-left {
   z-index: 3;
   filter: grayscale(100%);
+  transition: transform 0.25s ease, opacity 0.25s ease;
 }
 
 .crate-right {
@@ -103,6 +108,7 @@
   right: 5px;
   z-index: 3;
   filter: grayscale(100%);
+  transition: transform 0.25s ease, opacity 0.25s ease;
 }
 
 .pfp-stage.is-dealt .pfp {
@@ -129,10 +135,15 @@
 }
 
 .crate-left:hover,
-.crate-left:focus-visible,
+.crate-left:focus-visible {
+  filter: grayscale(40%);
+  transform: translateX(-6px) rotate(-4deg);
+
+}
 .crate-right:hover,
 .crate-right:focus-visible {
   filter: grayscale(40%);
+  transform: translateX(6px) rotate(4deg);
 }
 
 .crate-front:focus-visible,
@@ -252,6 +263,19 @@ a.large {
 
 .social-row a {
   flex: 1;
+}
+
+.tools-placeholder {
+  flex: 1;
+  display: block;
+  font: inherit;
+  color: var(--primary);
+  background: transparent;
+  padding: 10px;
+  border: 2px dashed var(--primary);
+  text-align: center;
+  opacity: 0.5;
+  cursor: not-allowed;
 }
 
 .webring-section {

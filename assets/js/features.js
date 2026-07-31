@@ -160,161 +160,15 @@ function wireCommandPalette() {
 
   // Cache all website assets for offline use
   async function cacheAllAssets() {
-    console.log('Starting asset caching process...');
-
     function updateProgress(message) {
       output.textContent += message + '\n';
       terminal.scrollTop = terminal.scrollHeight;
       console.log(message);
     }
 
-    try {
-      updateProgress('Starting asset caching process...');
-
-      // Get service worker registration
-      const registration = await navigator.serviceWorker.ready;
-      const cache = await caches.open('portfolio-v2');
-
-      // List of all assets to cache
-      const assetsToCache = [
-        // Project JSON files
-        ...Array.from({length: 6}, (_, i) => `/posts/post${i}.json`),
-        // Images
-        '/assets/images/embed.png',
-        '/assets/images/pc.jpeg',
-        '/assets/images/pfp400x400.jpg',
-        // Additional assets
-        '/favicon.png',
-        '/assets/star.svg',
-        '/assets/starW.svg',
-        '/assets/button88x31.png',
-        '/assets/flag-orpheus-top.svg'
-      ];
-
-      updateProgress(`Caching ${assetsToCache.length} assets...`);
-
-      // Cache all assets with progress
-      let completed = 0;
-      const total = assetsToCache.length;
-
-      for (const url of assetsToCache) {
-        try {
-          const response = await fetch(url);
-          if (response.ok) {
-            await cache.put(url, response);
-            completed++;
-            updateProgress(`[${completed}/${total}] ✓ Cached: ${url}`);
-          } else {
-            completed++;
-            updateProgress(`[${completed}/${total}] ✗ Failed: ${url} (${response.status})`);
-          }
-        } catch (error) {
-          completed++;
-          updateProgress(`[${completed}/${total}] ✗ Error: ${url} - ${error.message}`);
-        }
-      }
-
-      updateProgress('Asset caching complete!');
-
-      // Cache project images from gallery
-      updateProgress('Caching project images...');
-      let imageCount = 0;
-      let imageCompleted = 0;
-
-      // First pass: count total images
-      for (let i = 0; i < 6; i++) {
-        try {
-          const response = await fetch(`/posts/post${i}.json`);
-          const project = await response.json();
-
-          // Count gallery images
-          if (project.gallery && Array.isArray(project.gallery)) {
-            imageCount += project.gallery.length;
-          }
-
-          // Count card images
-          if (project.cardImage) imageCount++;
-          if (project.cardLogo) imageCount++;
-        } catch (error) {
-          // Ignore errors in counting
-        }
-      }
-
-      updateProgress(`Found ${imageCount} project images to cache...`);
-
-      // Second pass: cache images
-      for (let i = 0; i < 6; i++) {
-        try {
-          const response = await fetch(`/posts/post${i}.json`);
-          const project = await response.json();
-
-          // Cache gallery images
-          if (project.gallery && Array.isArray(project.gallery)) {
-            for (const image of project.gallery) {
-              if (image.src) {
-                try {
-                  const imgResponse = await fetch(image.src);
-                  if (imgResponse.ok) {
-                    await cache.put(image.src, imgResponse);
-                    imageCompleted++;
-                    updateProgress(`[${imageCompleted}/${imageCount}] ✓ Cached gallery image: ${image.src}`);
-                  } else {
-                    imageCompleted++;
-                    updateProgress(`[${imageCompleted}/${imageCount}] ✗ Failed gallery image: ${image.src}`);
-                  }
-                } catch (error) {
-                  imageCompleted++;
-                  updateProgress(`[${imageCompleted}/${imageCount}] ✗ Error gallery image: ${image.src}`);
-                }
-              }
-            }
-          }
-
-          // Cache card images
-          if (project.cardImage) {
-            try {
-              const imgResponse = await fetch(project.cardImage);
-              if (imgResponse.ok) {
-                await cache.put(project.cardImage, imgResponse);
-                imageCompleted++;
-                updateProgress(`[${imageCompleted}/${imageCount}] ✓ Cached card image: ${project.cardImage}`);
-              } else {
-                imageCompleted++;
-                updateProgress(`[${imageCompleted}/${imageCount}] ✗ Failed card image: ${project.cardImage}`);
-              }
-            } catch (error) {
-              imageCompleted++;
-              updateProgress(`[${imageCompleted}/${imageCount}] ✗ Error card image: ${project.cardImage}`);
-            }
-          }
-
-          if (project.cardLogo) {
-            try {
-              const imgResponse = await fetch(project.cardLogo);
-              if (imgResponse.ok) {
-                await cache.put(project.cardLogo, imgResponse);
-                imageCompleted++;
-                updateProgress(`[${imageCompleted}/${imageCount}] ✓ Cached logo: ${project.cardLogo}`);
-              } else {
-                imageCompleted++;
-                updateProgress(`[${imageCompleted}/${imageCount}] ✗ Failed logo: ${project.cardLogo}`);
-              }
-            } catch (error) {
-              imageCompleted++;
-              updateProgress(`[${imageCompleted}/${imageCount}] ✗ Error logo: ${project.cardLogo}`);
-            }
-          }
-
-        } catch (error) {
-          updateProgress(`Error processing project ${i}: ${error.message}`);
-        }
-      }
-
-      updateProgress('All assets cached successfully! Site is now fully available offline.');
-
-    } catch (error) {
-      updateProgress(`Error during asset caching: ${error.message}`);
-    }
+    updateProgress('Starting asset caching process...');
+    const registration = await navigator.serviceWorker.ready;
+    registration.active.postMessage({ type: 'CACHE_ALL_ASSETS' });
   }
 
   const overlay = document.createElement('div');
@@ -486,15 +340,11 @@ Piping support: command | cowsay';
           response = 'Enjoy! ^^';
           break;
         case 'cache':
-          // Show terminal if not visible
           if (!paletteVisible) {
             showPalette();
           }
-          // Clear output and start caching
-          output.textContent = '$ cache\nStarting asset caching...\n';
-          terminal.scrollTop = terminal.scrollHeight;
           cacheAllAssets();
-          return; // Don't add to output since cacheAllAssets handles it
+          return 'Starting asset caching...';
         case 'cowsay':
           response = 'Usage: cowsay [message] or command | cowsay';
           break;
@@ -558,6 +408,11 @@ Piping support: command | cowsay';
     } else if (e.key === 'Escape') {
       hidePalette();
     }
+
+    window.terminalUpdateProgress = function(message) {
+    output.textContent += message + '\n';
+    terminal.scrollTop = terminal.scrollHeight;
+};
   });
 
   overlay.addEventListener('click', (e) => {
