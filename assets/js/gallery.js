@@ -39,6 +39,8 @@
     // Create overlay
     const overlay = document.createElement('div');
     overlay.className = 'zoom-overlay';
+    const zoomOutIcon = '<svg class="zoom-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="square" stroke-linejoin="miter" aria-hidden="true" focusable="false"><path d="M6 12h12"></path></svg>';
+    const zoomInIcon = '<svg class="zoom-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="square" stroke-linejoin="miter" aria-hidden="true" focusable="false"><path d="M6 12h12M12 6v12"></path></svg>';
     overlay.innerHTML = `
       <div class="zoom-container">
         <img src="${src}" alt="${alt}" class="zoom-image" draggable="false">
@@ -46,9 +48,9 @@
       <div class="zoom-footer">
         <button class="zoom-close" aria-label="Close zoom viewer">✕ Close</button>
         <div class="zoom-controls">
-          <button class="zoom-out" aria-label="Zoom out">−</button>
+          <button class="zoom-out" aria-label="Zoom out">${zoomOutIcon}</button>
           <span class="zoom-level">100%</span>
-          <button class="zoom-in" aria-label="Zoom in">+</button>
+          <button class="zoom-in" aria-label="Zoom in">${zoomInIcon}</button>
           <button class="zoom-reset" aria-label="Reset zoom">Reset</button>
         </div>
       </div>
@@ -109,7 +111,7 @@
       isDragging = true;
       startX = e.clientX - panX;
       startY = e.clientY - panY;
-      container.style.cursor = 'grabbing';
+      container.classList.add('is-dragging');
     });
 
     document.addEventListener('mousemove', (e) => {
@@ -121,17 +123,19 @@
 
     document.addEventListener('mouseup', () => {
       isDragging = false;
-      container.style.cursor = 'grab';
+      container.classList.remove('is-dragging');
     });
 
     // Touch pan and pinch-to-zoom with passive listeners where appropriate
     container.addEventListener('touchstart', (e) => {
       if (e.touches.length === 1) {
         isDragging = true;
+        container.classList.add('is-dragging');
         startX = e.touches[0].clientX - panX;
         startY = e.touches[0].clientY - panY;
       } else if (e.touches.length === 2) {
         isDragging = false;
+        container.classList.remove('is-dragging');
         lastTouchDist = Math.hypot(
           e.touches[0].clientX - e.touches[1].clientX,
           e.touches[0].clientY - e.touches[1].clientY
@@ -160,6 +164,7 @@
 
     container.addEventListener('touchend', () => {
       isDragging = false;
+      container.classList.remove('is-dragging');
     }, { passive: true });
 
     // Button controls
@@ -269,6 +274,8 @@
   function renderGalleryHTML(data, gallery, currentIndex) {
     const currentImage = gallery[currentIndex];
     const dynamicContent = document.getElementById('dynamic-content');
+    const prevIcon = '<svg class="gallery-nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="square" stroke-linejoin="miter" aria-hidden="true" focusable="false"><path d="M15 18l-6-6 6-6"></path></svg>';
+    const nextIcon = '<svg class="gallery-nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="square" stroke-linejoin="miter" aria-hidden="true" focusable="false"><path d="M9 18l6-6-6-6"></path></svg>';
     dynamicContent.innerHTML = `
       <div class="gallery-viewer">
         <div class="gallery-top-bar">
@@ -277,7 +284,7 @@
         </div>
 
         <div class="gallery-main">
-          <button class="gallery-nav gallery-prev" ${currentIndex === 0 ? 'disabled' : ''} aria-label="Previous image">‹</button>
+          <button class="gallery-nav gallery-prev" ${currentIndex === 0 ? 'disabled' : ''} aria-label="Previous image">${prevIcon}</button>
 
           <div class="gallery-image-container">
             <img src="${currentImage.src}" alt="${currentImage.alt}" class="gallery-image">
@@ -285,13 +292,13 @@
             <p class="gallery-image-hint">Click image to zoom ✦ クリックで拡大</p>
           </div>
 
-          <button class="gallery-nav gallery-next" ${currentIndex === gallery.length - 1 ? 'disabled' : ''} aria-label="Next image">›</button>
+          <button class="gallery-nav gallery-next" ${currentIndex === gallery.length - 1 ? 'disabled' : ''} aria-label="Next image">${nextIcon}</button>
         </div>
 
         <div class="gallery-bottom">
           <div class="gallery-mobile-nav">
-            <button class="gallery-nav gallery-prev-mobile" ${currentIndex === 0 ? 'disabled' : ''} aria-label="Previous image">‹</button>
-            <button class="gallery-nav gallery-next-mobile" ${currentIndex === gallery.length - 1 ? 'disabled' : ''} aria-label="Next image">›</button>
+            <button class="gallery-nav gallery-prev-mobile" ${currentIndex === 0 ? 'disabled' : ''} aria-label="Previous image">${prevIcon}</button>
+            <button class="gallery-nav gallery-next-mobile" ${currentIndex === gallery.length - 1 ? 'disabled' : ''} aria-label="Next image">${nextIcon}</button>
           </div>
           <div class="gallery-thumbnails">
             ${gallery.map((img, i) => `

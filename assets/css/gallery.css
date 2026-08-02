@@ -66,12 +66,20 @@
   background: var(--background);
   border: 2px solid var(--primary);
   color: var(--primary);
-  font-size: 2rem;
+  padding: 0;
+  line-height: 0;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
+}
+
+.gallery-nav-icon {
+  width: 24px;
+  height: 24px;
+  display: block;
+  pointer-events: none;
 }
 
 .gallery-nav:hover:not(:disabled) {
@@ -231,7 +239,11 @@
   .gallery-mobile-nav .gallery-nav {
     width: 50%;
     height: 36px;
-    font-size: 1.3rem;
+  }
+
+  .gallery-mobile-nav .gallery-nav-icon {
+    width: 20px;
+    height: 20px;
   }
 
   .gallery-thumbnails {
@@ -272,13 +284,17 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  cursor: grab;
+  cursor: url('../cursors/handopen.svg') 10 5, auto;
   position: relative;
   touch-action: none;
 }
 
 .zoom-container:active {
-  cursor: grabbing;
+  cursor: url('../cursors/handgrabbing.svg') 10 5, auto;
+}
+
+.zoom-container.is-dragging {
+  cursor: url('../cursors/handgrabbing.svg') 10 5, auto;
 }
 
 .zoom-image {
@@ -309,6 +325,7 @@
   font-size: 0.9rem;
   letter-spacing: 1px;
   cursor: pointer;
+  word-spacing: 1rem;
 }
 
 .zoom-close:hover {
@@ -333,6 +350,19 @@
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+.zoom-controls .zoom-out,
+.zoom-controls .zoom-in {
+  padding: 0;
+  line-height: 0;
+}
+
+.zoom-icon {
+  width: 18px;
+  height: 18px;
+  display: block;
+  pointer-events: none;
 }
 
 .zoom-controls button:hover {
@@ -381,6 +411,11 @@
     width: 32px;
     height: 32px;
     font-size: 0.9rem;
+  }
+
+  .zoom-icon {
+    width: 14px;
+    height: 14px;
   }
 
   .zoom-controls .zoom-reset {
