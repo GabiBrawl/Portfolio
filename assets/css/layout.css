@@ -130,3 +130,26 @@ footer {
   line-height: 1.6;
   color: var(--primary);
 }
+
+.nerdy-clear-btn {
+  margin-top: 25px;
+  padding: 10px 18px;
+  background: transparent;
+  border: 2px solid var(--primary);
+  color: var(--primary);
+  font-family: monospace;
+  font-size: 0.8rem;
+  letter-spacing: 1px;
+  cursor: pointer;
+  transition: background 0.2s ease, color 0.2s ease;
+}
+
+.nerdy-clear-btn:hover {
+  background: var(--primary);
+  color: var(--background);
+}
+
+.nerdy-clear-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}

@@ -422,15 +422,23 @@ function wireSecretDashboard() {
             <h4>CONNECTIVITY PROFILE</h4>
             <p id="diag-network">Querying infrastructure...</p>
           </div>
+          <div class="nerdy-card">
+            <h4>CACHE STATE</h4>
+            <p id="diag-cache">Reading cache tables...</p>
+          </div>
         </div>
+        <button id="diag-clear-cache" class="nerdy-clear-btn">CLEAR CACHE &amp; RELOAD</button>
       `;
 
       dashboard.hidden = false;
       dashboard.removeAttribute('hidden');
 
+      document.getElementById('diag-clear-cache')?.addEventListener('click', clearCacheAndReload);
+
       // Execute data pipelines
       fetchLatestCommit();
       populateStaticMetrics();
+      populateCacheMetrics();
 
       // Spin up background telemetry loop
       clearInterval(telemetryInterval); 
@@ -488,6 +496,54 @@ function wireSecretDashboard() {
       OS_PLATFORM: ${platform.toUpperCase()}<br>
       BOOT_LATENCY: ${bootLatency}
     `;
+  }
+
+  async function populateCacheMetrics() {
+  const cacheEl = document.getElementById('diag-cache');
+  if (!cacheEl) return;
+
+  try {
+    const cacheNames = await caches.keys();
+    const activeCache = cacheNames[cacheNames.length - 1] || 'NONE';
+
+    let entryCount = 'N/A';
+    if (activeCache !== 'NONE') {
+      const cache = await caches.open(activeCache);
+      entryCount = (await cache.keys()).length;
+    }
+
+    const reg = await navigator.serviceWorker.getRegistration();
+    const swState = reg?.active ? 'ACTIVE'
+      : reg?.installing ? 'INSTALLING'
+      : reg?.waiting ? 'WAITING'
+      : 'NONE';
+
+    cacheEl.innerHTML = `
+      LOADED: ${activeCache}<br>
+      CACHED_ENTRIES: ${entryCount}<br>
+      SW_STATE: ${swState}<br>
+      SCOPE: ${reg?.scope || 'N/A'}
+    `;
+    } catch (err) {
+      cacheEl.innerHTML = `ERROR: Cache Storage unreachable.<br>STATUS: SW unsupported / blocked`;
+    }
+  }
+
+  async function clearCacheAndReload() {
+    const btn = document.getElementById('diag-clear-cache');
+    if (btn) {
+      btn.disabled = true;
+      btn.textContent = 'CLEARING...';
+    }
+
+    try {
+      const cacheNames = await caches.keys();
+      await Promise.all(cacheNames.map(name => caches.delete(name)));
+    } catch (err) {
+      console.warn('[Diagnostics] Cache clear failed:', err);
+    }
+
+    location.reload();
   }
 
   function updateLiveTelemetry() {

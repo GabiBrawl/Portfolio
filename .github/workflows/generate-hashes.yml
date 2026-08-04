@@ -21,17 +21,27 @@ jobs:
       with:
         fetch-depth: 0
 
+    # .github/workflows/generate-hashes.yml — scoped to only what sw.js manages
     - name: Generate file hashes
       run: |
-        # Find files, calculate sha256 sums, format paths cleanly, and sort them
-        find . -type f \
-          -not -path './.git/*' \
-          -not -path './.github/*' \
-          -not -path './node_modules/*' \
-          -not -name 'hashes.txt' \
-          -exec sha256sum {} \; | \
-          sed 's|\s\+\./|  /|' | \
-          sort > hashes.txt
+        # Pull the MANAGED_URLS array straight out of sw.js so this list
+        # can never drift from what the service worker actually caches.
+        node -e "
+          const fs = require('fs');
+          const sw = fs.readFileSync('sw.js', 'utf8');
+          const match = sw.match(/MANAGED_URLS\s*=\s*\[([\s\S]*?)\]/);
+          const urls = [...match[1].matchAll(/'([^']+)'/g)].map(m => m[1]);
+          const files = urls
+            .filter(u => u.startsWith('/'))
+            .map(u => u === '/' ? 'index.html' : u.replace(/^\//, ''));
+          fs.writeFileSync('.hash-manifest', files.join('\n'));
+        "
+        > hashes.txt
+        while IFS= read -r file; do
+          [ -f "$file" ] && sha256sum "$file" | sed "s|$file|  /$file|" >> hashes.txt
+        done < .hash-manifest
+        rm .hash-manifest
+        sort -o hashes.txt hashes.txt
 
     - name: Commit and push hashes
       run: |

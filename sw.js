@@ -1,15 +1,15 @@
 // ==========================================================================
 // CONFIGURATION & FLAGS
 // ==========================================================================
-const IS_DEVELOPMENT = false; // ✦ SET TO TRUE FOR DEV, FALSE FOR PROD ✦
-const CACHE_NAME = 'portfolio-v4.8'; // Increment this when pushing production updates
+const IS_DEVELOPMENT = false; // // ✦ SET TO TRUE FOR DEV, FALSE FOR PROD ✦
+const CACHE_NAME = 'portfolio-v6.0'; // Increment on deploys that should invalidate old caches
+const POSTS_COUNT = 6;
 const HASHES_URL = '/hashes.txt';
 const HASHES_STATE_KEY = '/__hashes_state__.json';
-const POSTS_COUNT = 6
 
-// URLs that prioritize cache loading (cache-first strategy)
-// NOTE: '/sw.js' has been permanently removed from here to prevent cache-locking!
-const cacheFirstUrls = [
+// Single list of everything the SW manages — no more cache-first/network-first split.
+// Also the source of truth for the hash-generator workflow (it parses this array directly).
+const MANAGED_URLS = [
   '/',
   '/index.html',
   '/404.html',
@@ -21,11 +21,6 @@ const cacheFirstUrls = [
   '/assets/images/pc.jpeg',
   '/assets/images/pfp400x400.jpg',
   '/discord/',
-  'https://fonts.googleapis.com/css2?family=Special+Gothic+Condensed+One&family=Special+Gothic+Expanded+One&display=swap'
-];
-
-// URLs that prioritize online loading (network-first strategy)
-const networkFirstUrls = [
   '/assets/css/base.css',
   '/assets/css/components.css',
   '/assets/css/effects.css',
@@ -40,10 +35,16 @@ const networkFirstUrls = [
   '/assets/js/interactions.js',
   '/assets/js/main.js',
   '/assets/js/utils.js',
-  '/assets/music.json'
+  '/assets/music.json',
+  '/posts/index.json'
 ];
 
-let currentHashes = {};
+// External URLs can't be sha256'd by the hash workflow (no local file to hash),
+// so they're cached on install but not tracked for change-invalidation.
+const EXTERNAL_CACHE_URLS = [
+  'https://fonts.googleapis.com/css2?family=Special+Gothic+Condensed+One&family=Special+Gothic+Expanded+One&display=swap'
+];
+
 let hashCheckInFlight = null;
 
 // ==========================================================================
@@ -66,98 +67,114 @@ function isSameOriginAsset(url) {
   return url.startsWith('/');
 }
 
-function getPrecacheUrls() {
-  return [...new Set([...cacheFirstUrls, ...networkFirstUrls, HASHES_URL].filter(isSameOriginAsset))];
+// Individual post files should always prefer a live network fetch —
+// these are the files most likely to get edited after publishing, so
+// stale-while-revalidate's "serve old, refresh in background" behavior
+// would show readers outdated content for one extra visit.
+function isPostContent(url) {
+  return /\/posts\/post\d+\.json$/.test(url);
 }
 
-function normalizeManifestPath(path) {
-  return path.replace(/^\.\//, '/');
+function isCacheableResponse(response) {
+  return !!response && response.ok && (response.type === 'basic' || response.type === 'cors');
 }
 
-async function loadHashes() {
-  try {
-    const response = await fetch(`${HASHES_URL}?sw-hash-check=${Date.now()}`, { cache: 'no-store' });
-    if (!response.ok) throw new Error('Failed to load hashes');
-    const text = await response.text();
-    const hashes = {};
-    text.split('\n').forEach(line => {
-      if (line.trim()) {
-        const [hash, file] = line.trim().split(/\s{2,}/);
-        if (hash && file) {
-          hashes[normalizeManifestPath(file)] = hash;
-        }
+// ==========================================================================
+// CACHING STRATEGY — single stale-while-revalidate path for everything
+// ==========================================================================
+async function staleWhileRevalidate(request) {
+  const cache = await caches.open(CACHE_NAME);
+  const cached = await cache.match(request);
+
+  const network = fetch(request)
+    .then(response => {
+      if (isCacheableResponse(response)) {
+        cache.put(request, response.clone());
       }
-    });
-    return hashes;
-  } catch (e) {
-    console.warn('Could not load hashes file:', e);
+      return response;
+    })
+    .catch(() => cached);
+
+  return cached || network;
+}
+
+async function fetchAndCache(request, cache) {
+  const response = await fetch(request);
+  if (isCacheableResponse(response)) {
+    await cache.put(request, response.clone());
+  }
+  return response;
+}
+
+// Used by install + the manual "$ cache" flow, where we want a guaranteed
+// fresh network copy rather than "cached if present."
+async function forceCacheUrl(url, cache) {
+  try {
+    return await fetchAndCache(new Request(url, { cache: 'reload' }), cache);
+  } catch {
     return null;
   }
 }
 
-async function readStoredHashes(cache) {
-  const response = await cache.match(HASHES_STATE_KEY);
-  if (!response) return {};
-  try { return await response.json(); } catch { return {}; }
+// ==========================================================================
+// HASH-BASED INVALIDATION — scoped to MANAGED_URLS, navigation-only
+// ==========================================================================
+async function loadHashes() {
+  try {
+    const res = await fetch(`${HASHES_URL}?t=${Date.now()}`, { cache: 'no-store' });
+    if (!res.ok) return null;
+    const text = await res.text();
+    const hashes = {};
+    text.split('\n').forEach(line => {
+      const trimmed = line.trim();
+      if (!trimmed) return;
+      const [hash, file] = trimmed.split(/\s{2,}/);
+      if (hash && file) hashes[file] = hash;
+    });
+    return hashes;
+  } catch {
+    return null;
+  }
 }
 
-async function writeStoredHashes(cache, hashes) {
-  await cache.put(
-    HASHES_STATE_KEY,
-    new Response(JSON.stringify(hashes), {
-      headers: { 'Content-Type': 'application/json' }
-    })
+async function invalidateChangedAssets() {
+  const cache = await caches.open(CACHE_NAME);
+  const prevRes = await cache.match(HASHES_STATE_KEY);
+  const previous = prevRes ? await prevRes.json() : {};
+
+  const latest = await loadHashes();
+  if (!latest) return; // manifest unreachable this cycle — leave existing cache alone
+
+  const changedFiles = [...new Set([...Object.keys(previous), ...Object.keys(latest)])]
+    .filter(file => previous[file] !== latest[file]);
+
+  await Promise.all(
+    changedFiles.map(file => cache.delete(new Request(self.location.origin + file)))
   );
-}
 
-async function invalidateCacheEntries(changedFiles) {
-  const cache = await caches.open(CACHE_NAME);
-  for (const file of changedFiles) {
-    try { await cache.delete(file); } catch (e) { console.warn(`Failed to delete cache for ${file}:`, e); }
+  await cache.put(HASHES_STATE_KEY, new Response(JSON.stringify(latest)));
+
+  if (changedFiles.length) {
+    await broadcastDebug('hashes-invalidated', { changedFiles });
   }
-}
-
-async function invalidateChangedAssetsByHash() {
-  const cache = await caches.open(CACHE_NAME);
-  const previousHashes = await readStoredHashes(cache);
-  const latestHashes = await loadHashes();
-
-  if (latestHashes === null) {
-    await broadcastDebug('Hash check skipped (manifest unavailable)');
-    return;
-  }
-
-  const changedFiles = [];
-  for (const [file, hash] of Object.entries(latestHashes)) {
-    if (previousHashes[file] !== hash) changedFiles.push(file);
-  }
-  for (const file of Object.keys(previousHashes)) {
-    if (!(file in latestHashes)) changedFiles.push(file);
-  }
-
-  if (changedFiles.length > 0) {
-    await broadcastDebug('Invalidating changed cached files', { files: changedFiles });
-    await invalidateCacheEntries(changedFiles);
-  }
-
-  await writeStoredHashes(cache, latestHashes);
-  currentHashes = latestHashes;
 }
 
 function checkHashesOnceBeforeNavigation() {
   if (hashCheckInFlight) return hashCheckInFlight;
-  hashCheckInFlight = invalidateChangedAssetsByHash()
-    .catch(error => console.warn('Hash check failed:', error))
-    .finally(() => { hashCheckInFlight = null; });
+
+  hashCheckInFlight = invalidateChangedAssets()
+    .catch(err => console.warn('[SW] Hash check failed:', err))
+    .finally(() => {
+      hashCheckInFlight = null;
+    });
+
   return hashCheckInFlight;
 }
 
 // ==========================================================================
 // SERVICE WORKER EVENTS
 // ==========================================================================
-
 self.addEventListener('install', event => {
-  // SHORT-CIRCUIT FOR DEV MODE
   if (IS_DEVELOPMENT) {
     console.log('[SW] Dev mode active. Skipping precache asset allocation.');
     self.skipWaiting();
@@ -166,20 +183,21 @@ self.addEventListener('install', event => {
 
   event.waitUntil(
     (async () => {
-      currentHashes = await loadHashes() ?? {};
       const cache = await caches.open(CACHE_NAME);
-      const precacheUrls = getPrecacheUrls();
-      const results = await Promise.allSettled(precacheUrls.map(url => cache.add(url)));
+      const urls = [...MANAGED_URLS, ...EXTERNAL_CACHE_URLS];
+
+      const results = await Promise.allSettled(
+        urls.map(url => forceCacheUrl(url, cache))
+      );
 
       results.forEach((result, index) => {
-        if (result.status === 'rejected') {
-          console.warn('[SW] Precache failed for', precacheUrls[index], result.reason);
+        if (result.status === 'rejected' || result.value === null) {
+          console.warn('[SW] Precache failed for', urls[index]);
         }
       });
-
-      await writeStoredHashes(cache, currentHashes);
     })()
   );
+
   self.skipWaiting();
 });
 
@@ -197,82 +215,49 @@ self.addEventListener('activate', event => {
       );
     })()
   );
+
   self.clients.claim();
 });
 
-// Helper request pipeline strategy selector
-function handleRequest(request) {
-  const url = request.url;
-  const isNetworkFirst = networkFirstUrls.some(u => url === u || url === location.origin + u) || url.match(/\/projects\/post\d+\.json$/);
-  const isCacheFirst = cacheFirstUrls.some(u => url === u || url === location.origin + u) || url.includes('fonts.googleapis.com') || url.includes('fonts.gstatic.com');
-
-  if (isNetworkFirst) {
-    return fetch(request).then(response => {
-      if (!response || response.status !== 200 || response.type !== 'basic') return caches.match(request);
-      const responseToCache = response.clone();
-      caches.open(CACHE_NAME).then(cache => cache.put(request, responseToCache));
-      return response;
-    }).catch(() => caches.match(request));
-  }
-
-  if (isCacheFirst) {
-    return caches.match(request).then(response => {
-      if (response) return response;
-      return fetch(request).then(fetchResponse => {
-        if (!fetchResponse || fetchResponse.status !== 200 || fetchResponse.type !== 'basic') return fetchResponse;
-        const responseToCache = fetchResponse.clone();
-        caches.open(CACHE_NAME).then(cache => cache.put(request, responseToCache));
-        return fetchResponse;
-      });
-    });
-  }
-
-  return caches.match(request).then(response => {
-    if (response) return response;
-    return fetch(request).then(fetchResponse => {
-      if (!fetchResponse || fetchResponse.status !== 200 || fetchResponse.type !== 'basic') return fetchResponse;
-      const responseToCache = fetchResponse.clone();
-      caches.open(CACHE_NAME).then(cache => cache.put(request, responseToCache));
-      return fetchResponse;
-    });
-  });
-}
-
 self.addEventListener('fetch', event => {
-  // SHORT-CIRCUIT FOR DEV MODE: Do absolutely nothing, fallback straight to network
   if (IS_DEVELOPMENT) {
-    return; 
+    return;
   }
 
   const requestUrl = new URL(event.request.url);
   if (!requestUrl.protocol.startsWith('http')) return;
 
-  if (requestUrl.origin === location.origin && requestUrl.pathname === HASHES_URL) {
-    event.respondWith(
-      fetch(event.request, { cache: 'no-store' })
-        .then(response => {
-          if (response && response.status === 200) {
-            const responseToCache = response.clone();
-            caches.open(CACHE_NAME).then(cache => cache.put(HASHES_URL, responseToCache));
-          }
-          return response;
-        })
-        .catch(() => caches.match(HASHES_URL))
-    );
-    return;
-  }
+  // '/sw.js' is intentionally excluded from all caching to avoid
+  // service-worker cache locking.
+  if (requestUrl.pathname === '/sw.js') return;
 
   if (event.request.mode === 'navigate' || event.request.destination === 'document') {
     event.respondWith(
       (async () => {
         await checkHashesOnceBeforeNavigation();
-        return handleRequest(event.request);
+        return staleWhileRevalidate(event.request);
       })()
     );
     return;
   }
 
-  event.respondWith(handleRequest(event.request));
+  if (isPostContent(event.request.url)) {
+    event.respondWith(
+      (async () => {
+        const cache = await caches.open(CACHE_NAME);
+        try {
+          return await fetchAndCache(event.request, cache);
+        } catch {
+          const fallback = await cache.match(event.request);
+          if (fallback) return fallback;
+          throw new Error(`Post content fetch failed and cache missed: ${event.request.url}`);
+        }
+      })()
+    );
+    return;
+  }
+
+  event.respondWith(staleWhileRevalidate(event.request));
 });
 
 self.addEventListener('message', event => {
@@ -282,10 +267,12 @@ self.addEventListener('message', event => {
 });
 
 async function cacheAllAssetsInSW() {
-  const cache = await caches.open(CACHE_NAME); // same cache the rest of the pipeline uses
+  await broadcastDebug('cache-start', {});
+
   const assetsToCache = [
     ...Array.from({ length: POSTS_COUNT }, (_, i) => `/posts/post${i}.json`),
-    ...getPrecacheUrls(), // reuse the existing list instead of a second hardcoded one
+    ...MANAGED_URLS,
+    ...EXTERNAL_CACHE_URLS,
     '/assets/star.svg',
     '/assets/starW.svg',
     '/assets/music.json',
@@ -293,14 +280,16 @@ async function cacheAllAssetsInSW() {
     '/assets/flag-orpheus-top.svg'
   ];
 
+  const uniqueAssets = [...new Set(assetsToCache)];
+  const cache = await caches.open(CACHE_NAME);
+
   let completed = 0;
-  for (const url of assetsToCache) {
-    try {
-      const response = await fetch(url);
-      if (response.ok) await cache.put(url, response);
-    } catch (e) { /* fall through */ }
+  for (const url of uniqueAssets) {
+    await forceCacheUrl(url, cache);
+
     completed++;
-    await broadcastDebug('cache-progress', { completed, total: assetsToCache.length, url });
+    await broadcastDebug('cache-progress', { completed, total: uniqueAssets.length, url });
   }
-  await broadcastDebug('cache-complete', { total: assetsToCache.length });
+
+  await broadcastDebug('cache-complete', { total: uniqueAssets.length });
 }
