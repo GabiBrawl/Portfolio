@@ -263,6 +263,16 @@ self.addEventListener('fetch', event => {
 self.addEventListener('message', event => {
   if (event.data?.type === 'CACHE_ALL_ASSETS') {
     event.waitUntil(cacheAllAssetsInSW());
+    return;
+  }
+
+  if (event.data?.type === 'GET_SW_MODE') {
+    event.source?.postMessage({
+      source: 'service-worker',
+      type: 'sw-mode',
+      requestId: event.data.requestId,
+      isDevelopment: IS_DEVELOPMENT
+    });
   }
 });
 

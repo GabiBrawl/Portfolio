@@ -179,7 +179,7 @@ let currentGalleryPreviewCount = null;
   }
 
   function renderProjectsListView(container) {
-    document.title = "Gabi's Portfolio";
+    document.title = "Gabriel Yassin's Portfolio";
     const ogTitle = document.querySelector('meta[property="og:title"]');
     if (ogTitle) ogTitle.content = "Gabi's Portfolio";
     const ogDesc = document.querySelector('meta[property="og:description"]');

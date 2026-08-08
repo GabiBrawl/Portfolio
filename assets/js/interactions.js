@@ -384,6 +384,29 @@ function wireSecretDashboard() {
   const dashboard = document.getElementById('nerdy-dashboard');
   if (!footer || !dashboard) return;
 
+  const diagnosticsPanels = [
+    {
+      id: 'diag-commit',
+      title: 'REPOSITORY TRANSMISSION',
+      placeholder: 'Accessing network array...'
+    },
+    {
+      id: 'diag-runtime',
+      title: 'RUNTIME PIPELINE',
+      placeholder: 'Loading layout footprints...'
+    },
+    {
+      id: 'diag-network',
+      title: 'CONNECTIVITY PROFILE',
+      placeholder: 'Querying infrastructure...'
+    },
+    {
+      id: 'diag-cache',
+      title: 'CACHE STATE',
+      placeholder: 'Reading cache tables...'
+    }
+  ];
+
   let clickCount = 0;
   let clickTimeout = null;
   let telemetryInterval = null; 
@@ -406,29 +429,7 @@ function wireSecretDashboard() {
       
       if (!dashboard.hidden) return;
 
-      // Render raw structural layout
-      dashboard.innerHTML = `
-        <h3>[ DEVELOPER DIAGNOSTICS ]</h3>
-        <div class="nerdy-grid">
-          <div class="nerdy-card">
-            <h4>REPOSITORY TRANSMISSION</h4>
-            <p id="diag-commit">Accessing network array...</p>
-          </div>
-          <div class="nerdy-card">
-            <h4>RUNTIME PIPELINE</h4>
-            <p id="diag-runtime">Loading layout footprints...</p>
-          </div>
-          <div class="nerdy-card">
-            <h4>CONNECTIVITY PROFILE</h4>
-            <p id="diag-network">Querying infrastructure...</p>
-          </div>
-          <div class="nerdy-card">
-            <h4>CACHE STATE</h4>
-            <p id="diag-cache">Reading cache tables...</p>
-          </div>
-        </div>
-        <button id="diag-clear-cache" class="nerdy-clear-btn">CLEAR CACHE &amp; RELOAD</button>
-      `;
+      dashboard.innerHTML = buildDiagnosticsDashboardMarkup(diagnosticsPanels);
 
       dashboard.hidden = false;
       dashboard.removeAttribute('hidden');
@@ -447,6 +448,25 @@ function wireSecretDashboard() {
     }
   });
 
+  function buildDiagnosticsDashboardMarkup(panels) {
+    const cards = panels
+      .map(panel => `
+          <div class="nerdy-card">
+            <h4>${panel.title}</h4>
+            <p id="${panel.id}">${panel.placeholder}</p>
+          </div>
+      `)
+      .join('');
+
+    return `
+        <h3>[ DEVELOPER DIAGNOSTICS ]</h3>
+        <div class="nerdy-grid">
+          ${cards}
+        </div>
+        <button id="diag-clear-cache" class="nerdy-clear-btn">CLEAR CACHE &amp; RELOAD</button>
+      `;
+  }
+
   async function fetchLatestCommit() {
     const commitEl = document.getElementById('diag-commit');
     if (!commitEl) return;
@@ -458,14 +478,22 @@ function wireSecretDashboard() {
       // Bypasses automated workflow pushes, target-isolates your manual code commits
       const trueCommit = data[1] || data[0]; 
       
-      commitEl.innerHTML = `
-        SHA: ${trueCommit.sha.substring(0, 7)}<br>
-        MSG: "${trueCommit.commit.message.split('\n')[0]}"<br>
-        DATE: ${new Date(trueCommit.commit.committer.date).toLocaleDateString()}
-      `;
+      renderDiagLines(commitEl, [
+        `SHA: ${trueCommit.sha.substring(0, 7)}`,
+        `MSG: "${trueCommit.commit.message.split('\n')[0]}"`,
+        `DATE: ${new Date(trueCommit.commit.committer.date).toLocaleDateString()}`
+      ]);
     } catch (err) {
-      commitEl.innerHTML = `ERROR: Tree payload unreachable.<br>STATUS: Offline / Rate-Limited`;
+      renderDiagLines(commitEl, [
+        'ERROR: Tree payload unreachable.',
+        'STATUS: Offline / Rate-Limited'
+      ]);
     }
+  }
+
+  function renderDiagLines(element, lines) {
+    if (!element) return;
+    element.innerHTML = lines.join('<br>');
   }
 
   function populateStaticMetrics() {
@@ -473,7 +501,6 @@ function wireSecretDashboard() {
     if (!networkEl) return;
 
     const protocol = window.location.protocol.toUpperCase().replace(':', '');
-    const swActive = navigator.serviceWorker && navigator.serviceWorker.controller ? 'ACTIVE' : 'BYPASS';
     const resolution = `${window.screen.width}x${window.screen.height}`;
 
     let platform = navigator.platform || 'UNKNOWN';
@@ -489,43 +516,81 @@ function wireSecretDashboard() {
       }
     }
 
-    networkEl.innerHTML = `
-      PROTOCOL: ${protocol}<br>
-      CACHE_CTRL: ${swActive}<br>
-      DISPLAY: ${resolution}<br>
-      OS_PLATFORM: ${platform.toUpperCase()}<br>
-      BOOT_LATENCY: ${bootLatency}
-    `;
+    const render = (swActive) => {
+      renderDiagLines(networkEl, [
+        `PROTOCOL: ${protocol}`,
+        `CACHE_CTRL: ${swActive}`,
+        `DISPLAY: ${resolution}`,
+        `OS_PLATFORM: ${platform.toUpperCase()}`,
+        `BOOT_LATENCY: ${bootLatency}`
+      ]);
+    };
+
+    const requestId = `sw-mode-${Date.now()}-${Math.random().toString(16).slice(2)}`;
+
+    if (!('serviceWorker' in navigator)) {
+      render('BYPASS');
+      return;
+    }
+
+    const handleMessage = (event) => {
+      if (event.data?.source !== 'service-worker' || event.data?.type !== 'sw-mode') return;
+      if (event.data.requestId !== requestId) return;
+      navigator.serviceWorker.removeEventListener('message', handleMessage);
+      render(event.data.isDevelopment ? 'BYPASS' : 'ACTIVE');
+    };
+
+    navigator.serviceWorker.addEventListener('message', handleMessage);
+
+    navigator.serviceWorker.ready.then((registration) => {
+      const target = navigator.serviceWorker.controller || registration.active;
+      if (!target) {
+        navigator.serviceWorker.removeEventListener('message', handleMessage);
+        render('BYPASS');
+        return;
+      }
+
+      target.postMessage({
+        type: 'GET_SW_MODE',
+        requestId
+      });
+    }).catch(() => {
+      navigator.serviceWorker.removeEventListener('message', handleMessage);
+      render('BYPASS');
+    });
   }
 
   async function populateCacheMetrics() {
-  const cacheEl = document.getElementById('diag-cache');
-  if (!cacheEl) return;
+    const cacheEl = document.getElementById('diag-cache');
+    if (!cacheEl) return;
 
-  try {
-    const cacheNames = await caches.keys();
-    const activeCache = cacheNames[cacheNames.length - 1] || 'NONE';
+    try {
+      const cacheNames = await caches.keys();
+      const activeCache = cacheNames[cacheNames.length - 1] || 'NONE';
 
-    let entryCount = 'N/A';
-    if (activeCache !== 'NONE') {
-      const cache = await caches.open(activeCache);
-      entryCount = (await cache.keys()).length;
-    }
+      let entryCount = 'N/A';
+      if (activeCache !== 'NONE') {
+        const cache = await caches.open(activeCache);
+        entryCount = (await cache.keys()).length;
+      }
 
-    const reg = await navigator.serviceWorker.getRegistration();
-    const swState = reg?.active ? 'ACTIVE'
-      : reg?.installing ? 'INSTALLING'
-      : reg?.waiting ? 'WAITING'
-      : 'NONE';
+      const reg = await navigator.serviceWorker.getRegistration();
+      const swState = reg?.active ? 'ACTIVE'
+        : reg?.installing ? 'INSTALLING'
+        : reg?.waiting ? 'WAITING'
+        : 'NONE';
 
-    cacheEl.innerHTML = `
-      LOADED: ${activeCache}<br>
-      CACHED_ENTRIES: ${entryCount}<br>
-      SW_STATE: ${swState}<br>
-      SCOPE: ${reg?.scope || 'N/A'}
-    `;
+      renderDiagLines(cacheEl, [
+        `LOADED: ${activeCache}`,
+        `CACHED_ENTRIES: ${entryCount}`,
+        `SW_STATE: ${swState}`,
+        `SCOPE: ${reg?.scope || 'N/A'}`
+      ]);
     } catch (err) {
-      cacheEl.innerHTML = `ERROR: Cache Storage unreachable.<br>STATUS: SW unsupported / blocked`;
+      renderDiagLines(cacheEl, [
+        'ERROR: Cache Storage unreachable.',
+        'STATUS: SW unsupported / blocked'
+      ]);
     }
   }
 
@@ -568,12 +633,12 @@ function wireSecretDashboard() {
     // ✦ REPLACEMENT: Swapped out the mobile network api for universal processor thread mapping ✦
     const cpuThreads = navigator.hardwareConcurrency || 'UNKNOWN';
 
-    runtimeEl.innerHTML = `
-      DOM_NODES: ${domNodes}<br>
-      ALLOC_HEAP: ${memUsage}<br>
-      NET_STATUS: ${netMode}<br>
-      SYS_UPTIME: ${uptimeFormatted}<br>
-      CPU_THREADS: ${cpuThreads}
-    `;
+    renderDiagLines(runtimeEl, [
+      `DOM_NODES: ${domNodes}`,
+      `ALLOC_HEAP: ${memUsage}`,
+      `NET_STATUS: ${netMode}`,
+      `SYS_UPTIME: ${uptimeFormatted}`,
+      `CPU_THREADS: ${cpuThreads}`
+    ]);
   }
 }
