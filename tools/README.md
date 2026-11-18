@@ -1,0 +1,23 @@
+# Portfolio tools
+
+Tools live here, separate from project posts. `registry.js` provides the shared registry, and `tools.css` styles the shared forms and results using the portfolio design tokens.
+
+Each tool gets a folder with its UI module and calculation logic. Register `{ title, description, render, mount, getShareState }` in `window.portfolioTools` under a stable URL name. `render()` returns markup; `mount(container)` attaches local interactions after rendering. Keep listeners within the rendered container so removing the view also removes its interactions. Module state can retain inputs during navigation without storing user content in the browser.
+
+Use `tool-workspace` for an open, borderless tool layout and shared `tool-form`, `tool-button`, and `tool-control` classes for controls. The app supplies compact cards and top back navigation. `window.copyToolText(text, status, fallbackField)` handles clipboard feedback and reveals/selects fallback output when needed. Bind listeners to elements inside the workspace, rather than the persistent `dynamic-content` container, so returning to a tool does not accumulate listeners.
+
+The app also supplies a Share tool button. `getShareState()` returns a small object of URL-safe input values; `readToolState()` reads them from the link fragment. Tool modules validate values before restoring them. Share uses the native browser sheet when available, clipboard otherwise, and selectable text as a final fallback. Generating or typing does not rewrite browser history. The URL retains `?tools=name`, with shared state in the fragment.
+
+Load new modules after the registry and before `assets/js/app.js` in `index.html`, and add their assets to `MANAGED_URLS` in `sw.js` for offline caching. The app builds the tools list from the registry and renders `?tools=name` without a refresh.
+
+Subnet calculator checks: `node --test tools/subnet/calculator.test.js`.
+
+The color palette generator lives in `palette/` and opens at `?tools=palette`. It supports direct color edits, automatic locking, lock-aware generation, a bounded undo history, presets, previews, and hex/CSS/JSON exports. Its pure color functions are in `generator.js`, its UI is in `index.js`, and its swatch styles are in `palette.css`. Checks: `node --test tools/palette/generator.test.js`.
+
+The text generator lives in `text/` and opens at `?tools=text`. The earlier `?tools=gothic` URL remains an alias. Eighteen styles appear as live, filterable previews with independent copy controls. Mathematical alphabet exceptions use Unicode's legacy Letterlike Symbols mappings. Checks: `node --test tools/text/generator.test.js`.
+
+The QR scanner lives in `qr/` and opens at `?tools=qr`. It scans webcam frames or local image files in the browser. Its bundled jsQR decoder is distributed under Apache-2.0; see `qr/JSQR-LICENSE.txt`.
+
+The subnet calculator accepts CIDR prefixes and contiguous dotted-decimal masks. Its host-count helper chooses a conventional subnet with reserved network and broadcast addresses; /31 and /32 remain available through direct input.
+
+Design references: [Coolors generator workflow](https://coolors-help.zendesk.com/hc/en-us/articles/360010581980-Generate-a-palette), [Calculator.net subnet inputs](https://www.calculator.net/ip-subnet-calculator.html), [Unicode character mappings](https://www.unicode.org/charts/PDF/U1D400.pdf), and [Web Share API](https://developer.mozilla.org/en-US/docs/Web/API/Navigator/share).

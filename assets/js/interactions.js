@@ -69,6 +69,31 @@ function wireProjectHoverInteractions() {
   });
 }
 
+/** Give tool cards the same gentle, randomized lift and tilt as project cards. */
+function wireToolCardHoverInteractions() {
+  const container = document.getElementById('dynamic-content');
+  if (!container || container._toolHoverWired) return;
+  container._toolHoverWired = true;
+
+  container.addEventListener('mouseover', (e) => {
+    const card = e.target.closest('.tool-card');
+    if (!card || card.classList.contains('is-hovered')) return;
+    card.classList.add('is-hovered');
+    if (window.innerWidth > CONFIG.MOBILE_BREAKPOINT) {
+      const angle = (Math.random() - 0.5) * 6;
+      card.style.transform = `scale(1.03) rotate(${angle}deg)`;
+    }
+  });
+
+  container.addEventListener('mouseout', (e) => {
+    const card = e.target.closest('.tool-card');
+    if (!card) return;
+    if (e.relatedTarget && card.contains(e.relatedTarget)) return;
+    card.classList.remove('is-hovered');
+    card.style.transform = '';
+  });
+}
+
 /**
  * Wires up profile picture click effects
  */

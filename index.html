@@ -46,6 +46,8 @@
     <link rel="preload" href="assets/css/effects.css" as="style" onload="this.rel='stylesheet'">
     <link rel="preload" href="assets/css/project-detail.css" as="style" onload="this.rel='stylesheet'">
     <link rel="preload" href="assets/css/gallery.css" as="style" onload="this.rel='stylesheet'">
+    <link rel="stylesheet" href="tools/tools.css">
+    <link rel="stylesheet" href="tools/palette/palette.css">
     <noscript>
         <link rel="stylesheet" href="assets/css/base.css">
         <link rel="stylesheet" href="assets/css/layout.css">
@@ -94,7 +96,7 @@
             <a class="large" id="email-link">Copy my Email</a>
             <div class="extra-socials">
                 <div class="social-row">
-                    <button class="tools-placeholder" disabled aria-label="Tools — soon">Tools</button>
+                    <a href="?tools" id="tools-link" aria-controls="dynamic-content">Tools</a>
                     <a href="https://discord.gg/D3GPt423tc" target="_blank">Discord</a>
                 </div>
                 <div class="social-row">
@@ -142,6 +144,15 @@
     <script src="assets/js/features.js" defer></script>
     <script src="assets/js/main.js" defer></script>
     <script src="assets/js/gallery.js" defer></script>
+    <script src="tools/registry.js" defer></script>
+    <script src="tools/subnet/calculator.js" defer></script>
+    <script src="tools/subnet/index.js" defer></script>
+    <script src="tools/palette/generator.js" defer></script>
+    <script src="tools/palette/index.js" defer></script>
+    <script src="tools/text/generator.js" defer></script>
+    <script src="tools/text/index.js" defer></script>
+    <script src="tools/qr/jsQR.js" defer></script>
+    <script src="tools/qr/index.js" defer></script>
     <script src="assets/js/app.js" defer></script>
     <script src="https://pagering.gideon.sh/embed.js" defer onerror="console.log('Webring script failed to load (offline mode)')"></script>
 </body>

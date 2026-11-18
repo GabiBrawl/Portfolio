@@ -247,7 +247,8 @@ a.large {
   margin: 0 0 10px 0;
 }
 
-.socials a:hover {
+.socials a:hover,
+.socials a[aria-current="page"] {
   background: var(--primary);
   color: var(--background);
 }
@@ -264,19 +265,6 @@ a.large {
 
 .social-row a {
   flex: 1;
-}
-
-.tools-placeholder {
-  flex: 1;
-  display: block;
-  font: inherit;
-  color: var(--primary);
-  background: transparent;
-  padding: 10px;
-  border: 2px dashed var(--primary);
-  text-align: center;
-  opacity: 0.5;
-  cursor: not-allowed;
 }
 
 .webring-section {

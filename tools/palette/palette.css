@@ -1,0 +1,29 @@
+.palette-toolbar label { flex: 0 1 220px; }
+.palette-swatches { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 12px; margin: 24px 0 12px; }
+.palette-swatch { min-width: 0; border: 2px solid var(--primary); }
+.palette-color-label { display: block; height: 190px; }
+.palette-color { display: block; width: 100%; height: 100%; padding: 0; border: 0; border-radius: 0; background: transparent; cursor: url('../../assets/cursors/handpointing.svg'), pointer; }
+.palette-color::-webkit-color-swatch-wrapper { padding: 0; }
+.palette-color::-webkit-color-swatch { border: 0; }
+.palette-color::-moz-color-swatch { border: 0; }
+.palette-caption { display: grid; gap: 10px; padding: 12px 8px; }
+.palette-hex { width: 100%; min-width: 0; box-sizing: border-box; text-align: center; border: 0; border-bottom: 1px solid var(--primary); border-radius: 0; background: var(--background); color: var(--primary); font-family: "Special Gothic Condensed One", sans-serif; padding: 6px 0; font-size: 1.1rem; }
+.palette-hex[aria-invalid="true"] { border-color: #ff4444; }
+.palette-color-actions { display: flex; gap: 6px; }
+.palette-lock, .palette-copy { flex: 1; border: 1px solid var(--primary); border-radius: 0; background: transparent; color: var(--primary); font-family: "Special Gothic Condensed One", sans-serif; cursor: url('../../assets/cursors/handpointing.svg'), pointer; padding: 8px 2px; min-width: 0; }
+.palette-lock:hover, .palette-copy:hover { background: var(--primary); color: var(--background); }
+.palette-lock[aria-pressed="true"] { background: var(--accent); color: var(--background); border-color: var(--accent); }
+.palette-bottom { display: flex; justify-content: space-between; align-items: end; gap: 20px; flex-wrap: wrap; margin: 20px 0; }
+.palette-bottom .tool-eyebrow { margin: 0 0 10px; }
+.palette-preview { padding: 30px; margin-top: 20px; }
+.palette-preview strong { display: block; font-family: "Special Gothic Expanded One", sans-serif; font-size: clamp(1.3rem, 3vw, 2rem); max-width: 500px; margin: 20px 0; }
+.palette-preview-button { display: inline-block; font-family: "Special Gothic Condensed One", sans-serif; padding: 12px 20px; margin: 12px 0 24px; }
+.palette-preview-strip { display: flex; height: 24px; }
+.palette-preview-strip span { flex: 1; }
+@media (max-width: 768px) {
+  .palette-toolbar label { flex-basis: 100%; }
+  .palette-swatches { grid-template-columns: 1fr; gap: 12px; }
+  .palette-swatch { display: grid; grid-template-columns: 1fr 150px; }
+  .palette-color-label { height: 110px; }
+  .palette-caption { align-content: center; padding: 12px; }
+}

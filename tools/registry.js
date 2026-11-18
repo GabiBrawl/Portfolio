@@ -1,0 +1,58 @@
+// Each tool registers its metadata, markup, and mount function here.
+window.portfolioTools = new Map();
+
+window.readToolState = function () {
+  return new URLSearchParams(window.location.hash.slice(1));
+};
+
+window.buildToolShareURL = function (id, state = {}) {
+  const url = new URL(window.location.href);
+  url.search = `?tools=${encodeURIComponent(id)}`;
+  const params = new URLSearchParams();
+  Object.entries(state).forEach(([key, value]) => params.set(key, String(value)));
+  url.hash = params.toString();
+  return url.href;
+};
+
+window.sharePortfolioTool = async function (id, tool, status, fallback) {
+  const url = window.buildToolShareURL(id, tool.getShareState?.());
+  fallback.hidden = true;
+  status.textContent = '';
+  status.hidden = false;
+  if (navigator.share) {
+    try {
+      await navigator.share({ title: tool.title, url });
+      if (status.isConnected) status.textContent = 'Shared.';
+      return;
+    } catch (error) {
+      if (error.name === 'AbortError') { status.hidden = true; return; }
+    }
+  }
+  try {
+    await navigator.clipboard.writeText(url);
+    if (status.isConnected) status.textContent = 'Link copied. It includes your current settings.';
+  } catch {
+    if (!status.isConnected) return;
+    status.textContent = 'Copy this link to share your current settings.';
+    fallback.hidden = false;
+    const input = fallback.querySelector('textarea');
+    input.value = url;
+    input.focus();
+    input.select();
+  }
+};
+
+// Shared copy feedback, with selectable output when clipboard access is unavailable.
+window.copyToolText = async function (text, status, fallback) {
+  try {
+    await navigator.clipboard.writeText(text);
+    if (status.isConnected) status.textContent = 'Copied to clipboard.';
+  } catch {
+    if (!status.isConnected) return;
+    status.textContent = 'Select the text below and copy it.';
+    const details = fallback?.closest('details');
+    if (details) details.open = true;
+    fallback?.focus();
+    fallback?.select();
+  }
+};

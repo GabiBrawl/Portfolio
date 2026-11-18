@@ -1,5 +1,5 @@
 // app.js - Dynamic content render for the single-page app
-// Handles both the projects list view and the individual project views based on URL
+// Handles projects, tools, and individual project views based on URL
 
 (function () {
   'use strict';
@@ -11,7 +11,7 @@ let cachedProjects = null;
 let currentGalleryPreviewCount = null;
 
   // Constants
-  const BACK_LINK_HTML = '<a href="#" class="back-link" onclick="history.pushState(null, \'\', window.location.pathname); window.renderContent(); window.wireInteractions(); return false;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><path d="M19 12H5M12 19l-7-7 7-7"></svg>Back to Portfolio</a>';
+  const BACK_LINK_HTML = '<a href="#" class="back-link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><path d="M19 12H5M12 19l-7-7 7-7"></svg>Back to Portfolio</a>';
   const LOADING_HTML = '<p style="padding: 40px; text-align: center;">Loading project...</p>';
   const ERROR_HTML = (message) => `
 <div class="project-detail">
@@ -31,6 +31,21 @@ let currentGalleryPreviewCount = null;
     }
 
     const view = getViewMode();
+
+    document.getElementById('tools-link')?.addEventListener('click', (event) => {
+      if (event.button !== 0 || event.ctrlKey || event.metaKey || event.shiftKey || event.altKey) return;
+      event.preventDefault();
+      const params = new URLSearchParams(window.location.search);
+      if (params.has('tools')) {
+        params.delete('tools');
+        const query = params.toString();
+        history.pushState(null, '', window.location.pathname + (query ? `?${query}` : ''));
+      } else {
+        history.pushState(null, '', '?tools');
+      }
+      renderContent();
+      wireInteractions();
+    });
 
     if (view.mode === 'project' && !loadedProjects[view.id]) {
       const dynamicContent = document.getElementById('dynamic-content');
@@ -109,6 +124,10 @@ let currentGalleryPreviewCount = null;
 
   function getViewMode() {
     const params = new URLSearchParams(window.location.search);
+    if (params.has('tools')) {
+      const toolId = params.get('tools');
+      return toolId ? { mode: 'tool', id: toolId } : { mode: 'tools' };
+    }
     const postId = params.get('post');
     const img = params.get('img');
     if (postId && params.has('gallery')) {
@@ -126,6 +145,12 @@ let currentGalleryPreviewCount = null;
       return;
     }
 
+    if (window.activeToolCleanup) {
+      const cleanup = window.activeToolCleanup;
+      window.activeToolCleanup = null;
+      cleanup();
+    }
+
     if (window._galleryKeyHandler && view.mode !== 'gallery') {
       document.removeEventListener('keydown', window._galleryKeyHandler);
       window._galleryKeyHandler = null;
@@ -136,7 +161,23 @@ let currentGalleryPreviewCount = null;
       window._sideTocMoveHandler = null;
     }
 
-    if (view.mode === 'gallery') {
+    const heading = container.querySelector('.title-container h2');
+    const isTools = view.mode === 'tools' || view.mode === 'tool';
+    if (heading) heading.textContent = isTools ? 'Tools' : 'My Projects';
+    const toolsLink = document.getElementById('tools-link');
+    if (isTools) {
+      toolsLink?.setAttribute('aria-current', 'page');
+      toolsLink?.setAttribute('href', window.location.pathname);
+    } else {
+      toolsLink?.removeAttribute('aria-current');
+      toolsLink?.setAttribute('href', '?tools');
+    }
+
+    if (view.mode === 'tools') {
+      renderToolsView(container);
+    } else if (view.mode === 'tool') {
+      renderToolView(container, view.id);
+    } else if (view.mode === 'gallery') {
       window.renderGalleryView(container, view.id, view.imgIndex);
     } else if (view.mode === 'project') {
       renderProjectView(container, view.id);
@@ -146,6 +187,53 @@ let currentGalleryPreviewCount = null;
   }
 
   window.renderContent = renderContent;
+
+  function renderToolsView(container) {
+    document.title = "Tools | Gabriel Yassin's Portfolio";
+    container.querySelector('#dynamic-content').innerHTML = `
+      <div class="tools-grid">
+        ${Array.from(window.portfolioTools, ([id, tool]) => `
+        <a class="tool-card" href="?tools=${encodeURIComponent(id)}" data-tools-navigation>
+          <div class="tool-card-heading"><h3>${tool.title}</h3></div>
+          <p>${tool.description}</p>
+        </a>
+        `).join('')}
+      </div>
+    `;
+  }
+
+  function renderToolView(container, toolId) {
+    // Preserve the original sample URL after replacing it with the subnet tool.
+    const canonicalId = toolId === 'sample_tool' ? 'subnet' : toolId === 'gothic' ? 'text' : toolId;
+    const tool = window.portfolioTools.get(canonicalId);
+    const title = tool ? tool.title : 'Tool not found';
+    document.title = `${title} | Gabriel Yassin's Portfolio`;
+    container.querySelector('#dynamic-content').innerHTML = `
+      <div class="tool-page">
+        <header class="tool-page-header">
+          <h1>${title}</h1>
+          <div class="tool-page-actions">
+            <a href="?tools" class="back-link" data-tools-navigation><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16" aria-hidden="true"><path d="M19 12H5M12 19l-7-7 7-7"></path></svg>Back to Tools</a>
+            ${tool ? '<button class="tool-button" data-share-tool>Share tool</button>' : ''}
+          </div>
+        </header>
+        <div class="tool-content-panel">
+          <p class="tool-status tool-share-status" role="status" hidden></p>
+          <label class="tool-label tool-share-fallback" hidden>Shareable link<textarea class="tool-control" readonly rows="2"></textarea></label>
+          ${tool ? tool.render() : '<section class="tool-workspace"><p>This tool is unavailable.</p></section>'}
+        </div>
+      </div>
+    `;
+    if (tool) {
+      const content = container.querySelector('#dynamic-content');
+      tool.mount(content);
+      content.querySelector('[data-share-tool]').addEventListener('click', () => {
+        const status = content.querySelector('.tool-share-status');
+        const fallback = content.querySelector('.tool-share-fallback');
+        window.sharePortfolioTool(canonicalId, tool, status, fallback);
+      });
+    }
+  }
 
   // Loads the lightweight card manifest instead of every full post JSON.
   function loadProjects() {
@@ -189,6 +277,7 @@ let currentGalleryPreviewCount = null;
     dynamicContent.innerHTML = '<p style="padding: 40px; text-align: center;">Loading projects...</p>';
 
     loadProjects().then(projects => {
+      if (getViewMode().mode !== 'projects') return;
       if (projects.offline) {
         const dynamicContent = document.getElementById('dynamic-content');
         dynamicContent.innerHTML = `
@@ -234,6 +323,7 @@ let currentGalleryPreviewCount = null;
         wireInteractions();
       }, 0);
     }).catch(error => {
+      if (getViewMode().mode !== 'projects') return;
       console.error('Error loading project cards:', error);
       const dynamicContent = document.getElementById('dynamic-content');
       const isOffline = !navigator.onLine || error.message.includes('fetch');
@@ -422,6 +512,10 @@ function wireInteractions() {
     if (typeof wireProjectHoverInteractions === 'function') {
       wireProjectHoverInteractions();
     }
+  } else if (view.mode === 'tools') {
+    if (typeof wireToolCardHoverInteractions === 'function') {
+      wireToolCardHoverInteractions();
+    }
   } else {
     wireProjectPageInteractions();
   }
@@ -501,10 +595,20 @@ function wireProjectPageInteractions() {
 }
 
 function handleProjectPageClick(e) {
+  const toolsNavigation = e.target.closest('[data-tools-navigation]');
+  if (toolsNavigation) {
+    if (e.button !== 0 || e.ctrlKey || e.metaKey || e.shiftKey || e.altKey) return;
+    e.preventDefault();
+    history.pushState(null, '', toolsNavigation.getAttribute('href'));
+    renderContent();
+    wireInteractions();
+    return;
+  }
+
   const backLink = e.target.closest('.back-link');
   if (backLink) {
     e.preventDefault();
-    history.pushState(null, '', '');
+    history.pushState(null, '', window.location.pathname);
     renderContent();
     wireInteractions();
     return;

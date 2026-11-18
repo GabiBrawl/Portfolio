@@ -36,7 +36,18 @@ const MANAGED_URLS = [
   '/assets/js/main.js',
   '/assets/js/utils.js',
   '/assets/music.json',
-  '/posts/index.json'
+  '/posts/index.json',
+  '/tools/tools.css',
+  '/tools/registry.js',
+  '/tools/subnet/calculator.js',
+  '/tools/subnet/index.js',
+  '/tools/palette/palette.css',
+  '/tools/palette/generator.js',
+  '/tools/palette/index.js',
+  '/tools/text/generator.js',
+  '/tools/text/index.js',
+  '/tools/qr/jsQR.js',
+  '/tools/qr/index.js'
 ];
 
 // External URLs can't be sha256'd by the hash workflow (no local file to hash),
