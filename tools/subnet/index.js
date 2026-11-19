@@ -57,7 +57,7 @@
           results.innerHTML = ''; output.value = ''; copy.disabled = true; pending.hidden = showError;
           if (showError) {
             error.textContent = exception.message; error.hidden = false;
-            const maskError = /prefix|subnet mask|mask/i.test(exception.message);
+            const maskError = /prefix length|subnet mask|contiguous/i.test(exception.message);
             (maskError ? mask : address).setAttribute('aria-invalid', 'true');
             (maskError ? mask : address).focus();
           }

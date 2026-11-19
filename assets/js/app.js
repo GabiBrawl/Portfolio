@@ -516,6 +516,7 @@ function wireInteractions() {
     if (typeof wireToolCardHoverInteractions === 'function') {
       wireToolCardHoverInteractions();
     }
+    wireProjectPageInteractions();
   } else {
     wireProjectPageInteractions();
   }

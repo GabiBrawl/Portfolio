@@ -1,0 +1,297 @@
+/* Acoustic Sweep Generator styling */
+.sweep-tool {
+  max-width: 1000px;
+}
+
+.sweep-header-meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.sweep-status-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 12px;
+  border: 1px solid var(--primary);
+  background: var(--background);
+  font-family: "Special Gothic Condensed One", sans-serif;
+  font-size: 0.95rem;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+.sweep-status-led {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--primary);
+  display: inline-block;
+  transition: background-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.sweep-status-badge.is-sweeping .sweep-status-led {
+  background: var(--accent);
+  box-shadow: 0 0 8px var(--accent);
+  animation: sweepPulse 1s ease-in-out infinite;
+}
+
+@keyframes sweepPulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.4; transform: scale(1.2); }
+}
+
+/* Primary Telemetry Dashboard */
+.sweep-dashboard {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(280px, 100%), 1fr));
+  gap: 16px;
+  margin: 20px 0;
+}
+
+.sweep-telemetry-card {
+  padding: 18px 20px;
+  border: 2px solid var(--primary);
+  background: var(--background);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.sweep-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.sweep-freq-primary {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+}
+
+.sweep-freq-number {
+  font-family: "Special Gothic Expanded One", sans-serif;
+  font-size: clamp(2rem, 5vw, 3rem);
+  line-height: 1;
+  color: var(--accent);
+  font-variant-numeric: tabular-nums;
+}
+
+.sweep-freq-unit {
+  font-family: "Special Gothic Condensed One", sans-serif;
+  font-size: 1.4rem;
+  color: var(--primary);
+}
+
+.sweep-badge-tag {
+  display: inline-block;
+  padding: 3px 8px;
+  border: 1px solid var(--accent);
+  color: var(--accent);
+  font-family: "Special Gothic Condensed One", sans-serif;
+  font-size: 0.85rem;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+}
+
+.sweep-card-meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-family: "Special Gothic Condensed One", sans-serif;
+  font-size: 1rem;
+  opacity: 0.85;
+  font-variant-numeric: tabular-nums;
+}
+
+.sweep-progress-container {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.sweep-progress-bar {
+  width: 100%;
+  height: 12px;
+  border: 1px solid var(--primary);
+  background: #111;
+  overflow: hidden;
+  position: relative;
+}
+
+.sweep-progress-fill {
+  height: 100%;
+  width: 0%;
+  background: var(--accent);
+  transition: none;
+}
+
+/* Canvas Visualizer */
+.sweep-visualizer-wrap {
+  margin: 20px 0;
+  border: 2px solid var(--primary);
+  background: #090909;
+  position: relative;
+}
+
+.sweep-visualizer-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 10px 16px;
+  border-bottom: 1px solid rgba(222, 216, 203, 0.2);
+  font-family: "Special Gothic Condensed One", sans-serif;
+  font-size: 0.9rem;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: var(--primary);
+  opacity: 0.85;
+}
+
+.sweep-canvas-stage {
+  width: 100%;
+  height: 240px;
+  position: relative;
+  overflow: hidden;
+}
+
+.sweep-canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+/* Waveform & Mode button groups */
+.sweep-button-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.sweep-button-group .tool-button {
+  padding: 8px 14px;
+  font-size: 1rem;
+  flex: 1 1 auto;
+  text-align: center;
+}
+
+.sweep-button-group .tool-button[aria-pressed="true"] {
+  background: var(--primary);
+  color: var(--background);
+}
+
+/* Output Volume Deck */
+.sweep-gain-deck {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  width: 100%;
+}
+
+.sweep-slider {
+  flex: 1 1 auto;
+  cursor: url('../../assets/cursors/handpointing.svg'), pointer;
+}
+
+.sweep-gain-readout {
+  font-family: "Special Gothic Condensed One", sans-serif;
+  font-size: 1.1rem;
+  min-width: 110px;
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+  color: var(--accent);
+}
+
+/* Acoustic Safety Callout */
+.sweep-safety-notice {
+  margin: 24px 0;
+  padding: 14px 18px;
+  border: 2px solid var(--accent);
+  background: rgba(255, 171, 7, 0.08);
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+}
+
+.sweep-safety-icon {
+  flex: 0 0 auto;
+  width: 20px;
+  height: 20px;
+  color: var(--accent);
+  margin-top: 2px;
+}
+
+.sweep-safety-notice p {
+  margin: 0;
+  line-height: 1.5;
+  font-size: 0.95rem;
+}
+
+.sweep-safety-notice strong {
+  color: var(--accent);
+}
+
+/* Presets & Actions */
+.sweep-preset-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.sweep-preset-btn {
+  border: 0;
+  border-bottom: 1px solid var(--primary);
+  background: transparent;
+  color: var(--primary);
+  font: inherit;
+  font-family: "Special Gothic Condensed One", sans-serif;
+  padding: 2px 6px;
+  cursor: url('../../assets/cursors/handpointing.svg') 10 5, pointer;
+  transition: color 0.15s ease, border-color 0.15s ease;
+}
+
+.sweep-preset-btn:hover {
+  color: var(--accent);
+  border-color: var(--accent);
+}
+
+.sweep-preset-btn:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+}
+
+.sweep-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+  margin: 24px 0 16px;
+}
+
+@media (max-width: 768px) {
+  .sweep-dashboard {
+    grid-template-columns: 1fr;
+  }
+  .sweep-canvas-stage {
+    height: 200px;
+  }
+  .sweep-gain-deck {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .sweep-gain-readout {
+    text-align: left;
+  }
+  .sweep-actions .tool-button {
+    width: 100%;
+  }
+}

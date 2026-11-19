@@ -18,6 +18,8 @@ The text generator lives in `text/` and opens at `?tools=text`. The earlier `?to
 
 The QR scanner lives in `qr/` and opens at `?tools=qr`. It scans webcam frames or local image files in the browser. Its bundled jsQR decoder is distributed under Apache-2.0; see `qr/JSQR-LICENSE.txt`.
 
+The acoustic sweep generator lives in `sweep/` and opens at `?tools=sweep`. It generates continuous frequency sweeps (20 Hz–20 kHz) with customizable waveforms (sine, triangle, square, sawtooth), logarithmic (exponential) or linear progression curves, real-time FFT spectrum and oscilloscope monitoring, acoustic band classification, musical pitch estimation, volume gain with dBFS scaling, hearing safety notices, and uncompressed 16-bit PCM WAV audio export. Its pure synthesis, math, and validation functions are in `generator.js`, its UI and audio controller are in `index.js`, and its styling is in `sweep.css`. Checks: `node --test tools/sweep/generator.test.js`.
+
 The subnet calculator accepts CIDR prefixes and contiguous dotted-decimal masks. Its host-count helper chooses a conventional subnet with reserved network and broadcast addresses; /31 and /32 remain available through direct input.
 
 Design references: [Coolors generator workflow](https://coolors-help.zendesk.com/hc/en-us/articles/360010581980-Generate-a-palette), [Calculator.net subnet inputs](https://www.calculator.net/ip-subnet-calculator.html), [Unicode character mappings](https://www.unicode.org/charts/PDF/U1D400.pdf), and [Web Share API](https://developer.mozilla.org/en-US/docs/Web/API/Navigator/share).

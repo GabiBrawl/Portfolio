@@ -50,6 +50,11 @@
         <canvas class="qr-canvas" data-canvas hidden></canvas>
       </section>`,
     mount(container) {
+      // Run any previous tool's cleanup, then reset shared state to a clean baseline.
+      window.activeToolCleanup?.();
+      state.stream = null; state.timer = 0; state.active = false;
+      window.activeToolCleanup = null;
+
       const root = container.querySelector('.qr-tool');
       const video = root.querySelector('[data-video]');
       const canvas = root.querySelector('[data-canvas]');
@@ -152,6 +157,7 @@
           state.stream = stream;
           video.srcObject = state.stream;
           await video.play();
+          if (requestId !== cameraRequestId) return;
           state.active = true;
           video.hidden = false;
           root.querySelector('[data-camera-placeholder]').hidden = true;
@@ -228,11 +234,10 @@
         root.querySelector('[data-image]').value = '';
       });
 
-      window.activeToolCleanup?.();
       window.activeToolCleanup = () => {
         stopCamera(false);
         if (imageURL) URL.revokeObjectURL(imageURL);
-        if (window.activeToolCleanup) window.activeToolCleanup = null;
+        window.activeToolCleanup = null;
       };
       if (!window.jsQR) status.textContent = 'The QR decoder did not load. Reload the page and try again.';
     }

@@ -45,7 +45,7 @@
 .tool-page :is(input, select, textarea, button, a):focus-visible, .tool-card:focus-visible { outline: 2px solid var(--accent); outline-offset: 4px; }
 .tool-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; margin: 20px 0; }
 .tool-status { min-height: 1.6em; font-family: "Special Gothic Condensed One", sans-serif; line-height: 1.6; }
-.tool-error { color: #ff4444; margin: 12px 0; }
+.tool-error { color: #ff4444; margin: 12px 0; font-family: "Special Gothic Condensed One", sans-serif; }
 .tool-note { font-size: .95rem; opacity: .8; line-height: 1.6; }
 .tool-result-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(220px, 100%), 1fr)); gap: 0 24px; margin: 20px 0; }
 .tool-result-grid > div { border-bottom: 1px solid var(--primary); padding: 16px 0; min-width: 0; }
@@ -67,6 +67,7 @@
 .subnet-size-helper .tool-form { margin: 16px 0 8px; }
 .subnet-footnote { margin-top: 24px; }
 .subnet-tool [aria-invalid="true"] { border-color: #ff4444; }
+.tool-form input[aria-invalid="true"], .tool-form select[aria-invalid="true"] { border-color: #ff4444; }
 .tool-presets { display: flex; flex-wrap: wrap; gap: 10px; }
 .tool-presets .tool-button { font-size: .95rem; padding: 6px 10px; }
 .text-source { margin-top: 24px; }

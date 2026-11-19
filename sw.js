@@ -47,7 +47,10 @@ const MANAGED_URLS = [
   '/tools/text/generator.js',
   '/tools/text/index.js',
   '/tools/qr/jsQR.js',
-  '/tools/qr/index.js'
+  '/tools/qr/index.js',
+  '/tools/sweep/sweep.css',
+  '/tools/sweep/generator.js',
+  '/tools/sweep/index.js'
 ];
 
 // External URLs can't be sha256'd by the hash workflow (no local file to hash),
