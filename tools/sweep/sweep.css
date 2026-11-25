@@ -198,7 +198,7 @@
 
 .sweep-slider {
   flex: 1 1 auto;
-  cursor: url('../../assets/cursors/handpointing.svg'), pointer;
+  cursor: url('../../assets/cursors/handpointing.svg') 10 5, pointer;
 }
 
 .sweep-gain-readout {

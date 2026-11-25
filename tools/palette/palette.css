@@ -2,7 +2,7 @@
 .palette-swatches { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 12px; margin: 24px 0 12px; }
 .palette-swatch { min-width: 0; border: 2px solid var(--primary); }
 .palette-color-label { display: block; height: 190px; }
-.palette-color { display: block; width: 100%; height: 100%; padding: 0; border: 0; border-radius: 0; background: transparent; cursor: url('../../assets/cursors/handpointing.svg'), pointer; }
+.palette-color { display: block; width: 100%; height: 100%; padding: 0; border: 0; border-radius: 0; background: transparent; cursor: url('../../assets/cursors/handpointing.svg') 10 5, pointer; }
 .palette-color::-webkit-color-swatch-wrapper { padding: 0; }
 .palette-color::-webkit-color-swatch { border: 0; }
 .palette-color::-moz-color-swatch { border: 0; }
@@ -10,7 +10,7 @@
 .palette-hex { width: 100%; min-width: 0; box-sizing: border-box; text-align: center; border: 0; border-bottom: 1px solid var(--primary); border-radius: 0; background: var(--background); color: var(--primary); font-family: "Special Gothic Condensed One", sans-serif; padding: 6px 0; font-size: 1.1rem; }
 .palette-hex[aria-invalid="true"] { border-color: #ff4444; }
 .palette-color-actions { display: flex; gap: 6px; }
-.palette-lock, .palette-copy { flex: 1; border: 1px solid var(--primary); border-radius: 0; background: transparent; color: var(--primary); font-family: "Special Gothic Condensed One", sans-serif; cursor: url('../../assets/cursors/handpointing.svg'), pointer; padding: 8px 2px; min-width: 0; }
+.palette-lock, .palette-copy { flex: 1; border: 1px solid var(--primary); border-radius: 0; background: transparent; color: var(--primary); font-family: "Special Gothic Condensed One", sans-serif; cursor: url('../../assets/cursors/handpointing.svg') 10 5, pointer; padding: 8px 2px; min-width: 0; }
 .palette-lock:hover, .palette-copy:hover { background: var(--primary); color: var(--background); }
 .palette-lock[aria-pressed="true"] { background: var(--accent); color: var(--background); border-color: var(--accent); }
 .palette-bottom { display: flex; justify-content: space-between; align-items: end; gap: 20px; flex-wrap: wrap; margin: 20px 0; }
