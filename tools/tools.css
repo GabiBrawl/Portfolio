@@ -106,7 +106,7 @@
 .qr-canvas { display: none; }
 .totp-intro { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 8px 24px; margin-bottom: 24px; }
 .totp-intro p { margin: 0; }
-.totp-layout { display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(280px, .8fr); gap: 28px; align-items: start; }
+.totp-layout { display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(280px, .8fr); gap: 24px; align-items: start; }
 .totp-editor { min-width: 0; }
 .totp-section-heading { margin-bottom: -4px; }
 .totp-section-heading h2, .totp-dashboard-heading h2 { margin: 0; font-family: "Special Gothic Expanded One", sans-serif; font-size: clamp(1.2rem, 2.5vw, 1.6rem); }
@@ -124,7 +124,7 @@
 .totp-form-actions, .totp-code-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; }
 .totp-code-card { min-width: 0; margin: 0; border: 2px solid var(--primary); }
 .totp-code-heading { display: flex; justify-content: space-between; gap: 16px; padding: 14px 16px; border-bottom: 1px solid var(--primary); font-family: "Special Gothic Condensed One", sans-serif; }
-.totp-code { display: flex; justify-content: center; width: 100%; box-sizing: border-box; padding: 18px 16px 12px; color: var(--primary); font-family: "Special Gothic Expanded One", sans-serif; font-size: clamp(2.5rem, 9vw, 5.5rem); letter-spacing: .09em; line-height: 1; text-align: center; }
+.totp-code { display: flex; justify-content: center; width: 100%; min-width: 0; box-sizing: border-box; padding: 22px 12px 16px; overflow: hidden; color: var(--primary); font-family: "Special Gothic Expanded One", sans-serif; font-size: clamp(1.8rem, 3.8vw, 3rem); letter-spacing: .045em; line-height: 1; text-align: center; }
 .totp-code-digit { display: inline-block; animation: totp-digit-in 420ms cubic-bezier(.2, .8, .2, 1) both; animation-delay: calc(var(--digit-index) * 55ms); }
 @keyframes totp-digit-in { from { opacity: 0; transform: translateY(.32em); } to { opacity: 1; transform: translateY(0); } }
 .totp-progress { height: 6px; margin: 0 16px; background: color-mix(in srgb, var(--primary) 18%, transparent); }
@@ -134,7 +134,7 @@
 .totp-dashboard { margin-top: 32px; padding-top: 20px; border-top: 2px solid var(--primary); }
 .totp-dashboard-heading { display: flex; flex-wrap: wrap; align-items: end; justify-content: space-between; gap: 12px; }
 .totp-dashboard > .tool-note { margin: 10px 0 18px; }
-.totp-pin-list { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(230px, 100%), 1fr)); gap: 14px; }
+.totp-pin-list { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(260px, 100%), 1fr)); gap: 14px; }
 .totp-pin { min-width: 0; border: 1px solid var(--primary); padding: 14px; }
 .totp-pin-heading { display: flex; align-items: start; justify-content: space-between; gap: 12px; }
 .totp-pin-heading strong { overflow-wrap: anywhere; font-family: "Special Gothic Condensed One", sans-serif; font-size: 1.2rem; }

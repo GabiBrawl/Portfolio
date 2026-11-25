@@ -72,17 +72,18 @@
         codeDisplay.replaceChildren(...Array.from(value, (digit, index) => { const character = document.createElement('span'); character.className = 'totp-code-digit'; character.style.setProperty('--digit-index', index); character.textContent = digit; return character; }));
       }
       function renderPins() {
-        pins.innerHTML = state.pins.map(pin => `<article class="totp-pin" data-pin-id="${pin.id}" data-revealed="false"><div class="totp-pin-heading"><strong>${escapeHTML(pin.label)}</strong><button class="totp-icon-button" type="button" data-remove-pin aria-label="Remove ${escapeHTML(pin.label)}">×</button></div><output class="totp-pin-code" data-pin-code aria-label="${escapeHTML(pin.label)} code is hidden">${'•'.repeat(Number(pin.digits))}</output><div class="totp-pin-meta"><span data-pin-countdown>Refreshes in ${secondsRemaining(Number(pin.period))}s</span><span class="totp-pin-progress" aria-hidden="true"><span data-pin-progress style="width:${(secondsRemaining(Number(pin.period)) / Number(pin.period)) * 100}%"></span></span></div><div class="totp-pin-actions"><button class="tool-button" type="button" data-reveal-pin>Reveal</button><button class="tool-button" type="button" data-copy-pin>Copy</button></div></article>`).join('');
+        pins.innerHTML = state.pins.map(pin => `<article class="totp-pin" data-pin-id="${pin.id}" data-revealed="${pin.revealed === true}"><div class="totp-pin-heading"><strong>${escapeHTML(pin.label)}</strong><button class="totp-icon-button" type="button" data-remove-pin aria-label="Remove ${escapeHTML(pin.label)}">×</button></div><output class="totp-pin-code" data-pin-code aria-label="${escapeHTML(pin.label)} code ${pin.revealed ? pin.code : 'is hidden'}">${pin.revealed ? pin.code : '•'.repeat(Number(pin.digits))}</output><div class="totp-pin-meta"><span data-pin-countdown>Refreshes in ${secondsRemaining(Number(pin.period))}s</span><span class="totp-pin-progress" aria-hidden="true"><span data-pin-progress style="width:${(secondsRemaining(Number(pin.period)) / Number(pin.period)) * 100}%"></span></span></div><div class="totp-pin-actions"><button class="tool-button" type="button" data-reveal-pin>${pin.revealed ? 'Hide' : 'Reveal'}</button><button class="tool-button" type="button" data-copy-pin>Copy</button></div></article>`).join('');
         empty.hidden = state.pins.length > 0; clearPins.hidden = state.pins.length === 0;
       }
       function setPinRevealed(cardElement, revealed) {
         const pin = state.pins.find(item => String(item.id) === cardElement.dataset.pinId); if (!pin) return;
+        pin.revealed = revealed;
         cardElement.dataset.revealed = String(revealed); cardElement.querySelector('[data-pin-code]').textContent = revealed ? pin.code : '•'.repeat(Number(pin.digits)); cardElement.querySelector('[data-reveal-pin]').textContent = revealed ? 'Hide' : 'Reveal';
         cardElement.querySelector('[data-pin-code]').setAttribute('aria-label', revealed ? `${pin.label} code ${pin.code}` : `${pin.label} code is hidden`);
       }
       async function updatePins() {
         const changed = [];
-        await Promise.all(state.pins.map(async pin => { const counter = Math.floor(Date.now() / 1000 / Number(pin.period)); if (counter !== pin.lastCounter) { pin.code = await window.generateTOTP(pin.secret, pin, Date.now()); pin.lastCounter = counter; changed.push(pin); } }));
+        await Promise.all(state.pins.map(async pin => { const counter = Math.floor(Date.now() / 1000 / Number(pin.period)); if (counter !== pin.lastCounter) { pin.lastCounter = counter; pin.code = await window.generateTOTP(pin.secret, pin, Date.now()); changed.push(pin); } }));
         if (changed.length) renderPins();
         root.querySelectorAll('.totp-pin').forEach(pinElement => { const pin = state.pins.find(item => String(item.id) === pinElement.dataset.pinId); const remaining = secondsRemaining(Number(pin.period)); pinElement.querySelector('[data-pin-countdown]').textContent = `Refreshes in ${remaining}s`; pinElement.querySelector('[data-pin-progress]').style.width = `${(remaining / Number(pin.period)) * 100}%`; });
       }
