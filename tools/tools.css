@@ -104,25 +104,51 @@
 .qr-result-actions { padding: 0 16px 8px; }
 .qr-open-link { display: inline-flex; align-items: center; text-decoration: none; }
 .qr-canvas { display: none; }
-.totp-form { display: grid; grid-template-columns: minmax(0, 1fr); align-items: end; }
-.totp-secret-label { max-width: 680px; }
+.totp-intro { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 8px 24px; margin-bottom: 24px; }
+.totp-intro p { margin: 0; }
+.totp-layout { display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(280px, .8fr); gap: 28px; align-items: start; }
+.totp-editor { min-width: 0; }
+.totp-section-heading { margin-bottom: -4px; }
+.totp-section-heading h2, .totp-dashboard-heading h2 { margin: 0; font-family: "Special Gothic Expanded One", sans-serif; font-size: clamp(1.2rem, 2.5vw, 1.6rem); }
+.totp-section-heading .tool-eyebrow, .totp-dashboard-heading .tool-eyebrow { margin-bottom: 3px; }
+.totp-form { display: grid; grid-template-columns: minmax(0, 1fr); align-items: end; margin: 18px 0; }
+.totp-form > label { max-width: none; }
 .totp-secret-input { display: flex; gap: 8px; }
 .totp-secret-field { position: relative; display: block; min-width: 0; flex: 1; }
 .totp-secret-input input { width: 100%; min-width: 0; box-sizing: border-box; }
 /* The native password input remains semantically secure; this layer only draws a mask using the same type as visible text. */
 .totp-secret-input input[type="password"] { color: transparent; -webkit-text-fill-color: transparent; caret-color: var(--primary); }
 .totp-secret-mask { position: absolute; inset: 0; display: flex; align-items: center; padding: 10px 12px; overflow: hidden; color: var(--primary); font-family: "Special Gothic Condensed One", sans-serif; font-size: 1.1rem; letter-spacing: normal; line-height: normal; pointer-events: none; white-space: nowrap; }
-.totp-options { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; max-width: 680px; }
+.totp-options { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
 .totp-options label { min-width: 0; }
-.totp-code-card { max-width: 680px; margin-top: 28px; border: 2px solid var(--primary); }
+.totp-form-actions, .totp-code-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; }
+.totp-code-card { min-width: 0; margin: 0; border: 2px solid var(--primary); }
 .totp-code-heading { display: flex; justify-content: space-between; gap: 16px; padding: 14px 16px; border-bottom: 1px solid var(--primary); font-family: "Special Gothic Condensed One", sans-serif; }
 .totp-code { display: flex; justify-content: center; width: 100%; box-sizing: border-box; padding: 18px 16px 12px; color: var(--primary); font-family: "Special Gothic Expanded One", sans-serif; font-size: clamp(2.5rem, 9vw, 5.5rem); letter-spacing: .09em; line-height: 1; text-align: center; }
 .totp-code-digit { display: inline-block; animation: totp-digit-in 420ms cubic-bezier(.2, .8, .2, 1) both; animation-delay: calc(var(--digit-index) * 55ms); }
 @keyframes totp-digit-in { from { opacity: 0; transform: translateY(.32em); } to { opacity: 1; transform: translateY(0); } }
 .totp-progress { height: 6px; margin: 0 16px; background: color-mix(in srgb, var(--primary) 18%, transparent); }
 .totp-progress span { display: block; height: 100%; background: var(--accent); transition: width .2s linear; }
-.totp-code-card .tool-actions { margin: 16px; }
-.totp-import { max-width: 680px; margin-top: 28px; }
+.totp-code-actions { padding: 16px; }
+.totp-import { margin-top: 20px; }
+.totp-dashboard { margin-top: 32px; padding-top: 20px; border-top: 2px solid var(--primary); }
+.totp-dashboard-heading { display: flex; flex-wrap: wrap; align-items: end; justify-content: space-between; gap: 12px; }
+.totp-dashboard > .tool-note { margin: 10px 0 18px; }
+.totp-pin-list { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(230px, 100%), 1fr)); gap: 14px; }
+.totp-pin { min-width: 0; border: 1px solid var(--primary); padding: 14px; }
+.totp-pin-heading { display: flex; align-items: start; justify-content: space-between; gap: 12px; }
+.totp-pin-heading strong { overflow-wrap: anywhere; font-family: "Special Gothic Condensed One", sans-serif; font-size: 1.2rem; }
+.totp-icon-button { flex: 0 0 auto; border: 0; padding: 0 4px; background: transparent; color: var(--primary); font: 1.4rem/1 sans-serif; cursor: url('../assets/cursors/handpointing.svg'), pointer; }
+.totp-icon-button:hover { color: var(--accent); }
+.totp-pin-code { display: block; min-height: 1.3em; margin: 12px 0; font-family: "Special Gothic Expanded One", sans-serif; font-size: 2rem; letter-spacing: .12em; line-height: 1; }
+.totp-pin[data-revealed="true"] .totp-pin-code { letter-spacing: .07em; }
+.totp-pin-meta { display: grid; gap: 7px; font-family: "Special Gothic Condensed One", sans-serif; font-size: .9rem; }
+.totp-pin-progress { display: block; height: 4px; background: color-mix(in srgb, var(--primary) 18%, transparent); }
+.totp-pin-progress span { display: block; height: 100%; background: var(--accent); transition: width .2s linear; }
+.totp-pin-actions { display: flex; gap: 8px; margin-top: 14px; }
+.totp-pin-actions .tool-button { padding: 7px 10px; font-size: .95rem; }
+.totp-empty { margin: 0; padding: 22px 0; border-top: 1px solid var(--primary); border-bottom: 1px solid var(--primary); font-family: "Special Gothic Condensed One", sans-serif; }
+@media (max-width: 700px) { .totp-layout { grid-template-columns: 1fr; } }
 @media (max-width: 520px) { .totp-options { grid-template-columns: 1fr; gap: 8px; } .totp-secret-input { align-items: stretch; flex-direction: column; } }
 @media (prefers-reduced-motion: reduce) { .totp-code-digit { animation: none; } }
 @media (max-width: 768px) {
