@@ -108,6 +108,8 @@
 .totp-secret-label { max-width: 680px; }
 .totp-secret-input { display: flex; gap: 8px; }
 .totp-secret-input input { min-width: 0; flex: 1; }
+/* Browser password bullets render smaller than letter glyphs at the same size. */
+.totp-secret-input input[type="password"] { font-family: sans-serif; font-size: 1.4rem; letter-spacing: .08em; }
 .totp-options { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; max-width: 680px; }
 .totp-options label { min-width: 0; }
 .totp-code-card { max-width: 680px; margin-top: 28px; border: 2px solid var(--primary); }
