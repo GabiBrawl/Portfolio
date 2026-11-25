@@ -243,53 +243,6 @@ function wirePfpEffects() {
 }
 
 /**
- * Wires up show more button for socials on mobile
- */
-function wireShowMoreSocials() {
-  const showMoreBtn = document.getElementById('show-more-socials');
-  const socialsContainer = document.querySelector('.socials');
-  
-  if (!showMoreBtn || !socialsContainer) return;
-  
-  const mainSocialLinks = Array.from(socialsContainer.children).filter(child => 
-    child.tagName === 'A' && 
-    child.classList.contains('large') && 
-    !child.classList.contains('show-more-btn')
-  );
-  const extraSocials = socialsContainer.querySelector('.extra-socials');
-  
-  let isExpanded = false;
-  
-  function updateVisibility() {
-    if (window.innerWidth <= CONFIG.MOBILE_BREAKPOINT) {
-      // On mobile, show main links always, toggle extra socials
-      mainSocialLinks.forEach(link => link.style.display = 'block');
-      extraSocials.style.display = isExpanded ? 'block' : 'none';
-      showMoreBtn.textContent = isExpanded ? 'Show Less' : 'Show More';
-      showMoreBtn.style.display = 'block';
-    } else {
-      // On desktop, show all and hide button
-      mainSocialLinks.forEach(link => link.style.display = 'block');
-      extraSocials.style.display = 'block';
-      showMoreBtn.style.display = 'none';
-      isExpanded = true; // Consider it expanded on desktop
-    }
-  }
-  
-  // Initial state
-  updateVisibility();
-  
-  showMoreBtn.addEventListener('click', (e) => {
-    e.preventDefault();
-    isExpanded = !isExpanded;
-    updateVisibility();
-  });
-  
-  // Handle window resize
-  window.addEventListener('resize', updateVisibility);
-}
-
-/**
  * Wires up cursor change on mouse down
  */
 function wireCursorGrab() {
@@ -303,30 +256,6 @@ function wireCursorGrab() {
 
   document.addEventListener('mouseup', () => {
     body.classList.remove('grabbing');
-  });
-}
-
-/**
- * Wires up webring toggle button
- */
-function wireWebringToggle() {
-  const toggleBtn = document.querySelector('.webring-toggle');
-  const content = document.querySelector('.webring-content');
-  
-  if (!toggleBtn || !content) return;
-  
-  let isExpanded = false;
-  
-  toggleBtn.addEventListener('click', (e) => {
-    e.preventDefault();
-    isExpanded = !isExpanded;
-    if (isExpanded) {
-      content.style.display = 'block';
-      toggleBtn.textContent = 'Hide Webring';
-    } else {
-      content.style.display = 'none';
-      toggleBtn.textContent = 'Part of the Hack Club Webring';
-    }
   });
 }
 
@@ -437,7 +366,8 @@ function wireSecretDashboard() {
   let telemetryInterval = null; 
 
   footer.addEventListener('click', (e) => {
-    const isFooterTarget = e.target.closest('.gb') || e.target.classList.contains('line') || e.target.tagName === 'FOOTER';
+    const gbMark = e.target.closest('.gb');
+    const isFooterTarget = gbMark || e.target.classList.contains('line') || e.target.tagName === 'FOOTER';
     if (!isFooterTarget) return;
 
     e.preventDefault();

@@ -12,8 +12,6 @@
     wireEmailCopy();
     wireCommandPalette();
     wireCursorGrab();
-    wireShowMoreSocials();
-    wireWebringToggle();
     wireKoFiWidget();
     wireSecretDashboard();
   });

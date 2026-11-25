@@ -11,7 +11,7 @@ let cachedProjects = null;
 let currentGalleryPreviewCount = null;
 
   // Constants
-  const BACK_LINK_HTML = '<a href="#" class="back-link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><path d="M19 12H5M12 19l-7-7 7-7"></svg>Back to Portfolio</a>';
+  const backLinkHTML = (label, href = '#', attributes = '') => `<a href="${href}" class="back-link" ${attributes}><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16" aria-hidden="true"><path d="M19 12H5M12 19l-7-7 7-7"></path></svg>${label}</a>`;
   const LOADING_HTML = '<p style="padding: 40px; text-align: center;">Loading project...</p>';
   const ERROR_HTML = (message) => `
 <div class="project-detail">
@@ -19,7 +19,7 @@ let currentGalleryPreviewCount = null;
                 <h1>ERROR</h1>
                 <p class="project-subtitle">${message}</p>
               </div>
-              ${BACK_LINK_HTML}
+              ${backLinkHTML('Back to Portfolio')}
             </div>
           `;
 
@@ -213,7 +213,6 @@ let currentGalleryPreviewCount = null;
         <header class="tool-page-header">
           <h1>${title}</h1>
           <div class="tool-page-actions">
-            <a href="?tools" class="back-link" data-tools-navigation><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16" aria-hidden="true"><path d="M19 12H5M12 19l-7-7 7-7"></path></svg>Back to Tools</a>
             ${tool ? '<button class="tool-button" data-share-tool>Share tool</button>' : ''}
           </div>
         </header>
@@ -222,6 +221,7 @@ let currentGalleryPreviewCount = null;
           <label class="tool-label tool-share-fallback" hidden>Shareable link<textarea class="tool-control" readonly rows="2"></textarea></label>
           ${tool ? tool.render() : '<section class="tool-workspace"><p>This tool is unavailable.</p></section>'}
         </div>
+        ${backLinkHTML('Back to Tools', '?tools', 'data-tools-navigation')}
       </div>
     `;
     if (tool) {
@@ -414,7 +414,7 @@ let currentGalleryPreviewCount = null;
     if (data.lastUpdated) {
       html += `<p class="project-last-updated">Last updated ${data.lastUpdated}</p>`;
     }
-    html += BACK_LINK_HTML;
+    html += backLinkHTML('Back to Portfolio');
     html += '</div>';
 
     // Slim right-edge "tick marks" section nav — hover reveals the name, current section highlights on scroll

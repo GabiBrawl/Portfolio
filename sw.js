@@ -48,6 +48,8 @@ const MANAGED_URLS = [
   '/tools/text/index.js',
   '/tools/qr/jsQR.js',
   '/tools/qr/index.js',
+  '/tools/qr/qrcodegen.js',
+  '/tools/qr-generator/index.js',
   '/tools/sweep/sweep.css',
   '/tools/sweep/generator.js',
   '/tools/sweep/index.js',

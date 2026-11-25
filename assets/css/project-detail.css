@@ -708,9 +708,13 @@
   .back-link {
     left: 50%;
     transform: translateX(-50%);
-    display: inline-block;
-    text-align: center;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    width: max-content;
     max-width: 90%;
+    box-sizing: border-box;
     white-space: nowrap;
     height: auto;
     min-height: auto;
@@ -718,6 +722,11 @@
     z-index: 1000;
     writing-mode: horizontal-tb;
     text-orientation: upright;
+  }
+
+  .back-link svg {
+    flex: 0 0 auto;
+    vertical-align: initial;
   }
 
   .project-header h1 {

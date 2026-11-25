@@ -7,27 +7,23 @@
     getShareState: () => ({ ip: state.address, mask: state.mask }),
     render: () => `
       <section class="tool-workspace subnet-tool">
-        <p>Enter an IPv4 address and subnet size to see its network, address range, and host capacity.</p>
+        <p class="subnet-intro">Enter an IPv4 address and prefix. Results update as you type.</p>
         <form class="tool-form subnet-form" novalidate>
-          <label>IPv4 address<input name="address" type="text" inputmode="decimal" placeholder="192.168.1.42" spellcheck="false" autocomplete="off" aria-describedby="subnet-address-help subnet-error"></label>
-          <label>Prefix length or subnet mask<input name="mask" type="text" inputmode="decimal" placeholder="24 or 255.255.255.0" spellcheck="false" autocomplete="off" aria-describedby="subnet-mask-help subnet-error"></label>
+          <label class="subnet-field">IPv4 address<input name="address" type="text" inputmode="decimal" placeholder="192.168.1.42" spellcheck="false" autocomplete="off" aria-describedby="subnet-address-help subnet-error"><span class="tool-note subnet-field-hint" id="subnet-address-help">Enter an address or paste CIDR, such as 192.168.1.42/24.</span></label>
+          <label class="subnet-field">Prefix length or subnet mask<input name="mask" type="text" inputmode="decimal" placeholder="24 or 255.255.255.0" spellcheck="false" autocomplete="off" aria-describedby="subnet-mask-help subnet-error"><span class="subnet-prefix-options" id="subnet-mask-help"><span class="tool-note">Common prefixes</span><button type="button" class="subnet-preset" data-prefix="24">/24</button><button type="button" class="subnet-preset" data-prefix="16">/16</button><button type="button" class="subnet-preset" data-prefix="8">/8</button></span></label>
           <button class="tool-button tool-button-primary" type="submit">Calculate</button>
         </form>
-        <div class="subnet-input-help">
-          <p id="subnet-address-help" class="tool-note">Paste CIDR notation here too, for example 192.168.1.42/24.</p>
-          <p id="subnet-mask-help" class="tool-note">Choose a common prefix: <span class="subnet-presets"><button type="button" class="subnet-preset" data-prefix="24">/24</button><button type="button" class="subnet-preset" data-prefix="16">/16</button><button type="button" class="subnet-preset" data-prefix="8">/8</button></span></p>
-        </div>
         <p id="subnet-error" class="tool-error" role="alert" hidden></p>
-        <p class="subnet-pending tool-note" hidden>Complete the address and mask to see results.</p>
+        <p class="subnet-pending tool-note" hidden>Enter a valid address and prefix to see results.</p>
+        <div class="subnet-results-heading"><h2>Your subnet</h2><div class="subnet-copy-actions"><button class="tool-button" data-copy-subnet disabled>Copy results</button><span class="tool-status" role="status" aria-live="polite"></span></div></div>
         <div class="tool-results" aria-live="polite" aria-atomic="true"></div>
-        <div class="tool-actions"><button class="tool-button" data-copy-subnet disabled>Copy results</button><span class="tool-status" role="status" aria-live="polite"></span></div>
-        <details class="tool-details subnet-size-helper"><summary>Choose a subnet by host count</summary>
+        <details class="tool-details subnet-size-helper"><summary>Find a prefix from the host count</summary>
           <p class="tool-note">Find the smallest subnet that can hold the number of usable hosts you need.</p>
           <div class="tool-form"><label>Usable hosts needed<input data-hosts type="number" min="1" max="4294967294" inputmode="numeric" placeholder="e.g. 100"></label><button class="tool-button" type="button" data-size>Find prefix</button></div>
           <p class="tool-note" data-size-result role="status">Network and broadcast addresses are reserved. /31 and /32 are available in the main calculator.</p>
         </details>
-        <details class="tool-details"><summary>Plain text results</summary><textarea class="tool-control" readonly rows="7" aria-label="Subnet results"></textarea></details>
-        <p class="tool-note subnet-footnote">/31 is for point-to-point links with two endpoints. /32 identifies one host. Neither uses a broadcast address.</p>
+        <details class="tool-details"><summary>Copyable plain-text summary</summary><textarea class="tool-control" readonly rows="7" aria-label="Subnet results"></textarea></details>
+        <p class="tool-note subnet-footnote">For point-to-point links, /31 provides two usable addresses. A /32 represents a single address.</p>
       </section>`,
     mount(container) {
       const params = window.readToolState();
@@ -49,7 +45,7 @@
           const parsed = window.parseSubnetInput(address.value, mask.value), data = parsed.result;
           const special = parsed.prefix < 31 && parsed.address === data.network ? 'This address is the network address, not a usable host.' : parsed.prefix < 31 && parsed.address === data.broadcast ? 'This address is the broadcast address, not a usable host.' : 'This address is within the usable host range.';
           const rows = [['Subnet mask', data.mask], ['Wildcard mask', data.wildcard], ['Network address', data.network], ['Broadcast address', data.broadcast]];
-          results.innerHTML = `<div class="subnet-overview"><div><span class="tool-eyebrow">Network</span><strong>${data.cidr}</strong></div><div><span class="tool-eyebrow">Usable hosts</span><strong>${data.usable.toLocaleString()}</strong><small>${data.total.toLocaleString()} total addresses</small></div></div><div class="subnet-range"><span class="tool-eyebrow">Usable host range</span><strong>${data.firstHost} — ${data.lastHost}</strong><p class="tool-note">${special}</p></div><dl class="tool-result-grid">${rows.map(([label, value]) => `<div><dt>${label}</dt><dd>${value}</dd></div>`).join('')}</dl>`;
+          results.innerHTML = `<div class="subnet-result-cards"><section class="subnet-result-card subnet-result-network"><span class="tool-eyebrow">Network</span><strong>${data.cidr}</strong></section><section class="subnet-result-card subnet-result-range"><span class="tool-eyebrow">Usable address range</span><strong>${data.firstHost} <span aria-hidden="true">–</span> ${data.lastHost}</strong><small>${special}</small></section><section class="subnet-result-card subnet-result-hosts"><span class="tool-eyebrow">Usable hosts</span><strong>${data.usable.toLocaleString()}</strong><small>${data.total.toLocaleString()} total addresses</small></section></div><details class="subnet-technical-details"><summary>Network details</summary><dl class="tool-result-grid">${rows.map(([label, value]) => `<div><dt>${label}</dt><dd>${value}</dd></div>`).join('')}</dl></details>`;
           output.value = [`Network: ${data.cidr}`, `Host range: ${data.firstHost} - ${data.lastHost}`, ...rows.map(([label, value]) => `${label}: ${value}`), `Usable hosts: ${data.usable}`, `Total addresses: ${data.total}`].join('\n');
           copy.disabled = false; pending.hidden = true;
           return parsed;

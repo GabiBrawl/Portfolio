@@ -268,31 +268,15 @@ a.large {
 }
 
 .webring-section {
-  margin-top: 0px;
-}
-
-.webring-toggle {
-  display: block;
-  color: var(--primary);
-  text-decoration: none;
-  margin-bottom: 10px;
-  padding: 10px;
-  border: 2px solid var(--primary);
-  text-align: center;
-  background: none;
-  cursor: pointer;
-  width: 100%;
-  font-family: inherit;
-  font-size: inherit;
-}
-
-.webring-toggle:hover {
-  background: var(--primary);
-  color: var(--background);
+  margin-top: 10px;
 }
 
 .webring-content {
-  display: none;
+  text-align: center;
+}
+
+.webring-content pagering-link {
+  display: inline-block;
 }
 
 .sidebar-ko-fi {
@@ -436,15 +420,6 @@ a.large {
     height: min(590px, 82vh);
   }
 
-  .socials .show-more-btn {
-    display: block !important;
-  }
-}
-
-@media (min-width: 769px) {
-  .socials .show-more-btn {
-    display: none;
-  }
 }
 
 /* Projects */
