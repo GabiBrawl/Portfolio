@@ -14,15 +14,22 @@ window.buildToolShareURL = function (id, state = {}) {
   return url.href;
 };
 
-window.sharePortfolioTool = async function (id, tool, status, fallback) {
+window.sharePortfolioTool = async function (id, tool, status, fallback, button) {
   const url = window.buildToolShareURL(id, tool.getShareState?.());
   fallback.hidden = true;
   status.textContent = '';
-  status.hidden = false;
+  status.hidden = true;
+  const originalText = button?.textContent || '';
+  const feedback = text => {
+    if (!button?.isConnected) return;
+    button.textContent = text;
+    button.classList.add('copied');
+    setTimeout(() => { if (button.isConnected) { button.textContent = originalText; button.classList.remove('copied'); } }, 2000);
+  };
   if (navigator.share) {
     try {
       await navigator.share({ title: tool.title, url });
-      if (status.isConnected) status.textContent = 'Shared.';
+      feedback('Shared!');
       return;
     } catch (error) {
       if (error.name === 'AbortError') { status.hidden = true; return; }
@@ -30,7 +37,7 @@ window.sharePortfolioTool = async function (id, tool, status, fallback) {
   }
   try {
     await navigator.clipboard.writeText(url);
-    if (status.isConnected) status.textContent = 'Link copied. It includes your current settings.';
+    feedback('Copied!');
   } catch {
     if (!status.isConnected) return;
     status.textContent = 'Copy this link to share your current settings.';

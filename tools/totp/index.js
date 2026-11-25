@@ -21,7 +21,8 @@
           <p class="tool-error" data-error role="alert" hidden></p>
           <p class="tool-status" data-status role="status" aria-live="polite"></p>
         </form>
-        <section class="totp-dashboard" aria-labelledby="totp-dashboard-title"><div class="totp-dashboard-heading"><div><span class="tool-eyebrow">Quick access</span><h2 id="totp-dashboard-title">Authenticators <span data-count></span></h2></div><button class="tool-button" type="button" data-clear hidden>Clear all</button></div><p class="totp-empty" data-empty>Add an authenticator above to see its live code here.</p><div class="totp-pin-list" data-pins></div></section>
+        <section class="totp-dashboard" aria-labelledby="totp-dashboard-title"><div class="totp-dashboard-heading"><div><span class="tool-eyebrow">Quick access</span><h2 id="totp-dashboard-title">Authenticators <span data-count></span></h2></div><div class="totp-vault-actions"><button class="tool-button" type="button" data-export>Export</button><button class="tool-button" type="button" data-import-file>Import</button><input data-file type="file" accept="application/json,.json" hidden><button class="tool-button" type="button" data-clear hidden>Clear all</button></div></div><p class="totp-empty" data-empty>Add an authenticator above to see its live code here.</p><div class="totp-pin-list" data-pins></div></section>
+        <dialog class="totp-export-dialog" data-export-dialog aria-labelledby="totp-export-title"><form method="dialog"><h2 id="totp-export-title">Export authenticators?</h2><p>This export is unencrypted and contains your secret keys in plain text. Anyone with the file can generate your codes. Store it securely and delete it when you no longer need it.</p><div class="totp-dialog-actions"><button class="tool-button" value="cancel">Cancel</button><button class="tool-button totp-export-confirm" type="button" data-confirm-export>Export</button></div></form></dialog>
         <input class="sr-only" data-copy-fallback type="text" readonly aria-label="Code to copy">
       </section>`,
     mount(container) {
@@ -33,6 +34,7 @@
       const { label, secret, algorithm, digits, period } = form.elements;
       const secretMask = root.querySelector('[data-secret-mask]'), list = root.querySelector('[data-pins]'), empty = root.querySelector('[data-empty]');
       const status = root.querySelector('[data-status]'), error = root.querySelector('[data-error]'), fallback = root.querySelector('[data-copy-fallback]');
+      const addButton = root.querySelector('[type="submit"]');
       let timer = 0;
       algorithm.value = state.algorithm; digits.value = state.digits; period.value = state.period;
       const save = () => { try { sessionStorage.setItem(STORAGE_KEY, JSON.stringify(pins.map(({ label, secret, algorithm, digits, period }) => ({ label, secret, algorithm, digits, period })))); } catch { status.textContent = 'Could not save to this tab. Check browser storage settings.'; } };
@@ -71,7 +73,7 @@
           const cleanLabel = label.value.trim() || `Authenticator ${pins.length + 1}`;
           if (pins.some(pin => pin.secret === cleanSecret && pin.algorithm === algorithm.value && pin.digits === digits.value && pin.period === period.value)) throw new Error('That authenticator is already in your list.');
           pins.push({ label: cleanLabel, secret: cleanSecret, algorithm: algorithm.value, digits: digits.value, period: period.value, counter: null, code: '' });
-          save(); render(); await refresh(); status.textContent = `${cleanLabel} added.`; label.value = ''; secret.value = ''; updateMask();
+          save(); render(); await refresh(); status.textContent = ''; addButton.textContent = 'Added!'; addButton.classList.add('copied'); setTimeout(() => { if (addButton.isConnected) { addButton.textContent = 'Add authenticator'; addButton.classList.remove('copied'); } }, 2000); label.value = ''; secret.value = ''; updateMask();
           if (!timer) timer = window.setInterval(refresh, 1000);
         } catch (exception) { error.textContent = exception.message; error.hidden = false; }
       });
@@ -81,6 +83,31 @@
       root.querySelector('[data-import]').addEventListener('click', () => { try { const imported = window.parseOtpauth(root.querySelector('[data-uri]').value); secret.value = imported.secret; label.value = imported.issuer || imported.label; algorithm.value = imported.algorithm; digits.value = String(imported.digits); period.value = String(imported.period); state.algorithm = algorithm.value; updateMask(); root.querySelector('[data-import-panel]').hidden = true; status.textContent = 'Setup imported. Add authenticator to save it for this tab.'; } catch (exception) { error.textContent = exception.message; error.hidden = false; } });
       list.addEventListener('click', event => { const row = event.target.closest('.totp-row'); if (!row) return; const pin = pins[Number(row.dataset.index)]; if (event.target.closest('[data-reveal]')) reveal(row, row.dataset.revealed !== 'true'); if (event.target.closest('[data-copy]')) window.copyToolText(pin.code || '', status, fallback); if (event.target.closest('[data-remove]')) { pins.splice(Number(row.dataset.index), 1); save(); render(); } });
       root.querySelector('[data-clear]').addEventListener('click', () => { pins = []; save(); render(); status.textContent = 'Authenticators cleared.'; });
+      const exportDialog = root.querySelector('[data-export-dialog]');
+      root.querySelector('[data-export]').addEventListener('click', () => { if (!pins.length) { status.textContent = 'Add an authenticator before exporting.'; return; } exportDialog.showModal(); });
+      root.querySelector('[data-confirm-export]').addEventListener('click', () => {
+        const payload = { format: 'portfolio-totp-export', version: 1, authenticators: pins.map(({ label, secret, algorithm, digits, period }) => ({ label, secret, algorithm, digits: Number(digits), period: Number(period) })) };
+        const blob = new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json' }); const url = URL.createObjectURL(blob); const link = document.createElement('a');
+        link.href = url; link.download = `totp-authenticators-${new Date().toISOString().slice(0, 10)}.json`; link.click(); setTimeout(() => URL.revokeObjectURL(url), 1000); exportDialog.close(); status.textContent = 'Export downloaded.';
+      });
+      root.querySelector('[data-import-file]').addEventListener('click', () => root.querySelector('[data-file]').click());
+      root.querySelector('[data-file]').addEventListener('change', async event => {
+        const file = event.target.files[0]; event.target.value = ''; if (!file) return;
+        try {
+          if (file.size > 1024 * 1024) throw new Error('Choose an export file smaller than 1 MB.');
+          const data = JSON.parse(await file.text());
+          if (data?.format !== 'portfolio-totp-export' || data.version !== 1 || !Array.isArray(data.authenticators)) throw new Error('This file is not a supported TOTP export.');
+          if (!data.authenticators.length || data.authenticators.length > 100) throw new Error('The export must contain between 1 and 100 authenticators.');
+          const imported = data.authenticators.map((entry, index) => {
+            const cleanSecret = window.normalizeSecret(entry.secret); const config = window.validateSettings(entry);
+            if (typeof entry.label !== 'string') throw new Error(`Authenticator ${index + 1} has no valid label.`);
+            return { label: entry.label.slice(0, 64) || `Authenticator ${index + 1}`, secret: cleanSecret, algorithm: config.algorithm, digits: String(config.digits), period: String(config.period), counter: null, code: '' };
+          });
+          const unique = imported.filter(entry => !pins.some(pin => pin.secret === entry.secret && pin.algorithm === entry.algorithm && pin.digits === entry.digits && pin.period === entry.period));
+          if (!unique.length) throw new Error('All authenticators in this file are already imported.');
+          pins.push(...unique); save(); render(); await refresh(); if (!timer) timer = window.setInterval(refresh, 1000); status.textContent = `Imported ${unique.length} authenticator${unique.length === 1 ? '' : 's'}.`;
+        } catch (exception) { error.textContent = exception.message || 'Could not read this export file.'; error.hidden = false; }
+      });
       render(); if (pins.length) { refresh(); timer = window.setInterval(refresh, 1000); }
       window.activeToolCleanup = () => { clearInterval(timer); window.activeToolCleanup = null; };
     }

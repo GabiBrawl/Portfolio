@@ -230,7 +230,7 @@ let currentGalleryPreviewCount = null;
       content.querySelector('[data-share-tool]').addEventListener('click', () => {
         const status = content.querySelector('.tool-share-status');
         const fallback = content.querySelector('.tool-share-fallback');
-        window.sharePortfolioTool(canonicalId, tool, status, fallback);
+        window.sharePortfolioTool(canonicalId, tool, status, fallback, content.querySelector('[data-share-tool]'));
       });
     }
   }
