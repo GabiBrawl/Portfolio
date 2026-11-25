@@ -13,7 +13,7 @@
         <p>Generate authentication codes entirely in your browser. Your secret is never uploaded, saved, or included in a share link.</p>
         <form class="tool-form totp-form" novalidate>
           <label class="totp-secret-label">Base32 secret
-            <div class="totp-secret-input"><input name="secret" type="password" autocomplete="off" autocapitalize="characters" spellcheck="false" placeholder="e.g. JBSWY3DPEHPK3PXP" aria-describedby="totp-secret-help totp-error"><button class="tool-button" type="button" data-toggle-secret aria-label="Show secret">Show</button></div>
+            <div class="totp-secret-input"><span class="totp-secret-field"><input name="secret" type="password" autocomplete="off" autocapitalize="characters" spellcheck="false" placeholder="e.g. JBSWY3DPEHPK3PXP" aria-describedby="totp-secret-help totp-error"><span class="totp-secret-mask" data-secret-mask aria-hidden="true"></span></span><button class="tool-button" type="button" data-toggle-secret aria-label="Show secret">Show</button></div>
           </label>
           <div class="totp-options">
             <label>Algorithm<select name="algorithm"><option>SHA-1</option><option>SHA-256</option><option>SHA-512</option></select></label>
@@ -26,7 +26,8 @@
         <p id="totp-error" class="tool-error" role="alert" hidden></p>
         <section class="totp-code-card" aria-live="polite" aria-atomic="true" hidden>
           <div class="totp-code-heading"><span class="tool-eyebrow">Current code</span><span data-countdown></span></div>
-          <input class="totp-code" data-code type="text" readonly aria-label="Current one-time code">
+          <div class="totp-code" data-code-display aria-hidden="true"></div>
+          <input class="sr-only" data-code type="text" readonly aria-label="Current one-time code">
           <div class="totp-progress" aria-hidden="true"><span data-progress></span></div>
           <div class="tool-actions"><button class="tool-button" type="button" data-copy-code>Copy code</button><span class="tool-status" data-status role="status"></span></div>
         </section>
@@ -48,6 +49,8 @@
       const error = root.querySelector('#totp-error');
       const card = root.querySelector('.totp-code-card');
       const code = root.querySelector('[data-code]');
+      const codeDisplay = root.querySelector('[data-code-display]');
+      const secretMask = root.querySelector('[data-secret-mask]');
       const countdown = root.querySelector('[data-countdown]');
       const progress = root.querySelector('[data-progress]');
       const status = root.querySelector('[data-status]');
@@ -56,6 +59,18 @@
       let request = 0;
 
       secret.value = state.secret; algorithm.value = state.algorithm; digits.value = state.digits; period.value = state.period;
+      function updateSecretMask() { secretMask.textContent = secret.type === 'password' ? '•'.repeat(secret.value.length) : ''; }
+      function showCode(value) {
+        code.value = value;
+        codeDisplay.replaceChildren(...Array.from(value, (digit, index) => {
+          const character = document.createElement('span');
+          character.className = 'totp-code-digit';
+          character.style.setProperty('--digit-index', index);
+          character.textContent = digit;
+          return character;
+        }));
+      }
+      updateSecretMask();
       function settings() { return { algorithm: algorithm.value, digits: digits.value, period: period.value }; }
       function stop() { clearInterval(timer); timer = 0; lastCounter = null; }
       async function updateCode() {
@@ -71,7 +86,7 @@
         try {
           const value = await window.generateTOTP(state.secret, settings(), now);
           if (activeRequest !== request) return;
-          code.value = value; card.hidden = false; lastCounter = currentCounter; error.hidden = true;
+          showCode(value); card.hidden = false; lastCounter = currentCounter; error.hidden = true;
         } catch (exception) { if (activeRequest === request) showError(exception.message); }
       }
       function showError(message) { stop(); card.hidden = true; error.textContent = message; error.hidden = false; secret.setAttribute('aria-invalid', 'true'); }
@@ -84,9 +99,11 @@
         updateCode(); timer = window.setInterval(updateCode, 250);
       }
       form.addEventListener('submit', event => { event.preventDefault(); generate(); });
+      secret.addEventListener('input', updateSecretMask);
       root.querySelector('[data-toggle-secret]').addEventListener('click', event => {
         const hidden = secret.type === 'password'; secret.type = hidden ? 'text' : 'password';
         event.currentTarget.textContent = hidden ? 'Hide' : 'Show'; event.currentTarget.setAttribute('aria-label', `${hidden ? 'Hide' : 'Show'} secret`);
+        updateSecretMask();
       });
       root.querySelector('[data-copy-code]').addEventListener('click', () => window.copyToolText(code.value, status, code));
       root.querySelector('[data-import]').addEventListener('click', () => {
@@ -94,6 +111,7 @@
         try {
           const imported = window.parseOtpauth(root.querySelector('[data-uri]').value);
           secret.value = imported.secret; algorithm.value = imported.algorithm; digits.value = String(imported.digits); period.value = String(imported.period);
+          updateSecretMask();
           importStatus.textContent = `Imported${imported.label ? ` ${imported.label}` : ''}. Generate the current code.`;
           generate(false);
         } catch (exception) { importStatus.textContent = exception.message; }

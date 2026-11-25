@@ -107,19 +107,24 @@
 .totp-form { display: grid; grid-template-columns: minmax(0, 1fr); align-items: end; }
 .totp-secret-label { max-width: 680px; }
 .totp-secret-input { display: flex; gap: 8px; }
-.totp-secret-input input { min-width: 0; flex: 1; }
-/* Browser password bullets render smaller than letter glyphs at the same size. */
-.totp-secret-input input[type="password"] { font-family: sans-serif; font-size: 1.4rem; letter-spacing: .08em; }
+.totp-secret-field { position: relative; display: block; min-width: 0; flex: 1; }
+.totp-secret-input input { width: 100%; min-width: 0; box-sizing: border-box; }
+/* The native password input remains semantically secure; this layer only draws a mask using the same type as visible text. */
+.totp-secret-input input[type="password"] { color: transparent; -webkit-text-fill-color: transparent; caret-color: var(--primary); }
+.totp-secret-mask { position: absolute; inset: 0; display: flex; align-items: center; padding: 10px 12px; overflow: hidden; color: var(--primary); font-family: "Special Gothic Condensed One", sans-serif; font-size: 1.1rem; letter-spacing: normal; line-height: normal; pointer-events: none; white-space: nowrap; }
 .totp-options { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; max-width: 680px; }
 .totp-options label { min-width: 0; }
 .totp-code-card { max-width: 680px; margin-top: 28px; border: 2px solid var(--primary); }
 .totp-code-heading { display: flex; justify-content: space-between; gap: 16px; padding: 14px 16px; border-bottom: 1px solid var(--primary); font-family: "Special Gothic Condensed One", sans-serif; }
-.totp-code { display: block; width: 100%; box-sizing: border-box; padding: 18px 16px 12px; border: 0; border-radius: 0; background: transparent; color: var(--primary); font-family: "Special Gothic Expanded One", sans-serif; font-size: clamp(2.5rem, 9vw, 5.5rem); letter-spacing: .09em; line-height: 1; text-align: center; }
+.totp-code { display: flex; justify-content: center; width: 100%; box-sizing: border-box; padding: 18px 16px 12px; color: var(--primary); font-family: "Special Gothic Expanded One", sans-serif; font-size: clamp(2.5rem, 9vw, 5.5rem); letter-spacing: .09em; line-height: 1; text-align: center; }
+.totp-code-digit { display: inline-block; animation: totp-digit-in 420ms cubic-bezier(.2, .8, .2, 1) both; animation-delay: calc(var(--digit-index) * 55ms); }
+@keyframes totp-digit-in { from { opacity: 0; transform: translateY(.32em); } to { opacity: 1; transform: translateY(0); } }
 .totp-progress { height: 6px; margin: 0 16px; background: color-mix(in srgb, var(--primary) 18%, transparent); }
 .totp-progress span { display: block; height: 100%; background: var(--accent); transition: width .2s linear; }
 .totp-code-card .tool-actions { margin: 16px; }
 .totp-import { max-width: 680px; margin-top: 28px; }
 @media (max-width: 520px) { .totp-options { grid-template-columns: 1fr; gap: 8px; } .totp-secret-input { align-items: stretch; flex-direction: column; } }
+@media (prefers-reduced-motion: reduce) { .totp-code-digit { animation: none; } }
 @media (max-width: 768px) {
   .tool-page-header { align-items: stretch; flex-direction: column; padding: 18px; }
   .tool-page-actions { justify-content: flex-start; }
