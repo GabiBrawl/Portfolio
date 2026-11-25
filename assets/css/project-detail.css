@@ -6,6 +6,56 @@
   position: relative;
 }
 
+.static-project-page {
+  min-height: 100vh;
+  box-sizing: border-box;
+  padding: clamp(16px, 3vw, 40px);
+}
+
+.static-project-detail {
+  max-width: 1000px;
+}
+
+.static-project-detail .project-header {
+  margin-bottom: 24px;
+}
+
+.static-project-navigation {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 12px 24px;
+  margin: 28px 0;
+  font-family: "Special Gothic Condensed One", sans-serif;
+}
+
+.static-project-navigation .back-link {
+  position: static;
+  transform: none;
+}
+
+.static-project-open {
+  color: var(--primary);
+  text-underline-offset: 4px;
+}
+
+.static-project-open:hover {
+  color: var(--accent);
+}
+
+.static-gallery-caption {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  padding: 8px 10px;
+  background: rgb(7 7 7 / 82%);
+  color: var(--primary);
+  font-family: "Special Gothic Condensed One", sans-serif;
+  font-size: .9rem;
+}
+
 .project-header {
   margin-bottom: 40px;
   border: 2px solid var(--primary);

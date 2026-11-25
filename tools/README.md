@@ -28,4 +28,6 @@ The world clock lives in `world-clock/` and opens at `?tools=world-clock`. It sh
 
 The subnet calculator accepts CIDR prefixes and contiguous dotted-decimal masks. Its host-count helper chooses a conventional subnet with reserved network and broadcast addresses; /31 and /32 remain available through direct input.
 
+Static project pages are generated into `project-pages/{slug}/` from `posts/index.json` and `posts/post{id}.json` with `node scripts/generate-project-pages.mjs`. They include crawler-ready metadata and project content, and link back to the existing `?post={id}` app view. Keep `sitemap.xml` in sync when adding or removing projects.
+
 Design references: [Coolors generator workflow](https://coolors-help.zendesk.com/hc/en-us/articles/360010581980-Generate-a-palette), [Calculator.net subnet inputs](https://www.calculator.net/ip-subnet-calculator.html), [Unicode character mappings](https://www.unicode.org/charts/PDF/U1D400.pdf), and [Web Share API](https://developer.mozilla.org/en-US/docs/Web/API/Navigator/share).
