@@ -15,10 +15,10 @@
         <form class="tool-form totp-form" novalidate>
           <label>Account<input name="label" type="text" maxlength="64" autocomplete="off" placeholder="e.g. GitHub"></label>
           <label class="totp-secret-label">Base32 secret<span class="totp-secret-input"><span class="totp-secret-field"><input name="secret" type="password" autocomplete="off" autocapitalize="characters" spellcheck="false" placeholder="Paste setup key" aria-describedby="totp-error"><span class="totp-secret-mask" data-secret-mask aria-hidden="true"></span></span><button class="tool-button" type="button" data-toggle-secret aria-label="Show secret">Show</button></span></label>
+          <p class="tool-error" data-error role="alert" hidden></p>
           <details class="tool-details totp-options-details"><summary>Advanced settings</summary><div class="totp-options"><label>Algorithm<select name="algorithm"><option>SHA-1</option><option>SHA-256</option><option>SHA-512</option></select></label><label>Digits<select name="digits"><option value="6">6 digits</option><option value="8">8 digits</option></select></label><label>Period<select name="period"><option value="30">30 seconds</option><option value="60">60 seconds</option></select></label></div></details>
           <div class="totp-form-actions"><button class="tool-button tool-button-primary" type="submit">Add authenticator</button><button class="tool-button" type="button" data-import-toggle>Import setup URI</button></div>
           <div class="totp-import" data-import-panel hidden><label>Setup URI<input data-uri type="text" autocomplete="off" spellcheck="false" placeholder="otpauth://totp/…"></label><button class="tool-button" type="button" data-import>Import</button></div>
-          <p class="tool-error" data-error role="alert" hidden></p>
           <p class="tool-status" data-status role="status" aria-live="polite"></p>
         </form>
         <section class="totp-dashboard" aria-labelledby="totp-dashboard-title"><div class="totp-dashboard-heading"><div><span class="tool-eyebrow">Quick access</span><h2 id="totp-dashboard-title">Authenticators <span data-count></span></h2></div><div class="totp-vault-actions"><button class="tool-button" type="button" data-export>Export</button><button class="tool-button" type="button" data-import-file>Import</button><input data-file type="file" accept="application/json,.json" hidden><button class="tool-button" type="button" data-clear hidden>Clear all</button></div></div><p class="totp-empty" data-empty>Add an authenticator above to see its live code here.</p><div class="totp-pin-list" data-pins></div></section>
@@ -40,6 +40,9 @@
       const save = () => { try { sessionStorage.setItem(STORAGE_KEY, JSON.stringify(pins.map(({ label, secret, algorithm, digits, period }) => ({ label, secret, algorithm, digits, period })))); } catch { status.textContent = 'Could not save to this tab. Check browser storage settings.'; } };
       const updateMask = () => { secretMask.textContent = secret.type === 'password' ? '•'.repeat(secret.value.length) : ''; };
       const remain = seconds => seconds - Math.floor(Date.now() / 1000) % seconds;
+      const errorMessage = exception => ['DataError', 'OperationError'].includes(exception?.name)
+        ? 'This key could not generate a code. Check that the Base32 secret is complete and correct.'
+        : exception?.message || 'Could not add this authenticator. Check the details and try again.';
       function render() {
         list.innerHTML = pins.map((pin, index) => `<article class="totp-row" data-index="${index}" data-revealed="false"><div class="totp-row-name"><strong>${esc(pin.label)}</strong><span>${pin.algorithm} · ${pin.digits} digits</span></div><div class="totp-row-code" data-code aria-label="${esc(pin.label)} code is hidden">${'•'.repeat(Number(pin.digits))}</div><div class="totp-row-timer"><span data-remaining></span><span class="totp-row-progress"><span data-progress></span></span></div><div class="totp-row-actions"><button type="button" class="tool-button" data-reveal>Reveal</button><button type="button" class="tool-button" data-copy>Copy</button><button type="button" class="tool-button" data-remove>Remove</button></div></article>`).join('');
         empty.hidden = pins.length > 0; root.querySelector('[data-clear]').hidden = pins.length === 0; root.querySelector('[data-count]').textContent = pins.length ? `(${pins.length})` : '';
@@ -48,7 +51,7 @@
         const now = Date.now();
         await Promise.all(pins.map(async (pin, index) => {
           const periodValue = Number(pin.period), counter = Math.floor(now / 1000 / periodValue);
-          if (pin.counter !== counter) { pin.counter = counter; pin.code = await window.generateTOTP(pin.secret, pin, now); }
+          if (pin.counter !== counter) { const nextCode = await window.generateTOTP(pin.secret, pin, now); pin.code = nextCode; pin.counter = counter; }
           const row = list.querySelector(`[data-index="${index}"]`); if (!row) return;
           const seconds = remain(periodValue); row.querySelector('[data-remaining]').textContent = `New code in ${seconds}s`; row.querySelector('[data-progress]').style.width = `${seconds / periodValue * 100}%`;
           const code = row.querySelector('[data-code]');
@@ -69,18 +72,19 @@
       form.addEventListener('submit', async event => {
         event.preventDefault(); error.hidden = true; status.textContent = '';
         try {
-          const cleanSecret = window.normalizeSecret(secret.value); window.validateSettings({ algorithm: algorithm.value, digits: digits.value, period: period.value });
+          const cleanSecret = window.normalizeSecret(secret.value); const config = window.validateSettings({ algorithm: algorithm.value, digits: digits.value, period: period.value });
           const cleanLabel = label.value.trim() || `Authenticator ${pins.length + 1}`;
           if (pins.some(pin => pin.secret === cleanSecret && pin.algorithm === algorithm.value && pin.digits === digits.value && pin.period === period.value)) throw new Error('That authenticator is already in your list.');
-          pins.push({ label: cleanLabel, secret: cleanSecret, algorithm: algorithm.value, digits: digits.value, period: period.value, counter: null, code: '' });
-          save(); render(); await refresh(); status.textContent = ''; addButton.textContent = 'Added!'; addButton.classList.add('copied'); setTimeout(() => { if (addButton.isConnected) { addButton.textContent = 'Add authenticator'; addButton.classList.remove('copied'); } }, 2000); label.value = ''; secret.value = ''; updateMask();
+          const candidate = { label: cleanLabel, secret: cleanSecret, algorithm: config.algorithm, digits: String(config.digits), period: String(config.period), counter: null, code: '' };
+          const now = Date.now(); candidate.code = await window.generateTOTP(candidate.secret, candidate, now); candidate.counter = Math.floor(now / 1000 / Number(candidate.period));
+          pins.push(candidate); save(); render(); await refresh(); status.textContent = ''; addButton.textContent = 'Added!'; addButton.classList.add('copied'); setTimeout(() => { if (addButton.isConnected) { addButton.textContent = 'Add authenticator'; addButton.classList.remove('copied'); } }, 2000); label.value = ''; secret.value = ''; updateMask();
           if (!timer) timer = window.setInterval(refresh, 1000);
-        } catch (exception) { error.textContent = exception.message; error.hidden = false; }
+        } catch (exception) { secret.setAttribute('aria-invalid', 'true'); error.textContent = errorMessage(exception); error.hidden = false; secret.focus(); }
       });
-      secret.addEventListener('input', updateMask);
+      secret.addEventListener('input', () => { updateMask(); secret.removeAttribute('aria-invalid'); error.hidden = true; });
       root.querySelector('[data-toggle-secret]').addEventListener('click', event => { const show = secret.type === 'password'; secret.type = show ? 'text' : 'password'; event.currentTarget.textContent = show ? 'Hide' : 'Show'; event.currentTarget.setAttribute('aria-label', `${show ? 'Hide' : 'Show'} secret`); updateMask(); });
       root.querySelector('[data-import-toggle]').addEventListener('click', () => { const panel = root.querySelector('[data-import-panel]'); panel.hidden = !panel.hidden; });
-      root.querySelector('[data-import]').addEventListener('click', () => { try { const imported = window.parseOtpauth(root.querySelector('[data-uri]').value); secret.value = imported.secret; label.value = imported.issuer || imported.label; algorithm.value = imported.algorithm; digits.value = String(imported.digits); period.value = String(imported.period); state.algorithm = algorithm.value; updateMask(); root.querySelector('[data-import-panel]').hidden = true; status.textContent = 'Setup imported. Add authenticator to save it for this tab.'; } catch (exception) { error.textContent = exception.message; error.hidden = false; } });
+      root.querySelector('[data-import]').addEventListener('click', () => { try { const imported = window.parseOtpauth(root.querySelector('[data-uri]').value); secret.value = imported.secret; label.value = imported.issuer || imported.label; algorithm.value = imported.algorithm; digits.value = String(imported.digits); period.value = String(imported.period); state.algorithm = algorithm.value; updateMask(); secret.removeAttribute('aria-invalid'); error.hidden = true; root.querySelector('[data-import-panel]').hidden = true; status.textContent = 'Setup imported. Add authenticator to save it for this tab.'; } catch (exception) { error.textContent = errorMessage(exception); error.hidden = false; } });
       list.addEventListener('click', event => { const row = event.target.closest('.totp-row'); if (!row) return; const pin = pins[Number(row.dataset.index)]; if (event.target.closest('[data-reveal]')) reveal(row, row.dataset.revealed !== 'true'); if (event.target.closest('[data-copy]')) window.copyToolText(pin.code || '', status, fallback); if (event.target.closest('[data-remove]')) { pins.splice(Number(row.dataset.index), 1); save(); render(); } });
       root.querySelector('[data-clear]').addEventListener('click', () => { pins = []; save(); render(); status.textContent = 'Authenticators cleared.'; });
       const exportDialog = root.querySelector('[data-export-dialog]');
@@ -103,12 +107,31 @@
             if (typeof entry.label !== 'string') throw new Error(`Authenticator ${index + 1} has no valid label.`);
             return { label: entry.label.slice(0, 64) || `Authenticator ${index + 1}`, secret: cleanSecret, algorithm: config.algorithm, digits: String(config.digits), period: String(config.period), counter: null, code: '' };
           });
+          const now = Date.now();
+          await Promise.all(imported.map(async pin => { pin.code = await window.generateTOTP(pin.secret, pin, now); pin.counter = Math.floor(now / 1000 / Number(pin.period)); }));
           const unique = imported.filter(entry => !pins.some(pin => pin.secret === entry.secret && pin.algorithm === entry.algorithm && pin.digits === entry.digits && pin.period === entry.period));
           if (!unique.length) throw new Error('All authenticators in this file are already imported.');
-          pins.push(...unique); save(); render(); await refresh(); if (!timer) timer = window.setInterval(refresh, 1000); status.textContent = `Imported ${unique.length} authenticator${unique.length === 1 ? '' : 's'}.`;
-        } catch (exception) { error.textContent = exception.message || 'Could not read this export file.'; error.hidden = false; }
+          const seen = new Set(pins.map(pin => `${pin.secret}|${pin.algorithm}|${pin.digits}|${pin.period}`));
+          const additions = unique.filter(pin => { const key = `${pin.secret}|${pin.algorithm}|${pin.digits}|${pin.period}`; if (seen.has(key)) return false; seen.add(key); return true; });
+          if (!additions.length) throw new Error('All authenticators in this file are already imported.');
+          pins.push(...additions); save(); render(); if (!timer) timer = window.setInterval(refresh, 1000); status.textContent = `Imported ${additions.length} authenticator${additions.length === 1 ? '' : 's'}.`;
+        } catch (exception) { error.textContent = errorMessage(exception); error.hidden = false; }
       });
-      render(); if (pins.length) { refresh(); timer = window.setInterval(refresh, 1000); }
+      async function restorePins() {
+        if (!pins.length) return;
+        const now = Date.now(), saved = pins;
+        const results = await Promise.all(saved.map(async pin => {
+          try {
+            const secretValue = window.normalizeSecret(pin.secret), config = window.validateSettings(pin);
+            const clean = { label: String(pin.label).slice(0, 64) || 'Authenticator', secret: secretValue, algorithm: config.algorithm, digits: String(config.digits), period: String(config.period), counter: null, code: '' };
+            clean.code = await window.generateTOTP(clean.secret, clean, now); clean.counter = Math.floor(now / 1000 / Number(clean.period)); return clean;
+          } catch { return null; }
+        }));
+        pins = results.filter(Boolean);
+        if (pins.length !== saved.length) { save(); status.textContent = 'An invalid saved key was removed. Re-import it with the correct Base32 secret.'; }
+        render(); if (pins.length && !timer) timer = window.setInterval(refresh, 1000);
+      }
+      render(); restorePins();
       window.activeToolCleanup = () => { clearInterval(timer); window.activeToolCleanup = null; };
     }
   });

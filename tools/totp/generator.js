@@ -51,7 +51,9 @@
     if (!cryptoApi?.subtle) throw new Error('This browser does not support secure code generation.');
     const { algorithm, digits, period } = validateSettings(settings);
     const counter = Math.floor(time / 1000 / period);
-    const key = await cryptoApi.subtle.importKey('raw', decodeBase32(secret), { name: 'HMAC', hash: algorithm }, false, ['sign']);
+    const keyBytes = decodeBase32(secret);
+    if (!keyBytes.length) throw new Error('That Base32 secret is too short. Check the key and try again.');
+    const key = await cryptoApi.subtle.importKey('raw', keyBytes, { name: 'HMAC', hash: algorithm }, false, ['sign']);
     const signature = new Uint8Array(await cryptoApi.subtle.sign('HMAC', key, counterBytes(counter)));
     const offset = signature[signature.length - 1] & 15;
     const number = ((signature[offset] & 127) << 24) | (signature[offset + 1] << 16) | (signature[offset + 2] << 8) | signature[offset + 3];
