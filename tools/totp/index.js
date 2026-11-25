@@ -35,11 +35,41 @@
       const secretMask = root.querySelector('[data-secret-mask]'), list = root.querySelector('[data-pins]'), empty = root.querySelector('[data-empty]');
       const status = root.querySelector('[data-status]'), error = root.querySelector('[data-error]'), fallback = root.querySelector('[data-copy-fallback]');
       const addButton = root.querySelector('[type="submit"]');
-      let timer = 0;
+      let timer = 0, clockSyncTimer = 0, clockRequest = 0;
+      let syncedClock = null;
       algorithm.value = state.algorithm; digits.value = state.digits; period.value = state.period;
       const save = () => { try { sessionStorage.setItem(STORAGE_KEY, JSON.stringify(pins.map(({ label, secret, algorithm, digits, period }) => ({ label, secret, algorithm, digits, period })))); } catch { status.textContent = 'Could not save to this tab. Check browser storage settings.'; } };
       const updateMask = () => { secretMask.textContent = secret.type === 'password' ? '•'.repeat(secret.value.length) : ''; };
-      const remain = seconds => seconds - Math.floor(Date.now() / 1000) % seconds;
+      const currentTime = () => syncedClock ? syncedClock.unixMs + (performance.now() - syncedClock.performanceMs) : Date.now();
+      const remain = seconds => seconds - Math.floor(currentTime() / 1000) % seconds;
+      async function syncClock() {
+        const request = ++clockRequest;
+        let responseRecorded = false;
+        const controller = new AbortController();
+        const timeout = window.setTimeout(() => controller.abort(), 5000);
+        const startedAt = performance.now();
+        try {
+          const response = await fetch('https://utctime.app/api/now', { cache: 'no-store', signal: controller.signal });
+          const payload = await response.json();
+          window.recordUtcTimeApiResponse({ endpoint: 'https://utctime.app/api/now', receivedAt: new Date().toISOString(), status: response.status, payload });
+          responseRecorded = true;
+          if (!response.ok) throw new Error(`Time service returned ${response.status}.`);
+          const serverTime = Number(payload.unix_ms ?? Number(payload.unix) * 1000);
+          if (!Number.isFinite(serverTime) || serverTime < 1) throw new Error('Time service returned an invalid timestamp.');
+          if (request !== clockRequest) return;
+          const receivedAt = performance.now();
+          syncedClock = { unixMs: serverTime + (receivedAt - startedAt) / 2, performanceMs: receivedAt };
+          await refresh();
+        } catch {
+          if (request === clockRequest) {
+            syncedClock = null;
+            if (!responseRecorded) window.recordUtcTimeApiResponse({ endpoint: 'https://utctime.app/api/now', receivedAt: new Date().toISOString(), status: 'FETCH_FAILED', error: 'Could not read the online time; using the device clock.' });
+            await refresh();
+          }
+        } finally {
+          clearTimeout(timeout);
+        }
+      }
       const errorMessage = exception => ['DataError', 'OperationError'].includes(exception?.name)
         ? 'This key could not generate a code. Check that the Base32 secret is complete and correct.'
         : exception?.message || 'Could not add this authenticator. Check the details and try again.';
@@ -48,7 +78,7 @@
         empty.hidden = pins.length > 0; root.querySelector('[data-clear]').hidden = pins.length === 0; root.querySelector('[data-count]').textContent = pins.length ? `(${pins.length})` : '';
       }
       async function refresh() {
-        const now = Date.now();
+        const now = currentTime();
         await Promise.all(pins.map(async (pin, index) => {
           const periodValue = Number(pin.period), counter = Math.floor(now / 1000 / periodValue);
           if (pin.counter !== counter) { const nextCode = await window.generateTOTP(pin.secret, pin, now); pin.code = nextCode; pin.counter = counter; }
@@ -76,7 +106,7 @@
           const cleanLabel = label.value.trim() || `Authenticator ${pins.length + 1}`;
           if (pins.some(pin => pin.secret === cleanSecret && pin.algorithm === algorithm.value && pin.digits === digits.value && pin.period === period.value)) throw new Error('That authenticator is already in your list.');
           const candidate = { label: cleanLabel, secret: cleanSecret, algorithm: config.algorithm, digits: String(config.digits), period: String(config.period), counter: null, code: '' };
-          const now = Date.now(); candidate.code = await window.generateTOTP(candidate.secret, candidate, now); candidate.counter = Math.floor(now / 1000 / Number(candidate.period));
+          const now = currentTime(); candidate.code = await window.generateTOTP(candidate.secret, candidate, now); candidate.counter = Math.floor(now / 1000 / Number(candidate.period));
           pins.push(candidate); save(); render(); await refresh(); status.textContent = ''; addButton.textContent = 'Added!'; addButton.classList.add('copied'); setTimeout(() => { if (addButton.isConnected) { addButton.textContent = 'Add authenticator'; addButton.classList.remove('copied'); } }, 2000); label.value = ''; secret.value = ''; updateMask();
           if (!timer) timer = window.setInterval(refresh, 1000);
         } catch (exception) { secret.setAttribute('aria-invalid', 'true'); error.textContent = errorMessage(exception); error.hidden = false; secret.focus(); }
@@ -107,7 +137,7 @@
             if (typeof entry.label !== 'string') throw new Error(`Authenticator ${index + 1} has no valid label.`);
             return { label: entry.label.slice(0, 64) || `Authenticator ${index + 1}`, secret: cleanSecret, algorithm: config.algorithm, digits: String(config.digits), period: String(config.period), counter: null, code: '' };
           });
-          const now = Date.now();
+          const now = currentTime();
           await Promise.all(imported.map(async pin => { pin.code = await window.generateTOTP(pin.secret, pin, now); pin.counter = Math.floor(now / 1000 / Number(pin.period)); }));
           const unique = imported.filter(entry => !pins.some(pin => pin.secret === entry.secret && pin.algorithm === entry.algorithm && pin.digits === entry.digits && pin.period === entry.period));
           if (!unique.length) throw new Error('All authenticators in this file are already imported.');
@@ -119,7 +149,7 @@
       });
       async function restorePins() {
         if (!pins.length) return;
-        const now = Date.now(), saved = pins;
+        const now = currentTime(), saved = pins;
         const results = await Promise.all(saved.map(async pin => {
           try {
             const secretValue = window.normalizeSecret(pin.secret), config = window.validateSettings(pin);
@@ -132,7 +162,9 @@
         render(); if (pins.length && !timer) timer = window.setInterval(refresh, 1000);
       }
       render(); restorePins();
-      window.activeToolCleanup = () => { clearInterval(timer); window.activeToolCleanup = null; };
+      syncClock();
+      clockSyncTimer = window.setInterval(syncClock, 5 * 60 * 1000);
+      window.activeToolCleanup = () => { clearInterval(timer); clearInterval(clockSyncTimer); clockRequest++; syncedClock = null; window.activeToolCleanup = null; };
     }
   });
 })();

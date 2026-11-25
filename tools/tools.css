@@ -226,6 +226,34 @@
 @media (max-width: 600px) { .totp-form { grid-template-columns: 1fr; } .totp-options { grid-template-columns: 1fr; } .totp-row { grid-template-columns: 1fr auto; gap: 8px 16px; } .totp-row-code { grid-column: 1; grid-row: 2; } .totp-row-timer { grid-column: 2; grid-row: 2; } .totp-row-actions { grid-column: 1 / -1; } .totp-import { align-items: stretch; flex-direction: column; } }
 @keyframes totp-digit-in { from { opacity: 0; transform: translateY(.32em); } to { opacity: 1; transform: translateY(0); } }
 @media (prefers-reduced-motion: reduce) { .totp-digit { animation: none; } }
+.world-clock-face { position: relative; display: grid; justify-items: center; gap: 8px; margin-bottom: 28px; padding: clamp(24px, 5vw, 48px) 20px; border: 2px solid var(--primary); background: color-mix(in srgb, var(--primary) 3%, var(--background)); text-align: center; }
+.world-clock-face-top { position: absolute; inset: 12px 14px auto; display: flex; align-items: center; justify-content: space-between; gap: 12px; text-align: left; }
+.world-clock-face-top .tool-eyebrow { margin: 0; }
+.world-clock-sync { font-family: "Special Gothic Condensed One", sans-serif; font-size: .85rem; opacity: .7; }
+.world-clock-face h2 { margin: 20px 0 0; font-family: "Special Gothic Expanded One", sans-serif; font-size: clamp(1.2rem, 3vw, 1.8rem); }
+.world-clock-time { display: block; font-family: "Special Gothic Expanded One", sans-serif; font-size: clamp(3rem, 12vw, 7.5rem); font-variant-numeric: tabular-nums; letter-spacing: .02em; line-height: 1.05; }
+.world-clock-date, .world-clock-zone { margin: 0; font-family: "Special Gothic Condensed One", sans-serif; font-size: 1.1rem; opacity: .75; }
+.world-clock-add { display: grid; gap: 8px; max-width: 620px; margin: 0 auto 28px; }
+.world-clock-add > label { font-family: "Special Gothic Condensed One", sans-serif; letter-spacing: .04em; }
+.world-clock-add-controls { display: flex; gap: 8px; }
+.world-clock-add-controls select { flex: 1; }
+.world-clock-add > .tool-note { margin: 0; }
+.world-clock-cities { border-top: 2px solid var(--primary); padding-top: 18px; }
+.world-clock-cities-heading { display: flex; align-items: end; justify-content: space-between; gap: 12px; margin-bottom: 10px; }
+.world-clock-cities-heading .tool-eyebrow { margin: 0 0 4px; }
+.world-clock-cities-heading h2 { margin: 0; font-family: "Special Gothic Expanded One", sans-serif; font-size: clamp(1.2rem, 2.5vw, 1.6rem); }
+.world-clock-city-count { font-family: "Special Gothic Condensed One", sans-serif; opacity: .7; }
+.world-clock-city-list { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(240px, 100%), 1fr)); gap: 10px; }
+.world-clock-city { position: relative; min-width: 0; border: 1px solid color-mix(in srgb, var(--primary) 38%, transparent); }
+.world-clock-city.is-active { border: 2px solid var(--primary); }
+.world-clock-city-select { display: grid; width: 100%; min-height: 104px; gap: 4px; padding: 14px 44px 14px 16px; border: 0; background: transparent; color: var(--primary); text-align: left; cursor: pointer; }
+.world-clock-city-select:hover, .world-clock-city-select[aria-pressed="true"] { background: color-mix(in srgb, var(--primary) 5%, transparent); }
+.world-clock-city-name { font-family: "Special Gothic Condensed One", sans-serif; font-size: 1.1rem; }
+.world-clock-city-time { font-family: "Special Gothic Expanded One", sans-serif; font-size: 1.5rem; font-variant-numeric: tabular-nums; }
+.world-clock-city-zone { font-family: "Special Gothic Condensed One", sans-serif; font-size: .85rem; opacity: .68; overflow-wrap: anywhere; }
+.world-clock-remove { position: absolute; top: 8px; right: 8px; display: grid; width: 30px; height: 30px; place-items: center; border: 1px solid color-mix(in srgb, var(--primary) 45%, transparent); background: var(--background); color: var(--primary); font-size: 1.1rem; cursor: pointer; }
+.world-clock-remove:hover { border-color: var(--accent); color: var(--accent); }
+.world-clock :is(button, select):focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
 @media (max-width: 768px) {
   .tool-page-header { align-items: stretch; flex-direction: column; padding: 18px; }
   .tool-page-actions { justify-content: flex-start; }
@@ -247,6 +275,10 @@
   .qrg-local-tag { white-space: normal; }
   .qrg-contact-fields, .qrg-location-fields { grid-template-columns: 1fr; }
   .qrg-location-fields .tool-note { grid-column: auto; }
+  .world-clock-face-top { position: static; width: 100%; }
+  .world-clock-face h2 { margin-top: 8px; }
+  .world-clock-time { font-size: clamp(2.6rem, 15vw, 5rem); }
+  .world-clock-add-controls { align-items: stretch; flex-direction: column; }
   .tool-form { align-items: stretch; }
   .tool-form label { flex-basis: 100%; }
   .subnet-form { grid-template-columns: minmax(0, 1fr); gap: 16px; }

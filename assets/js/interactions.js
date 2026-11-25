@@ -358,6 +358,12 @@ function wireSecretDashboard() {
       id: 'diag-cache',
       title: 'CACHE STATE',
       placeholder: 'Reading cache tables...'
+    },
+    {
+      id: 'diag-time-api',
+      title: 'UTC TIME API RESPONSE',
+      placeholder: 'No time API request recorded yet...',
+      preformatted: true
     }
   ];
 
@@ -395,6 +401,10 @@ function wireSecretDashboard() {
       fetchLatestCommit();
       populateStaticMetrics();
       populateCacheMetrics();
+      const timeApiOutput = document.getElementById('diag-time-api');
+      if (window.latestUtcTimeApiResponse && timeApiOutput) {
+        timeApiOutput.textContent = JSON.stringify(window.latestUtcTimeApiResponse, null, 2);
+      }
 
       // Spin up background telemetry loop
       clearInterval(telemetryInterval); 
@@ -405,12 +415,17 @@ function wireSecretDashboard() {
 
   function buildDiagnosticsDashboardMarkup(panels) {
     const cards = panels
-      .map(panel => `
+      .map(panel => {
+        const content = panel.preformatted
+          ? `<pre id="${panel.id}">${panel.placeholder}</pre>`
+          : `<p id="${panel.id}">${panel.placeholder}</p>`;
+        return `
           <div class="nerdy-card">
             <h4>${panel.title}</h4>
-            <p id="${panel.id}">${panel.placeholder}</p>
+            ${content}
           </div>
-      `)
+        `;
+      })
       .join('');
 
     return `

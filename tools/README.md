@@ -24,6 +24,8 @@ The acoustic sweep generator lives in `sweep/` and opens at `?tools=sweep`. It g
 
 The TOTP generator lives in `totp/` and opens at `?tools=totp`. It generates RFC 6238-compatible 6- or 8-digit codes from Base32 secrets or standard `otpauth://` URIs, using the browser's Web Crypto API. Secrets remain in memory only and are never added to share links. Checks: `node --test tools/totp/generator.test.js`.
 
+The world clock lives in `world-clock/` and opens at `?tools=world-clock`. It shows a large live clock, lets users add and select IANA time zones, and syncs against UTCtime with a device-clock fallback.
+
 The subnet calculator accepts CIDR prefixes and contiguous dotted-decimal masks. Its host-count helper chooses a conventional subnet with reserved network and broadcast addresses; /31 and /32 remain available through direct input.
 
 Design references: [Coolors generator workflow](https://coolors-help.zendesk.com/hc/en-us/articles/360010581980-Generate-a-palette), [Calculator.net subnet inputs](https://www.calculator.net/ip-subnet-calculator.html), [Unicode character mappings](https://www.unicode.org/charts/PDF/U1D400.pdf), and [Web Share API](https://developer.mozilla.org/en-US/docs/Web/API/Navigator/share).

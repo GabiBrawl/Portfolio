@@ -5,6 +5,12 @@ window.readToolState = function () {
   return new URLSearchParams(window.location.hash.slice(1));
 };
 
+window.recordUtcTimeApiResponse = function (result) {
+  window.latestUtcTimeApiResponse = result;
+  const output = document.getElementById('diag-time-api');
+  if (output) output.textContent = JSON.stringify(result, null, 2);
+};
+
 window.buildToolShareURL = function (id, state = {}) {
   const url = new URL(window.location.href);
   url.search = `?tools=${encodeURIComponent(id)}`;

@@ -143,6 +143,16 @@ footer {
   color: var(--primary);
 }
 
+.nerdy-card pre {
+  max-height: 260px;
+  margin: 0;
+  overflow: auto;
+  color: var(--primary);
+  font: 0.8rem/1.5 monospace;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
 .nerdy-clear-btn {
   margin-top: 25px;
   padding: 10px 18px;

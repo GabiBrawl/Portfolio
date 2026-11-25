@@ -2,7 +2,7 @@
 // CONFIGURATION & FLAGS
 // ==========================================================================
 const IS_DEVELOPMENT = false; // // ✦ SET TO TRUE FOR DEV, FALSE FOR PROD ✦
-const CACHE_NAME = 'portfolio-v6.1'; // Increment on deploys that should invalidate old caches
+const CACHE_NAME = 'portfolio-v6.4'; // Increment on deploys that should invalidate old caches
 const POSTS_COUNT = 6;
 const HASHES_URL = '/hashes.txt';
 const HASHES_STATE_KEY = '/__hashes_state__.json';
@@ -54,7 +54,8 @@ const MANAGED_URLS = [
   '/tools/sweep/generator.js',
   '/tools/sweep/index.js',
   '/tools/totp/generator.js',
-  '/tools/totp/index.js'
+  '/tools/totp/index.js',
+  '/tools/world-clock/index.js'
 ];
 
 // External URLs can't be sha256'd by the hash workflow (no local file to hash),
